@@ -40,7 +40,7 @@ That’s it! You’re now ready to communicate!
 
 ## Usage
 
-Example code for each type of mission is included with the library. To view examples, go to **File > 
+Example code for each type of mission is included with the library. To view examples, go to **File > Examples > ENES100**.
 
 For your OSV to get information about its location and its destination, you will need to communicate with the Vision System using the library. To get the location of the destination, use the `retreieveDestination()` method.
 
