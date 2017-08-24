@@ -1,0 +1,8 @@
+Coordinate	KEYWORD1
+Enes100	KEYWORD1
+baseObjective	KEYWORD2
+bonusObjective	KEYWORD2
+navigated	KEYWORD2
+print	KEYWORD2
+println	KEYWORD2
+updateLocation	KEYWORD2
