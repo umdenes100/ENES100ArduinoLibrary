@@ -13,7 +13,7 @@ To use this library, download the contents from [this Github repository](https:/
 To use the library, you have to direct the compiler to include it in your code. Go to **Sketch > Include Library > ENES100**, or add it manually by typing
 
 ```
-#include "enes100.h"
+#include "Enes100.h"
 ```
 
 at the very top of your file.
@@ -40,7 +40,7 @@ That’s it! You’re now ready to communicate!
 
 ## Usage
 
-Example code for each type of mission is included with the library. To view examples, go to **File > Examples > ENES100**.
+Example code for each type of mission is included with the library. To view examples, open Arduino IDE and go to **File > Examples > ENES100**. (You must restart the IDE after adding the library for the examples to show.)
 
 For your OSV to get information about its location and its destination, you will need to communicate with the Vision System using the library. To get the location of the destination, use the `retreieveDestination()` method.
 
