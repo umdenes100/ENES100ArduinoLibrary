@@ -21,10 +21,10 @@ at the very top of your file.
 All the functionality is encapsulated in the `Enes100` class. To use it, you’ll first need to create an instance of the class. At the top of your code (outside of the `setup()` and `loop()` functions), add
 
 ```
-Enes100 enes(BLACK_BOX, 3, 8, 9);
+Enes100 enes("BlackBoxTeam", BLACK_BOX, 3, 8, 9);
 ```
 
-In the code shown above, `enes` is an identifier. You may replace it with any other valid C identifier. `BLACK_BOX` refers to the mission type of your team. The full list of valid mission names is
+In the code shown above, `enes` is an identifier. You may replace it with any other valid C identifier. The first parameter is the name of your team, which will appear on the Vision System with your serial port. `BLACK_BOX` refers to the mission type of your team. The full list of valid mission names is
 
  * BLACK_BOX
  * CHEMICAL
@@ -55,7 +55,7 @@ enes.destination.x; // x Coordinate
 enes.destination.y; // y Coordinate
 ```
 
-For the Black Box mission, the destination is unknown. Calling `retrieveDestination()` is not required and will not update the destination coordinates.
+For the Black Box mission, the destination is unknown. Calling `retrieveDestination()` is not required and doing so will not update the destination coordinates.
 
 To request an update of your OSV’s location, call the `updateLocation()` method of your `Enes100` object. This method also returns a value indicating if it succeeded or not.
 
@@ -77,6 +77,12 @@ enes.println(enes.location.x);
 ```
 
 **Note: Your messages to the Vision System may not include the `#` or `*` characters. They _will not_ appear in the message pane and may prevent further communication.**
+
+Once your OSV reaches the destination, alert the Vision System that you've done so with the `navigated()` method.
+
+```
+enes.navigated();
+```
 
 As your OSV completes its objectives, it will need to alert the Vision System. When your OSV completes a base objective that requires transmission, call the `baseObjective()` method with the value that you've calculated. When your OSV completes a bonus objective that requires transmission, call the `bonusObjective()` method with the value that you've calculated.
 
@@ -104,7 +110,7 @@ enes.endMission();
 
 ### The Coordinate Object
 
-The ENES100 library also includes a Coordinate class that holds an x, y, and theta. Students may use Coordinates in their code as desired. The `destination` and `location` members of `Enes100` are Coordinate objects. The x, y, and theta are accessed in the same way as in `destination` and `location`, i.e. `coordinate.x`, coordinate.y`, and `coordinate.theta`. For convenience, we have included 3 constructors for the Coordinate object.
+The ENES100 library also includes a Coordinate class that holds an x, y, and theta. Students may use Coordinates in their code as desired. The `destination` and `location` members of `Enes100` are Coordinate objects. The x, y, and theta are accessed in the same way as in `destination` and `location`, i.e. `coordinate.x`, `coordinate.y`, and `coordinate.theta`. For convenience, we have included 3 constructors for the Coordinate object.
 
 ```
 Coordinate coordinate1(); // Represents the point (0, 0, 0)
@@ -131,6 +137,9 @@ Sends value for a bonus objective.
 
 `void endMission()`   
 Alerts the Vision System that you've finished your mission. Prevents further code execution on the Arduino.
+
+`void navigated()`   
+Alerts the Vision System that you've reached your destination. For chemical teams, splits the timer.
 
 `void print(message)`  
 Sends a message to be displayed on the Vision System. Accepts a String, integer, or double as an argument.

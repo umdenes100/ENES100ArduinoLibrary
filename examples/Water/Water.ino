@@ -2,12 +2,13 @@
 
 /* Create a new Enes100 object
  * Parameters:
+ *  string teamName
  *  int teamType
  *  int markerId
  *  int rxPin
  *  int txPin
  */
-Enes100 enes(WATER, 3, 8, 9);
+Enes100 enes("Team Name Here", WATER, 3, 8, 9);
 
 void setup() {
     // Retrieve the destination
@@ -34,6 +35,8 @@ void loop() {
     } else {
         enes.println("Sad trombone... I couldn't update my location");
     }
+
+    enes.navigated();
 
     // Transmit the water quality
     enes.baseObjective(POLLUTED);

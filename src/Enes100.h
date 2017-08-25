@@ -19,7 +19,7 @@ private:
 
 class Enes100 {
 public:
-    Enes100(int teamType, int markerId, int rxPin, int txPin);
+    Enes100(const char* teamName, int teamType, int markerId, int rxPin, int txPin);
     void baseObjective(int value);
     void baseObjective(double value);
     void baseObjective(Coordinate& value);

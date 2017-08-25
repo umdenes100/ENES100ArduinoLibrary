@@ -2,12 +2,13 @@
 
 /* Create a new Enes100 object
  * Parameters:
+ *  string teamName
  *  int teamType
  *  int markerId
  *  int rxPin
  *  int txPin
  */
-Enes100 enes(BLACK_BOX, 3, 8, 9);
+Enes100 enes("Team Name Here", BLACK_BOX, 3, 8, 9);
 
 void setup() {
 }
@@ -25,8 +26,10 @@ void loop() {
     } else {
         enes.println("Sad trombone... I couldn't update my location");
     }
-    
-    // Transmit a coordinate
+
+    enes.navigated();
+
+    // Transmit the coordinate of the black box
     Coordinate blackBox(2.9, 1.4);
     enes.baseObjective(blackBox);
 }

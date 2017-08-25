@@ -2,12 +2,13 @@
 
 /* Create a new Enes100 object
  * Parameters:
+ *  string teamName
  *  int teamType
  *  int markerId
  *  int rxPin
  *  int txPin
  */
-Enes100 enes(DEBRIS, 3, 8, 9);
+Enes100 enes("Team Name Here", DEBRIS, 3, 8, 9);
 
 void setup() {
     // Retrieve the destination
@@ -34,11 +35,13 @@ void loop() {
     } else {
         enes.println("Sad trombone... I couldn't update my location");
     }
-    
-    // Transmit the mass of the debris
-    // The type of the number passed must be a double
-    enes.bonusObjective(2.43);
 
-    // Transmit the type of the debris
-    enes.bonusObjective(STEEL);
+    enes.navigated();
+
+    // Transmit the material of the debris
+    // The type of the number passed must be a double
+    enes.baseObjective(STEEL);
+
+    // Transmit the mass of the debris
+    enes.bonusObjective(2.43);
 }

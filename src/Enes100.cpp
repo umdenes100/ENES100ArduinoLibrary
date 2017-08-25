@@ -18,13 +18,15 @@ void Coordinate::init(double x, double y, double theta) {
     this->theta = theta;
 }
 
-Enes100::Enes100(int teamType, int markerId, int rxPin, int txPin) {
+Enes100::Enes100(const char* teamName, int teamType, int markerId, int rxPin, int txPin) {
     mId = markerId;
     mSoftwareSerial = new SoftwareSerial(rxPin, txPin);
     mSoftwareSerial->begin(9600);
     
     mSoftwareSerial->print("#start ");
     mSoftwareSerial->print(teamType);
+    mSoftwareSerial->print(" ");
+    mSoftwareSerial->print(teamName);
     mSoftwareSerial->print("*");
     mSoftwareSerial->flush();
 }
@@ -69,10 +71,16 @@ void Enes100::bonusObjective(double value) {
 }
 
 // MARK: endMission
-vod Enes100::endMission() {
+void Enes100::endMission() {
     mSoftwareSerial->print("#end*");
     mSoftwareSerial->flush();
     while(1);
+}
+
+// MARK: navigated
+void Enes100::navigated() {
+    mSoftwareSerial->print("#navigated*");
+    mSoftwareSerial->flush();
 }
 
 // MARK: print
@@ -109,6 +117,9 @@ void Enes100::println(double msg) {
 
 // MARK: retrieveDestination
 bool Enes100::retrieveDestination() {
+    mSoftwareSerial->print("#destination*");
+    mSoftwareSerial->flush();
+    
     unsigned long start = millis();
     int state = 0;
     while((millis() - start) < 600) {
@@ -137,9 +148,9 @@ bool Enes100::retrieveDestination() {
 
 // MARK: updateLocation
 unsigned long Enes100::updateLocation() {
-    mSoftwareSerial->print('#');
+    mSoftwareSerial->print("#");
     mSoftwareSerial->print(mId);
-    mSoftwareSerial->print('*');
+    mSoftwareSerial->print("*");
     mSoftwareSerial->flush();
     
     unsigned long start = millis();
