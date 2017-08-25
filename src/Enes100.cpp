@@ -68,6 +68,13 @@ void Enes100::bonusObjective(double value) {
     mSoftwareSerial->flush();
 }
 
+// MARK: endMission
+vod Enes100::endMission() {
+    mSoftwareSerial->print("#end*");
+    mSoftwareSerial->flush();
+    while(1);
+}
+
 // MARK: print
 void Enes100::print(const char *msg) {
     mSoftwareSerial->print(msg);
@@ -100,6 +107,7 @@ void Enes100::println(double msg) {
     mSoftwareSerial->flush();
 }
 
+// MARK: retrieveDestination
 bool Enes100::retrieveDestination() {
     unsigned long start = millis();
     int state = 0;
@@ -127,6 +135,7 @@ bool Enes100::retrieveDestination() {
     return false;
 }
 
+// MARK: updateLocation
 unsigned long Enes100::updateLocation() {
     mSoftwareSerial->print('#');
     mSoftwareSerial->print(mId);

@@ -96,6 +96,12 @@ For the Debris mission, valid material types are
  * COPPER
  * STEEL
 
+Once you've finished your mission, you'll need to alert the Vision System that your done. Use the `endMission()` method to stop the timer on the Vision System.
+
+```
+enes.endMission();
+```
+
 ### The Coordinate Object
 
 The ENES100 library also includes a Coordinate class that holds an x, y, and theta. Students may use Coordinates in their code as desired. The `destination` and `location` members of `Enes100` are Coordinate objects. The x, y, and theta are accessed in the same way as in `destination` and `location`, i.e. `coordinate.x`, coordinate.y`, and `coordinate.theta`. For convenience, we have included 3 constructors for the Coordinate object.
@@ -123,9 +129,8 @@ Sends value for a base objective.
 `void bonusObjective(value)`   
 Sends value for a bonus objective.
 
-`unsigned long updateLocation()`  
-Returns: Time elapsed to update the location, or 0 on failure.
-Updates the OSV's location information.
+`void endMission()`   
+Alerts the Vision System that you've finished your mission. Prevents further code execution on the Arduino.
 
 `void print(message)`  
 Sends a message to be displayed on the Vision System. Accepts a String, integer, or double as an argument.
@@ -136,6 +141,10 @@ Sends a message to be displayed on the Vision System followed by a new line char
 `bool retrieveDestination()`   
 Returns: True on success, false on failure.
 Retrieves the coordinates of the destination from the Vision System.
+
+`unsigned long updateLocation()`  
+Returns: Time elapsed to update the location, or 0 on failure.
+Updates the OSV's location information.
 
 ## Competition Procedures
 
