@@ -26,6 +26,7 @@ public:
     void bonusObjective(int value);
     void bonusObjective(double value);
     void endMission();
+    void navigated();
     void print(const char* message);
     void print(int message);
     void print(double message);
