@@ -8,7 +8,7 @@
  *  int rxPin
  *  int txPin
  */
-Enes100 enes("Team Name Here", "CHEMICAL, 3, 8, 9);
+Enes100 enes("Team Name Here", CHEMICAL, 3, 8, 9);
 
 void setup() {
     // Retrieve the destination
