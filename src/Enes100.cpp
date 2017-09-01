@@ -122,6 +122,7 @@ bool Enes100::retrieveDestination() {
     
     unsigned long start = millis();
     int state = 0;
+    
     while((millis() - start) < 600) {
         if (mSoftwareSerial->available()) {
             switch(state) {
