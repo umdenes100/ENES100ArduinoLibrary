@@ -4,11 +4,27 @@ Arduino library for use in the ENES100 course with Vision System v4 and APC220s
 
 ## Downloading and Installation
 
-To use this library, download the contents from [this Github repository](https://github.com/umdenes100/Enes100ArduinoLibrary) by going to the green **Clone or Download** menu and clicking **Download ZIP**. Open the Arduino IDE and install the library by going to **Sketch > Include Library > Add .ZIP Library** and selecting the downloaded file. You must have Arduino IDE version 1.5.0 or above. The most current version of Arduino IDE can be downloaded from the [Arduino website](https://www.arduino.cc/en/Main/Software).
+To use this library, download the contents from [this Github repository](https://github.com/umdenes100/Enes100ArduinoLibrary) by going to the green **Clone or Download** menu and clicking **Download ZIP**. (There is no need to unzip the file.) Open the Arduino IDE and install the library by going to **Sketch > Include Library > Add .ZIP Library** and selecting the downloaded file. You must have Arduino IDE version 1.5.0 or above. The most current version of Arduino IDE can be downloaded from the [Arduino website](https://www.arduino.cc/en/Main/Software).
 
 **If you have an older version of the library on your computer, you _must_ delete it before adding a newer version.** Failure to do this may cause file conflicts and it is not guaranteed that the library will work properly.
 
 ## Setup
+
+### Hardware
+
+Communication with the Vision System is done using APC220 wireless RF transceivers. APC220s are available in your team electrical toolbox or can be checked out from the tool cabinet through a Teaching Fellow. The APC220 has 7 pins:
+
+| Pin | Description     | Connect to...           |
+| --- | ---             | ---                     |
+| GND | Ground          | Common ground           |
+| VCC | Voltage supply  | +5 V                    |
+| EN  | Enable          | +5 V                    |
+| RXD | Serial receive  | Arduino serial transmit |
+| TXD | Serial transmit | Arduino serial receive  |
+| AUX | Auxiliary       | Not connected           |
+| SET | Setting mode    | +5 V                    |
+
+### Software
 
 To use the library, you have to direct the compiler to include it in your code. Go to **Sketch > Include Library > ENES100**, or add it manually by typing
 
@@ -32,7 +48,7 @@ In the code shown above, `enes` is an identifier. You may replace it with any ot
  * FIRE
  * WATER
 
-(As with all code samples in this document, these are case sensitive.) The second argument is the ID of the marker that your team will be using. The third and fourth arguments are your RX and TX pins (recall that your RX pin connects to the APC’s TX pin and vice versa).
+(As with all code samples in this document, these are case sensitive.) The third argument is the ID of the marker that your team will be using. The third and fourth arguments are your serial receive and serial transmit pins (recall that your RX pin connects to the APC’s TX pin and vice versa).
 
 When choosing the pins to use for communication, there are a few things to keep in mind. Firstly, you cannot use pins 0 and 1 for RF communication (or for anything else). The RX and TX labels on those pins refer to the Arduino’s serial transmit and receive with the computer. If you block those pins, you will not be able to upload code to your Arduino. Secondly, it is preferable not to use PWM pins for your communication; you’ll want to save those for things like controlling your motors.
 
@@ -45,7 +61,7 @@ Example code for each type of mission is included with the library. To view exam
 For your OSV to get information about its location and its destination, you will need to communicate with the Vision System using the library. To get the location of the destination, use the `retreieveDestination()` method.
 
 ```
-enes.retrieveLocation();
+enes.retrieveDestination();
 ```
 
 This method returns a `bool` indicating if the operation succeeded. If the operation succeeded, the coordinates of the destination will be stored in the `Enes100`'s `destination` member. You can access the coordinates using
@@ -102,7 +118,7 @@ For the Debris mission, valid material types are
  * COPPER
  * STEEL
 
-Once you've finished your mission, you'll need to alert the Vision System that your done. Use the `endMission()` method to stop the timer on the Vision System.
+Once you've finished your mission, you'll need to alert the Vision System that you're done. Use the `endMission()` method to stop the timer on the Vision System.
 
 ```
 enes.endMission();
