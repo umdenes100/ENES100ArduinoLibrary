@@ -83,7 +83,7 @@ if (enes.updateLocation()) {
 }
 ```
 
-The x and y coordinates are the distance in meters from the y axis and x axis to the center of your marker. Theta is measured in radians from 0 to 2π, with zero being parallel to the x axis, increasing counter-clockwise.
+The x and y coordinates are the distance in meters from the y axis and x axis to the center of your marker. Theta is measured in radians from -π to π, with zero being parallel to the x axis, increasing counter-clockwise.
 
 At points in your mission, you may want to send information to be displayed on the Vision System. Writing information to the Vision System is similar to writing information to the Serial console. The `print()` function will write a message to the console. The `println()` function will write a message to the console followed by a new line. These functions can accept strings, integers, and doubles as arguments.
 
