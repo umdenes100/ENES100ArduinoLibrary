@@ -1,23 +1,5 @@
 #include "Enes100.h"
 
-Coordinate::Coordinate() {
-    init(0, 0, 0);
-}
-
-Coordinate::Coordinate(double x, double y) {
-    init(x, y, 0);
-}
-
-Coordinate::Coordinate(double x, double y, double theta) {
-    init(x, y, theta);
-}
-
-void Coordinate::init(double x, double y, double theta) {
-    this->x = x;
-    this->y = y;
-    this->theta = theta;
-}
-
 Enes100::Enes100(const char* teamName, int teamType, int markerId, int rxPin, int txPin) {
     mId = markerId;
     mSoftwareSerial = new SoftwareSerial(rxPin, txPin);

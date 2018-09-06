@@ -5,17 +5,33 @@
 #include "SoftwareSerial.h"
 #include "Enums.h"
 
+#ifndef Coordinate_h
+#define Coordinate_h
+
 class Coordinate {
 public:
-    Coordinate();
-    Coordinate(double x, double y);
-    Coordinate(double x, double y, double theta);
     double x;
     double y;
     double theta;
+    Coordinate() {
+        init(0, 0, 0);
+    }
+
+    Coordinate(double x, double y) {
+        init(x, y, 0);
+    }
+
+    Coordinate(double x, double y, double theta) {
+        init(x, y, theta);
+    }
 private:
-    void init(double x, double y, double theta);
+    void init(double x, double y, double theta) {
+        this->x = x;
+        this->y = y;
+        this->theta = theta;
+    }
 };
+#endif
 
 class Enes100 {
 public:
