@@ -1,6 +1,6 @@
 Coordinate	KEYWORD1
 Enes100	KEYWORD1
-DFRTank KEYWORD1
+DFRTank	KEYWORD1
 baseObjective	KEYWORD2
 bonusObjective	KEYWORD2
 endMission	KEYWORD2
