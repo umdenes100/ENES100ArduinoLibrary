@@ -190,6 +190,6 @@ This function sets the PWM of the tank's right motor. It accepts one argument (a
 `void DFRTank::setLeftMotorPWM()`
 This function sets the PWM of the tank's left motor. It accepts one argument (an integer), which should be in the range [-255, 255]
 
-## Competition Procedures
+## Demonstration Procedures
 
-During the competition, messages sent using `print()` and `println()` will not be shown on the Vision System console. The console will only print out the values that you send using `baseObjective()` and `bonusObjective()`.
+During the demonstration, messages sent using `print()` and `println()` will not be shown on the Vision System console. The console will only print out the values that you send using `baseObjective()` and `bonusObjective()`.
