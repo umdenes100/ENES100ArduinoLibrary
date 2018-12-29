@@ -13,7 +13,7 @@ Enes100 enes("Team Name Here", WATER, 3, 8, 9);
 void setup() {
     // Retrieve the destination
     while (!enes.retrieveDestination()) {
-        enes.println("Unable to retrieve location");
+        enes.println("Unable to retrieve destination");
     }
 
     enes.print("My destination is at ");
@@ -41,6 +41,6 @@ void loop() {
     // Transmit the water quality
     enes.baseObjective(POLLUTED);
 
-    // Transmit the depth of the pool
+    // Transmit the depth of the pool (in millimeters)
     enes.bonusObjective(44.2);
 }

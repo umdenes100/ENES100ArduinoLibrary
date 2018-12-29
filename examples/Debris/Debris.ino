@@ -13,7 +13,7 @@ Enes100 enes("Team Name Here", DEBRIS, 3, 8, 9);
 void setup() {
     // Retrieve the destination
     while (!enes.retrieveDestination()) {
-        enes.println("Unable to retrieve location");
+        enes.println("Unable to retrieve destination");
     }
 
     enes.print("My destination is at ");
@@ -39,9 +39,9 @@ void loop() {
     enes.navigated();
 
     // Transmit the material of the debris
-    // The type of the number passed must be a double
     enes.baseObjective(STEEL);
 
-    // Transmit the mass of the debris
-    enes.bonusObjective(2.43);
+    // Transmit the mass of the debris (in grams)
+    // The type of the number passed must be a double
+    enes.bonusObjective(70.43);
 }

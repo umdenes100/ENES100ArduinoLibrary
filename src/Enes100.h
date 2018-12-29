@@ -8,6 +8,8 @@
 #ifndef Coordinate_h
 #define Coordinate_h
 
+#define abs(x) ((x)>0?(x):-(x))
+
 class Coordinate {
 public:
     double x;
