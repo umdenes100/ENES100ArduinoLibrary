@@ -1,11 +1,9 @@
 Coordinate	KEYWORD1
+VisionSystemClient	KEYWORD1
 Enes100	KEYWORD1
-DFRTank KEYWORD1
-baseObjective	KEYWORD2
-bonusObjective	KEYWORD2
-endMission	KEYWORD2
-navigated	KEYWORD2
+ping	KEYWORD2
+begin	KEYWORD2
+updateLocation	KEYWORD2
+mission	KEYWORD2
 print	KEYWORD2
 println	KEYWORD2
-retrieveDestination	KEYWORD2
-updateLocation	KEYWORD2

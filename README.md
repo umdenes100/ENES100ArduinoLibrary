@@ -141,55 +141,36 @@ Coordinate blackBox(3.2, 1.6);
 baseObjective(blackBox);
 ```
 
-### DFRTank object
-
-For convinence, we have provided an additional class in the enes100 library to allow for usage of the tanks provided by the course. To utilize it in your code, you must direct the compiler to use it by adding the line:
-
-```
-#include "DFRTank.h"
-```
-
 ## Function List
 
 The following are functions of the `Enes100` class.
 
-`void Enes100::baseObjective(value)`   
+`void baseObjective(value)`   
 Sends value for a base objective.
 
-`void Enes100::bonusObjective(value)`   
+`void bonusObjective(value)`   
 Sends value for a bonus objective.
 
-`void Enes100::endMission()`   
+`void endMission()`   
 Alerts the Vision System that you've finished your mission. Prevents further code execution on the Arduino.
 
-`void Enes100::navigated()`   
+`void navigated()`   
 Alerts the Vision System that you've reached your destination. For chemical teams, splits the timer.
 
-`void Enes100::print(message)`  
+`void print(message)`  
 Sends a message to be displayed on the Vision System. Accepts a String, integer, or double as an argument.
 
-`void Enes100::println(message)`  
+`void println(message)`  
 Sends a message to be displayed on the Vision System followed by a new line character. Accepts a String, integer, or double as an argument.
 
-`bool Enes100::retrieveDestination()`   
+`bool retrieveDestination()`   
 Returns: True on success, false on failure.
 Retrieves the coordinates of the destination from the Vision System.
 
-`unsigned long Enes100::updateLocation()`  
+`unsigned long updateLocation()`  
 Returns: Time elapsed to update the location, or 0 on failure.
 Updates the OSV's location information.
 
-The following are functions of the `DFRTank` class.
+## Competition Procedures
 
-`void DFRTank::turnOffMotors()`
-This function simply stops the OSV by setting both motor PWM's to zero.
-
-`void DFRTank::setRightMotorPWM()`
-This function sets the PWM of the tank's right motor. It accepts one argument (an integer), which should be in the range [-255, 255]
-
-`void DFRTank::setLeftMotorPWM()`
-This function sets the PWM of the tank's left motor. It accepts one argument (an integer), which should be in the range [-255, 255]
-
-## Demonstration Procedures
-
-During the demonstration, messages sent using `print()` and `println()` will not be shown on the Vision System console. The console will only print out the values that you send using `baseObjective()` and `bonusObjective()`.
+During the competition, messages sent using `print()` and `println()` will not be shown on the Vision System console. The console will only print out the values that you send using `baseObjective()` and `bonusObjective()`.

@@ -13,7 +13,7 @@ Enes100 enes("Team Name Here", CHEMICAL, 3, 8, 9);
 void setup() {
     // Retrieve the destination
     while (!enes.retrieveDestination()) {
-        enes.println("Unable to retrieve destination");
+        enes.println("Unable to retrieve location");
     }
 
     enes.print("My destination is at ");

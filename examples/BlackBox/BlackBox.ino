@@ -29,7 +29,7 @@ void loop() {
 
     enes.navigated();
 
-    // Transmit the coordinate of the black box (in units of meters)
+    // Transmit the coordinate of the black box
     Coordinate blackBox(2.9, 1.4);
     enes.baseObjective(blackBox);
 }
