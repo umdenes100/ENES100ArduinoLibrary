@@ -23,9 +23,9 @@ public:
   bool ping();
   bool begin(const char* teamName, int teamType, int markerId, int rxPin, int txPin);
   bool updateLocation();
-  bool mission(int level, int message);
-  bool mission(int level, float message);
-  bool mission(int level, Coordinate& message);
+  bool mission(int message);
+  bool mission(double message);
+  bool mission(Coordinate& message);
   void print(const char* message);
   void print(int message);
   void print(double message);

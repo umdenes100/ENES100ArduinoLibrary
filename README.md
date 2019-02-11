@@ -84,11 +84,11 @@ Enes100.print(“Our x coordinate is: “);
 Enes100.println(enes.location.x);
 ```
 
-As your OSV completes its objectives, it will need to alert the Vision System. When your OSV completes one of the objectives that requires transmission, call the `mission()` method with the value that you've calculated. Use the first argument to indicate if the objective is a base or bonus mission.
+As your OSV completes its objectives, it will need to alert the Vision System. When your OSV completes one of the objectives that requires transmission, call the `mission()` method with the value that you've calculated.
 
 ```
-Enes100.mission(BASE, 2.34);
-Enes100.mission(BONUS, STEEL);
+Enes100.mission(2.34);
+Enes100.mission(STEEL);
 ```
 
 For the Water mission, valid water types for the base objective are

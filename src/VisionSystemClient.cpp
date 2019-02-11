@@ -50,9 +50,8 @@ bool VisionSystemClient::updateLocation() {
   return receive(&location);
 }
 
-bool VisionSystemClient::mission(int level, int message) {
+bool VisionSystemClient::mission(int message) {
   mSerial->write(6);
-  mSerial->write(level);
   mSerial->print(message);
   mSerial->write(255);
   mSerial->flush();
@@ -60,9 +59,8 @@ bool VisionSystemClient::mission(int level, int message) {
   return receive(NULL);
 }
 
-bool VisionSystemClient::mission(int level, float message) {
+bool VisionSystemClient::mission(double message) {
   mSerial->write(6);
-  mSerial->write(level);
   mSerial->print(message);
   mSerial->write(255);
   mSerial->flush();
@@ -70,9 +68,8 @@ bool VisionSystemClient::mission(int level, float message) {
   return receive(NULL);
 }
 
-bool VisionSystemClient::mission(int level, Coordinate& message) {
+bool VisionSystemClient::mission(Coordinate& message) {
   mSerial->write(6);
-  mSerial->write(level);
   mSerial->print(message.x);
   mSerial->print(',');
   mSerial->print(message.y);
@@ -134,10 +131,10 @@ bool VisionSystemClient::receive(Coordinate* coordinate) {
   int pos = 0;
   byte buffer[13];
   
-  while ((millis() - start) < 400 && pos < 13) {
+  while ((millis() - start) < 300 && pos < 13) {
     if (mSerial->available()) {
       buffer[pos++] = mSerial->read();
-      if (buffer[0] == 1 || buffer[0] == 7) {
+      if (buffer[0] == 1 || buffer[0] == 7 || buffer[0] == 9) {
         return coordinate == NULL;
       }
     }

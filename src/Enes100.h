@@ -3,9 +3,6 @@
 
 #include "VisionSystemClient.hpp"
 
-#define BASE        0
-#define BONUS       1
-
 #define BLACK_BOX   0
 #define CHEMICAL    1
 #define DEBRIS      2
