@@ -1,47 +1,37 @@
 #include "Enes100.h"
 
-/* Create a new Enes100 object
- * Parameters:
- *  string teamName
- *  int teamType
- *  int markerId
- *  int rxPin
- *  int txPin
- */
-Enes100 enes("Team Name Here", DEBRIS, 3, 8, 9);
-
 void setup() {
-    // Retrieve the destination
-    while (!enes.retrieveDestination()) {
-        enes.println("Unable to retrieve location");
-    }
+    // Initialize Enes100 library
+    // Team Name, Mission Type, Marker ID, RX Pin, TX Pin
+    Enes100.begin("Duhbree", DEBRIS, 3, 8, 9);
 
-    enes.print("My destination is at ");
-    enes.print(enes.destination.x);
-    enes.print(",");
-    enes.println(enes.destination.y);
+    Enes100.print("Destination is at (");
+    Enes100.print(Enes100.location.x);
+    Enes100.print(", ");
+    Enes100.print(Enes100.location.y);
+    Enes100.println(")");
+
+    // Any other setup code...
 }
 
 void loop() {
     // Update the OSV's current location
-    if (enes.updateLocation()) {
-        enes.println("Huzzah! Location updated!");
-        enes.print("My x coordinate is ");
-        enes.println(enes.location.x);
-        enes.print("My y coordinate is ");
-        enes.println(enes.location.y);
-        enes.print("My theta is ");
-        enes.println(enes.location.theta);
+    if (Enes100.updateLocation()) {
+        Enes100.print("OSV is at (");
+        Enes100.print(Enes100.location.x);
+        Enes100.print(", ");
+        Enes100.print(Enes100.location.y);
+        Enes100.print(", ");
+        Enes100.print(Enes100.location.theta);
+        Enes100.println(")");
     } else {
-        enes.println("Sad trombone... I couldn't update my location");
+        // OSV's location was not found
+        Enes100.println("404 Not Found");
     }
 
-    enes.navigated();
-
     // Transmit the material of the debris
-    // The type of the number passed must be a double
-    enes.baseObjective(STEEL);
+    Enes100.mission(STEEL);
 
-    // Transmit the mass of the debris
-    enes.bonusObjective(2.43);
+    // Transmit the mass of the debris in grams
+    Enes100.mission(2.43);
 }
