@@ -32,6 +32,7 @@ bool VisionSystemClient::begin(const char* teamName, int teamType, int markerId,
   mSerial = new SoftwareSerial(rxPin, txPin);
   mSerial->begin(9600);
   
+  mSerial->write(255);
   mSerial->write(2);
   mSerial->write(teamType);
   mSerial->write(teamName);
