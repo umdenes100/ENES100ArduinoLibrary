@@ -6,9 +6,9 @@ void setup() {
     Enes100.begin("Duhbree", DEBRIS, 3, 8, 9);
 
     Enes100.print("Destination is at (");
-    Enes100.print(Enes100.location.x);
+    Enes100.print(Enes100.destination.x);
     Enes100.print(", ");
-    Enes100.print(Enes100.location.y);
+    Enes100.print(Enes100.destination.y);
     Enes100.println(")");
 
     // Any other setup code...

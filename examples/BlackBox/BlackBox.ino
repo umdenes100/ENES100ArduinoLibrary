@@ -5,12 +5,6 @@ void setup() {
     // Team Name, Mission Type, Marker ID, RX Pin, TX Pin
     Enes100.begin("Black Box Team", BLACK_BOX, 3, 8, 9);
 
-    Enes100.print("Destination is at (");
-    Enes100.print(Enes100.location.x);
-    Enes100.print(", ");
-    Enes100.print(Enes100.location.y);
-    Enes100.println(")");
-
     // Any other setup code...
 }
 
