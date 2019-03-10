@@ -112,11 +112,11 @@ Coordinate coordinate2(1.2, 0.7); // Represents the point (1.2, 0.7, 0)
 Coordinate coordinate3(1.2, 0.7, 1.1); // Represents the point (1.2, 0.7, 1.1)
 ```
 
-For the Black Box mission, the base objective must be transmitted using a Coordinate object.
+For the Black Box mission, the coordinates of the black box must be transmitted using a Coordinate object.
 
 ```
 Coordinate blackBox(3.2, 1.6);
-Enes100.mission(BASE, blackBox);
+Enes100.mission(blackBox);
 ```
 
 ## Example Code and Debugging
