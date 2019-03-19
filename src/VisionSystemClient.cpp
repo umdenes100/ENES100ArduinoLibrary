@@ -27,7 +27,6 @@ bool VisionSystemClient::ping() {
 }
 
 bool VisionSystemClient::begin(const char* teamName, int teamType, int markerId, int rxPin, int txPin) {
-  Serial.println("begin");
   mMarkerId = markerId;
   mSerial = new SoftwareSerial(rxPin, txPin);
   mSerial->begin(9600);
