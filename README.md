@@ -1,6 +1,6 @@
 # Enes100ArduinoLibrary
 
-Arduino library for use in the ENES100 course with Vision System v5 and APC220s
+Arduino library for use in the ENES100 course with Vision System v5.1 over WiFi
 
 ## Download and Installation
 
@@ -10,19 +10,16 @@ To use this library, download the contents from [this Github repository](https:/
 
 ## Setup
 
-Communication with the Vision System is done using APC220 wireless RF transceivers. APC220s are available for check out from the tool cabinet through a Teaching Fellow. The APC220 has 7 pins:
+Communication with the Vision System is done using ESP8266 WiFi-enabled microcontrollers. WiFi modules are available for checkout through a Teaching Fellow. The WiFi module has 4 pins:
 
 | Pin | Description     | Connect to...           |
 | --- | ---             | ---                     |
 | GND | Ground          | Common ground           |
 | VCC | Voltage supply  | +5 V                    |
-| EN  | Enable          | +5 V                    |
-| RXD | Serial receive  | Arduino serial transmit |
-| TXD | Serial transmit | Arduino serial receive  |
-| AUX | Auxiliary       | Not connected           |
-| SET | Setting mode    | +5 V                    |
+| TX  | Serial transmit | Arduino serial receive  |
+| RX  | Serial receive  | Arduino serial transmit |
 
-When choosing the pins to use for communication, there are a few things to keep in mind. Firstly, you cannot use pins 0 and 1 for RF communication (or for anything else). The RX and TX labels on those pins refer to the Arduino’s serial transmit and receive with the computer. If you block those pins, you will not be able to upload code to your Arduino. Secondly, it is preferable not to use PWM pins for your communication; you’ll want to save those for things like controlling your motors.
+When choosing the pins to use for communication, there are a few things to keep in mind. Firstly, you will want to avoid pins 0 and 1 for RF communication (or for anything else). The RX and TX labels on those pins refer to the Arduino’s serial transmit and receive with the computer. If you block those pins, you will not be able to upload code to your Arduino. Secondly, you might not want to use PWM pins for your communication so you can save those for things like controlling your motors. That choice simply depends on how many PWM pins you need for your other peripherals.
 
 ## Usage
 
@@ -52,7 +49,7 @@ The first parameter is the name of your team, which will appear on the Vision Sy
  * `FIRE`
  * `WATER`
 
-(As with all `code samples` in this document, these are case sensitive.) The third argument is the ID number of the marker that your team will be using. The fourth and fifth arguments are your serial receive and serial transmit pins (recall that your RX pin connects to the APC’s TX pin and vice versa).
+(As with all `code samples` in this document, these are case sensitive.) The third argument is the ID number of the marker that your team will be using. The fourth and fifth arguments are your serial receive and serial transmit pins (recall that your RX pin connects to the WiFi module’s TX pin and vice versa).
 
 The `begin()` method returns a `bool` to indicate if the Vision System received your request to start the mission. You can use this return value to make your OSV wait for affirmative communication before starting.
 
@@ -141,14 +138,14 @@ Initializes the ENES100 library and establishes communication with the Vision Sy
 Returns: `true` on success, `false` on failure.   
 Updates the OSV's location information.
 
-`void mission(type, value)`   
-Sends value for a base objective.
+`void mission(value)`   
+Sends value for a mission objective.
 
 `void print(message)`  
-Sends a message to be displayed on the Vision System. Accepts a String, integer, or double as an argument.
+Sends a message to be displayed on the Vision System.
 
 `void println(message)`  
-Sends a message to be displayed on the Vision System followed by a new line character. Accepts a String, integer, or double as an argument.
+Sends a message to be displayed on the Vision System followed by a new line character.
 
 ## Competition Procedures
 
