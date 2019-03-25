@@ -4,6 +4,15 @@
 #include "Arduino.h"
 #include "SoftwareSerial.h"
 
+// Transmission opcodes
+#define OP_PING     0
+#define OP_BEGIN    2
+#define OP_LOCATION 4
+#define OP_MISSION  6
+#define OP_PRINT    8
+
+const byte FLUSH_SEQUENCE[] = {0xFF, 0xFE, 0xFD, 0xFC};
+
 class Coordinate {
 public:
   Coordinate();
@@ -26,12 +35,10 @@ public:
   bool mission(int message);
   bool mission(double message);
   bool mission(Coordinate& message);
-  void print(const char* message);
-  void print(int message);
-  void print(double message);
-  void println(const char* message);
-  void println(int message);
-  void println(double message);
+  template <typename T>
+  void print(T message);
+  template <typename T>
+  void println(T message);
   
   Coordinate location;
   Coordinate destination;
@@ -42,5 +49,25 @@ private:
   int mMarkerId;
   SoftwareSerial* mSerial;
 };
+
+/**
+ * Templated functions have to be in the header file
+ **/
+template <typename T>
+void VisionSystemClient::print(T message) {
+  mSerial->write(OP_PRINT);
+  mSerial->print(message);
+  mSerial->write(FLUSH_SEQUENCE, 4);
+  mSerial->flush();
+}
+
+template <typename T>
+void VisionSystemClient::println(T message) {
+  mSerial->write(OP_PRINT);
+  mSerial->print(message);
+  mSerial->write('\n');
+  mSerial->write(FLUSH_SEQUENCE, 4);
+  mSerial->flush();
+}
 
 #endif /* VisionSystemClient_hpp */
