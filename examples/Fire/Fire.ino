@@ -30,5 +30,5 @@ void loop() {
     }
     
     // Transmit the number of candles that are lit
-    Enes100.mission(BASE, 4);
+    Enes100.mission(4);
 }
