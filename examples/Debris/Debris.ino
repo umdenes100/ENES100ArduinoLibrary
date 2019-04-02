@@ -2,7 +2,7 @@
 
 void setup() {
     // Initialize Enes100 library
-    // Team Name, Mission Type, Marker ID, RX Pin, TX Pin
+    // Team Name, Mission Type, Marker ID, TX Pin, RX Pin
     Enes100.begin("Duhbree", DEBRIS, 3, 8, 9);
 
     Enes100.print("Destination is at (");

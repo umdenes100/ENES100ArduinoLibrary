@@ -2,7 +2,7 @@
 
 void setup() {
     // Initialize Enes100 library
-    // Team Name, Mission Type, Marker ID, RX Pin, TX Pin
+    // Team Name, Mission Type, Marker ID, TX Pin, RX Pin
     Enes100.begin("Black Box Team", BLACK_BOX, 3, 8, 9);
 
     // Any other setup code...
