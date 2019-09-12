@@ -4,7 +4,7 @@
 #include "VisionSystemClient.hpp"
 
 #define BLACK_BOX   0
-#define PAYLOAD     1
+#define DATA        1
 #define DEBRIS      2
 #define FIRE        3
 #define WATER       4
