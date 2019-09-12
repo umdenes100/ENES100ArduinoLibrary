@@ -88,7 +88,7 @@ Enes100.mission(2.34);
 Enes100.mission(ALUMINUM);
 ```
 
-For the BlackBox missino, valid color types are
+For the BlackBox mission, valid color types are
 * `RED`
 * `GREEN`
 * `BLUE`
