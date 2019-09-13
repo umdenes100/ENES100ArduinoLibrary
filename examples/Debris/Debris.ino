@@ -5,6 +5,7 @@ void setup() {
     // Team Name, Mission Type, Marker ID, TX Pin, RX Pin
     Enes100.begin("Duhbree", DEBRIS, 3, 8, 9);
 
+    //Print Destination Coordinates
     Enes100.print("Destination is at (");
     Enes100.print(Enes100.destination.x);
     Enes100.print(", ");
