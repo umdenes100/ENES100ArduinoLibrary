@@ -30,8 +30,8 @@ void loop() {
         Enes100.println("404 Not Found");
     }
 
-    // Transmit the material of the debris
-    Enes100.mission(STEEL);
+    // Transmit the material of the debris (Plastic or Aluminum)
+    Enes100.mission(Plastic);
 
     // Transmit the mass of the debris in grams
     Enes100.mission(2.43);
