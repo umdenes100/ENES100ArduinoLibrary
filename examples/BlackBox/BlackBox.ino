@@ -23,7 +23,6 @@ void loop() {
         Enes100.println("404 Not Found");
     }
 
-    // Transmit the coordinate of the black box
-    Coordinate blackBox(2.9, 1.4);
-    Enes100.mission(blackBox);
+    // Transmit the color of the LED
+    Enes100.mission("Green");
 }
