@@ -44,7 +44,7 @@ void setup() {
 The first parameter is the name of your team, which will appear on the Vision System. `FIRE` refers to the mission type of your team. The full list of valid mission names is:
 
  * `BLACK_BOX`
- * `DATA`
+ * `CHEMICAL`
  * `DEBRIS`
  * `FIRE`
  * `WATER`
@@ -85,25 +85,19 @@ As your OSV completes its objectives, it will need to alert the Vision System. W
 
 ```
 Enes100.mission(2.34);
-Enes100.mission(ALUMINUM);
+Enes100.mission(STEEL);
 ```
-
-For the BlackBox mission, valid color types are
-* `RED`
-* `GREEN`
-* `BLUE`
 
 For the Water mission, valid water types for the base objective are
 
- * `FRESH_UNPOLLUTED`
- * `FRESH_POLLUTED`
- * `SALT_UNPOLLUTED`
- * `SALT_POLLUTED`
+ * `FRESH`
+ * `POLLUTED`
+ * `SALT`
 
 For the Debris mission, valid material types are
 
- * `PLASTIC`
- * `ALUMINUM`
+ * `COPPER`
+ * `STEEL`
 
 ### The Coordinate Object
 

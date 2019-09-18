@@ -3,7 +3,7 @@
 void setup() {
     // Initialize Enes100 Library
     // Team Name, Mission Type, Marker ID, TX Pin, RX Pin
-    Enes100.begin("DATA TEAM", DATA, 3, 8, 9);
+    Enes100.begin("Drop the Base", CHEMICAL, 3, 8, 9);
 
     Enes100.print("Destination is at (");
     Enes100.print(Enes100.destination.x);
@@ -29,6 +29,9 @@ void loop() {
         Enes100.println("404 Not Found");
     }
 
-    // Transmit the message from the arduino
+    // Transmit the initial pH of the pool
+    Enes100.mission(2.7);
+
+    // Transmit the final pH of the pool
     Enes100.mission(7.0);
 }
