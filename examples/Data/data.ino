@@ -3,9 +3,8 @@
 void setup() {
     // Initialize Enes100 Library
     // Team Name, Mission Type, Marker ID, TX Pin, RX Pin
-    Enes100.begin("Data Mission", Data, 3, 8, 9);
+    Enes100.begin("DATA TEAM", DATA, 3, 8, 9);
 
-    //Print out Coordinates of the destination
     Enes100.print("Destination is at (");
     Enes100.print(Enes100.destination.x);
     Enes100.print(", ");
@@ -30,6 +29,6 @@ void loop() {
         Enes100.println("404 Not Found");
     }
 
-    // Transmit the Message
-    Enes100.mission("A");
+    // Transmit the message from the arduino
+    Enes100.mission('M');
 }
