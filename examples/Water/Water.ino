@@ -30,7 +30,7 @@ void loop() {
     }
 
     // Transmit the state of the pool
-    Enes100.mission(FRESH_POLLUTED);
+    Enes100.mission(POLLUTED);
 
     // Transmit the depth of the pool in mm
     Enes100.mission(44.2);
