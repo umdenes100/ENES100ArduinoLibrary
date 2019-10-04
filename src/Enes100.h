@@ -19,7 +19,7 @@
 #define SALT_POLLUTED     3
 
 #define PLASTIC           0
-#define ALUMINUM          1
+#define COPPER            1
 
 VisionSystemClient Enes100;
 

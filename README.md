@@ -85,7 +85,7 @@ As your OSV completes its objectives, it will need to alert the Vision System. W
 
 ```
 Enes100.mission(2.34);
-Enes100.mission(ALUMINUM);
+Enes100.mission(COPPER);
 ```
 
 For the BlackBox mission, valid color types are
@@ -103,7 +103,7 @@ For the Water mission, valid water types for the base objective are
 For the Debris mission, valid material types are
 
  * `PLASTIC`
- * `ALUMINUM`
+ * `COPPER`
 
 ### The Coordinate Object
 
