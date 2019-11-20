@@ -34,6 +34,7 @@ public:
   bool updateLocation();
   bool mission(int message);
   bool mission(double message);
+  bool mission(char message);
   bool mission(Coordinate& message);
   template <typename T>
   void print(T message);
