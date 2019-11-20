@@ -70,6 +70,14 @@ bool VisionSystemClient::mission(double message) {
   
   return receive(NULL);
 }
+bool VisionSystemClient::mission(char message) {
+  mSerial->write(OP_MISSION);
+  mSerial->print(message);
+  mSerial->write(FLUSH_SEQUENCE, 4);
+  mSerial->flush();
+
+  return receive(NULL);
+}
 
 bool VisionSystemClient::mission(Coordinate& message) {
   mSerial->write(OP_MISSION);
