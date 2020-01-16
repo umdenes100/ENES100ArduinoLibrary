@@ -10,25 +10,24 @@ void setup() {
     Enes100.print(", ");
     Enes100.print(Enes100.destination.y);
     Enes100.println(")");
-
+    
+    // Transmit the number of candles that are lit
+    Enes100.mission(4);
+    
     // Any other setup code...
 }
 
 void loop() {
     // Update the OSV's current location
-    if (Enes100.updateLocation()) {
-        Enes100.print("OSV is at (");
-        Enes100.print(Enes100.location.x);
-        Enes100.print(", ");
-        Enes100.print(Enes100.location.y);
-        Enes100.print(", ");
-        Enes100.print(Enes100.location.theta);
-        Enes100.println(")");
-    } else {
+    while(!Enes100.updateLocation()) {
         // OSV's location was not found
         Enes100.println("404 Not Found");
     }
-    
-    // Transmit the number of candles that are lit
-    Enes100.mission(4);
+    Enes100.print("OSV is at (");
+    Enes100.print(Enes100.location.x);
+    Enes100.print(", ");
+    Enes100.print(Enes100.location.y);
+    Enes100.print(", ");
+    Enes100.print(Enes100.location.theta);
+    Enes100.println(")");    
 }
