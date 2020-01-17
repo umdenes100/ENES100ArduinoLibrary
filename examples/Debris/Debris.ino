@@ -12,7 +12,7 @@ void setup() {
     Enes100.print(Enes100.destination.y);
     Enes100.println(")");
     // Transmit the material of the debris (Plastic or Copper)
-    Enes100.mission(Plastic);
+    Enes100.mission(PLASTIC);
 
     // Transmit the mass of the debris in grams
     Enes100.mission(2.43);
