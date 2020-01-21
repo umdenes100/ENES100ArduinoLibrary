@@ -10,8 +10,10 @@ void setup() {
     Enes100.print(", ");
     Enes100.print(Enes100.destination.y);
     Enes100.println(")");
-    // Transmit the color of the LED
-    Enes100.mission(GREEN);
+    // Transmit the height of the payload in mm
+    Enes100.mission(270);
+    //Transmit the width of the payload in mm
+    Enes100.mission(180)
     // Any other setup code...
 }
 
