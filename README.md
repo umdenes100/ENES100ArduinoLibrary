@@ -43,7 +43,7 @@ void setup() {
 
 The first parameter is the name of your team, which will appear on the Vision System. `FIRE` refers to the mission type of your team. The full list of valid mission names is:
 
- * `BLACK_BOX`
+ * `CRASH_SITE`
  * `DATA`
  * `DEBRIS`
  * `FIRE`
@@ -60,7 +60,7 @@ Enes100.destination.x; // x Coordinate
 Enes100.destination.y; // y Coordinate
 ```
 
-For the Black Box mission, the destination is unknown. The `destination` object will be filled with zeroes.
+For the Crash Site mission, the destination is unknown. The `destination` object will be filled with zeroes.
 
 To request an update of your OSV’s location, call the `updateLocation()` method. This method returns a `bool` indicating if it succeeded or not.
 
@@ -88,11 +88,6 @@ Enes100.mission(2.34);
 Enes100.mission(COPPER);
 ```
 
-For the BlackBox mission, valid color types are
-* `RED`
-* `GREEN`
-* `BLUE`
-
 For the Water mission, valid water types for the base objective are
 
  * `FRESH_UNPOLLUTED`
@@ -113,13 +108,6 @@ The ENES100 library also includes a `Coordinate` class that holds an x, y, and t
 Coordinate coordinate1(); // Represents the point (0, 0, 0)
 Coordinate coordinate2(1.2, 0.7); // Represents the point (1.2, 0.7, 0)
 Coordinate coordinate3(1.2, 0.7, 1.1); // Represents the point (1.2, 0.7, 1.1)
-```
-
-For the Black Box mission, the coordinates of the black box must be transmitted using a Coordinate object.
-
-```
-Coordinate blackBox(3.2, 1.6);
-Enes100.mission(blackBox);
 ```
 
 ## Example Code and Debugging
