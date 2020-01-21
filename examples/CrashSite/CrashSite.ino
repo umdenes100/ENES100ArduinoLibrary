@@ -13,7 +13,7 @@ void setup() {
     // Transmit the height of the payload in mm
     Enes100.mission(270);
     //Transmit the width of the payload in mm
-    Enes100.mission(180)
+    Enes100.mission(180);
     // Any other setup code...
 }
 
