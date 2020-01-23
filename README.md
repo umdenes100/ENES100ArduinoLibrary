@@ -4,7 +4,7 @@ Arduino library for use in the ENES100 course with Vision System v5.1 over WiFi
 
 ## Download and Installation
 
-To use this library, download the contents from [this Github repository](https://github.com/umdenes100/Enes100ArduinoLibrary) by going to the green **Clone or Download** menu and clicking **Download ZIP**. (There is no need to unzip the file.) Open the Arduino IDE and install the library by going to **Sketch > Include Library > Add .ZIP Library** and selecting the downloaded file. You must have Arduino IDE version 1.5.0 or above. The most current version of Arduino IDE can be downloaded from the [Arduino website](https://www.arduino.cc/en/Main/Software).
+To download this library, click on the blue **Download** button on the right. Make sure the file is unzipped and move it to the arduino libraries folder (Documents->Arduino->libraries). You must have Arduino IDE version 1.5.0 or above. The most current version of Arduino IDE can be downloaded from the [Arduino website](https://www.arduino.cc/en/Main/Software).
 
 **If you have an older version of the library on your computer, you _must_ delete it before adding a newer version.** Failure to do this may cause file conflicts and it is not guaranteed that the library will work properly.
 
@@ -49,7 +49,7 @@ The first parameter is the name of your team, which will appear on the Vision Sy
  * `FIRE`
  * `WATER`
 
-(As with all `code samples` in this document, these are case sensitive.) The third argument is the ID number of the marker that your team will be using. The fourth argument is your serial transmit pin. The fifth argument is your serial receive pin.
+(As with all `code samples` in this document, these are case sensitive.) The third argument is the ID number of the aruco marker that your team will be using. The fourth argument is your serial transmit pin. The fifth argument is your serial receive pin.
 
 The `begin()` method returns a `bool` to indicate if the Vision System received your request to start the mission. You can use this return value to make your OSV wait for affirmative communication before starting.
 
@@ -59,8 +59,6 @@ The coordinates of your mission site are transmitted automatically when you call
 Enes100.destination.x; // x Coordinate
 Enes100.destination.y; // y Coordinate
 ```
-
-For the Crash Site mission, the destination is unknown. The `destination` object will be filled with zeroes.
 
 To request an update of your OSV’s location, call the `updateLocation()` method. This method returns a `bool` indicating if it succeeded or not.
 
