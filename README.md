@@ -103,9 +103,12 @@ For the Debris mission, valid material types are
 The ENES100 library also includes a `Coordinate` class that holds an x, y, and theta. Students may use Coordinates in their code as desired. The `destination` and `location` members of `Enes100` are `Coordinate` objects. The x, y, and theta are accessed in the same way as in `destination` and `location`, i.e. `coordinate.x`, `coordinate.y`, and `coordinate.theta`. For convenience, we have included 3 constructors for the Coordinate object.
 
 ```
-Coordinate coordinate1(); // Represents the point (0, 0, 0)
-Coordinate coordinate2(1.2, 0.7); // Represents the point (1.2, 0.7, 0)
-Coordinate coordinate3(1.2, 0.7, 1.1); // Represents the point (1.2, 0.7, 1.1)
+// Represents the point (0, 0, 0)
+Coordinate coordinate1();
+// Represents the point (1.2, 0.7, 0)
+Coordinate coordinate2(1.2, 0.7);
+// Represents the point (1.2, 0.7, 1.1)
+Coordinate coordinate3(1.2, 0.7, 1.1);
 ```
 
 ## Example Code and Debugging
