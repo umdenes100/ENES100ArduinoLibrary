@@ -4,7 +4,7 @@ Arduino library for use in the ENES100 course with Vision System v5.1 over WiFi
 
 ## Download and Installation
 
-To use this library, download the contents from [this Github repository](https://github.com/umdenes100/Enes100ArduinoLibrary) by going to the green **Clone or Download** menu and clicking **Download ZIP**. (There is no need to unzip the file.) Open the Arduino IDE and install the library by going to **Sketch > Include Library > Add .ZIP Library** and selecting the downloaded file. You must have Arduino IDE version 1.5.0 or above. The most current version of Arduino IDE can be downloaded from the [Arduino website](https://www.arduino.cc/en/Main/Software).
+To download this library, click on the blue **Download** button on the right. Make sure the file is unzipped and move it to the arduino libraries folder (Documents->Arduino->libraries). You must have Arduino IDE version 1.5.0 or above. The most current version of Arduino IDE can be downloaded from the [Arduino website](https://www.arduino.cc/en/Main/Software).
 
 **If you have an older version of the library on your computer, you _must_ delete it before adding a newer version.** Failure to do this may cause file conflicts and it is not guaranteed that the library will work properly.
 
@@ -19,7 +19,7 @@ Communication with the Vision System is done using ESP8266 WiFi-enabled microcon
 | TX  | Serial transmit | Arduino serial receive  |
 | RX  | Serial receive  | Arduino serial transmit |
 
-When choosing the pins to use for communication, there are a few things to keep in mind. Firstly, you will want to avoid pins 0 and 1 for RF communication (or for anything else). The RX and TX labels on those pins refer to the Arduino’s serial transmit and receive with the computer. If you block those pins, you will not be able to upload code to your Arduino. Secondly, you might not want to use PWM pins for your communication so you can save those for things like controlling your motors. That choice simply depends on how many PWM pins you need for your other peripherals.
+When choosing the pins to use for communication, there are a few things to keep in mind. Firstly, you will want to avoid pins 0 and 1 for communication (or for anything else). The RX and TX labels on those pins refer to the Arduino’s serial transmit and receive with the computer. If you block those pins, you will not be able to upload code to your Arduino. Secondly, you might not want to use PWM pins for your communication so you can save those for things like controlling your motors. That choice simply depends on how many PWM pins you need for your other peripherals. Thirdly, some pins aren't configured to transmit and recieve. You can find out if a certain pin is suitable to transmit or recieve by looking at the datasheet for your arduino, or by uploading the example code and seeing if you are able to recieve location coordinates. 
 
 ## Usage
 
@@ -43,13 +43,13 @@ void setup() {
 
 The first parameter is the name of your team, which will appear on the Vision System. `FIRE` refers to the mission type of your team. The full list of valid mission names is:
 
- * `BLACK_BOX`
+ * `CRASH_SITE`
  * `DATA`
  * `MATERIAL`
  * `FIRE`
  * `WATER`
 
-(As with all `code samples` in this document, these are case sensitive.) The third argument is the ID number of the marker that your team will be using. The fourth argument is your serial transmit pin. The fifth argument is your serial receive pin.
+(As with all `code samples` in this document, these are case sensitive.) The third argument is the ID number of the aruco marker that your team will be using. The fourth argument is your serial transmit pin. The fifth argument is your serial receive pin.
 
 The `begin()` method returns a `bool` to indicate if the Vision System received your request to start the mission. You can use this return value to make your OSV wait for affirmative communication before starting.
 
@@ -59,8 +59,6 @@ The coordinates of your mission site are transmitted automatically when you call
 Enes100.destination.x; // x Coordinate
 Enes100.destination.y; // y Coordinate
 ```
-
-For the Black Box mission, the destination is unknown. The `destination` object will be filled with zeroes.
 
 To request an update of your OSV’s location, call the `updateLocation()` method. This method returns a `bool` indicating if it succeeded or not.
 
@@ -88,11 +86,6 @@ Enes100.mission(2.34);
 Enes100.mission(COPPER);
 ```
 
-For the BlackBox mission, valid color types are
-* `RED`
-* `GREEN`
-* `BLUE`
-
 For the Water mission, valid water types for the base objective are
 
  * `FRESH_UNPOLLUTED`
@@ -110,16 +103,12 @@ For the Material mission, valid material types are
 The ENES100 library also includes a `Coordinate` class that holds an x, y, and theta. Students may use Coordinates in their code as desired. The `destination` and `location` members of `Enes100` are `Coordinate` objects. The x, y, and theta are accessed in the same way as in `destination` and `location`, i.e. `coordinate.x`, `coordinate.y`, and `coordinate.theta`. For convenience, we have included 3 constructors for the Coordinate object.
 
 ```
-Coordinate coordinate1(); // Represents the point (0, 0, 0)
-Coordinate coordinate2(1.2, 0.7); // Represents the point (1.2, 0.7, 0)
-Coordinate coordinate3(1.2, 0.7, 1.1); // Represents the point (1.2, 0.7, 1.1)
-```
-
-For the Black Box mission, the coordinates of the black box must be transmitted using a Coordinate object.
-
-```
-Coordinate blackBox(3.2, 1.6);
-Enes100.mission(blackBox);
+// Represents the point (0, 0, 0)
+Coordinate coordinate1();
+// Represents the point (1.2, 0.7, 0)
+Coordinate coordinate2(1.2, 0.7);
+// Represents the point (1.2, 0.7, 1.1)
+Coordinate coordinate3(1.2, 0.7, 1.1);
 ```
 
 ## Example Code and Debugging
