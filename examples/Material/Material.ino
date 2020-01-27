@@ -3,7 +3,7 @@
 void setup() {
     // Initialize Enes100 library
     // Team Name, Mission Type, Marker ID, TX Pin, RX Pin
-    Enes100.begin("Duhbree", DEBRIS, 3, 8, 9);
+    Enes100.begin("Material Team", MATERIAL, 3, 8, 9);
 
     //Print Destination Coordinates
     Enes100.print("Destination is at (");
@@ -11,10 +11,10 @@ void setup() {
     Enes100.print(", ");
     Enes100.print(Enes100.destination.y);
     Enes100.println(")");
-    // Transmit the material of the debris (Plastic or Copper)
+    // Transmit the material of the material (Plastic or Copper)
     Enes100.mission(PLASTIC);
 
-    // Transmit the mass of the debris in grams
+    // Transmit the mass of the material in grams
     Enes100.mission(2.43);
     // Any other setup code...
 }

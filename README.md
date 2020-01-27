@@ -45,7 +45,7 @@ The first parameter is the name of your team, which will appear on the Vision Sy
 
  * `BLACK_BOX`
  * `DATA`
- * `DEBRIS`
+ * `MATERIAL`
  * `FIRE`
  * `WATER`
 
@@ -100,7 +100,7 @@ For the Water mission, valid water types for the base objective are
  * `SALT_UNPOLLUTED`
  * `SALT_POLLUTED`
 
-For the Debris mission, valid material types are
+For the Material mission, valid material types are
 
  * `PLASTIC`
  * `COPPER`
@@ -153,6 +153,6 @@ Sends a message to be displayed on the Vision System.
 `void println(message)`  
 Sends a message to be displayed on the Vision System followed by a new line character.
 
-## Competition Procedures
+## Product Demonstration Procedures
 
-During the competition, messages sent using `print()` and `println()` will not be shown on the Vision System console. The console will only print out the values that you send using `mission()`.
+During the product demonstration, messages sent using `print()` and `println()` will not be shown on the Vision System console. The console will only print out the values that you send using `mission()`.

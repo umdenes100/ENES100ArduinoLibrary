@@ -27,7 +27,7 @@ bool VisionSystemClient::ping() {
 }
 
 bool VisionSystemClient::begin(const char* teamName, int teamType, int markerId, int rxPin, int txPin) {
-  delay(2000);
+  delay(3000);
   mMarkerId = markerId;
   mSerial = new SoftwareSerial(rxPin, txPin);
   mSerial->begin(9600);
