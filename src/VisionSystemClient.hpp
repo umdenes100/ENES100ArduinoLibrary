@@ -32,10 +32,10 @@ public:
   bool ping();
   bool begin(const char* teamName, int teamType, int markerId, int rxPin, int txPin);
   bool updateLocation();
-  bool mission(int message);
-  bool mission(double message);
-  bool mission(char message);
-  bool mission(Coordinate& message);
+  bool mission(int type, int message);
+  bool mission(int type, double message);
+  bool mission(int type, char message);
+  bool mission(int type, Coordinate& message);
   template <typename T>
   void print(T message);
   template <typename T>

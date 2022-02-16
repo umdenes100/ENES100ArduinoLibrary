@@ -54,8 +54,9 @@ bool VisionSystemClient::updateLocation() {
   return receive(&location);
 }
 
-bool VisionSystemClient::mission(int message) {
+bool VisionSystemClient::mission(int type, int message) {
   mSerial->write(OP_MISSION);
+  mSerial->write(type);
   mSerial->print(message);
   mSerial->write(FLUSH_SEQUENCE, 4);
   mSerial->flush();
@@ -63,16 +64,18 @@ bool VisionSystemClient::mission(int message) {
   return receive(NULL);
 }
 
-bool VisionSystemClient::mission(double message) {
+bool VisionSystemClient::mission(int type, double message) {
   mSerial->write(OP_MISSION);
+  mSerial->write(type);
   mSerial->print(message);
   mSerial->write(FLUSH_SEQUENCE, 4);
   mSerial->flush();
   
   return receive(NULL);
 }
-bool VisionSystemClient::mission(char message) {
+bool VisionSystemClient::mission(int type, char message) {
   mSerial->write(OP_MISSION);
+  mSerial->write(type);
   mSerial->print(message);
   mSerial->write(FLUSH_SEQUENCE, 4);
   mSerial->flush();
@@ -80,8 +83,9 @@ bool VisionSystemClient::mission(char message) {
   return receive(NULL);
 }
 
-bool VisionSystemClient::mission(Coordinate& message) {
+bool VisionSystemClient::mission(int type, Coordinate& message) {
   mSerial->write(OP_MISSION);
+  mSerial->write(type);
   mSerial->print(message.x);
   mSerial->print(',');
   mSerial->print(message.y);
