@@ -31,6 +31,7 @@ To use the library, you have to direct the compiler to include it in your code. 
 
 at the very top of your file.
 
+### Enes100.begin()
 Just like the built-in `Serial` interface, you need to initialize the library by calling `begin()`.
 
 ```
@@ -60,6 +61,7 @@ Enes100.destination.x; // x Coordinate
 Enes100.destination.y; // y Coordinate
 ```
 
+### Enes100.updateLocaiton()
 To request an update of your OSV’s location, call the `updateLocation()` method. This method returns a `bool` indicating if it succeeded or not.
 
 ```
@@ -79,37 +81,49 @@ Enes100.print(“Our x coordinate is: “);
 Enes100.println(enes.location.x);
 ```
 
-As your OSV completes its objectives, it will need to alert the Vision System. When your OSV completes one of the objectives that requires transmission, call the `mission()` method with the value that you've calculated.
+### Enes100.mission()
+As your OSV completes its objectives, it will need to alert the Vision System. When your OSV completes one of the objectives that requires transmission, call the `mission()` method with the value that you've calculated. There are two arguments associated with this function `mission(arg1, arg2)`. **arg1** is the argument specifying what type of mission call you are sending (for each mission there are a couple types). These C definitions are all defined in `Enes100.h`. **arg2** is the argument specifying the mission value associated with the mission type. These are also C definitions besides those that require integer or float values.
 
-```
-Enes100.mission(2.34);
-Enes100.mission(COPPER);
-```
+For the valid mission calls below, the value `x` will denote an integer/float value.
 
-For the Water mission, valid water types for the base objective are
+Valid calls for **CRASH_SITE**:
 
- * `FRESH_UNPOLLUTED`
- * `FRESH_POLLUTED`
- * `SALT_UNPOLLUTED`
- * `SALT_POLLUTED`
+ * Enes100.mission(LENGTH, x);
+ * Enes100.mission(HEIGHT, x);
+ * Enes100.mission(DIRECTION, POS_X);
+ * Enes100.mission(DIRECTION, NEG_X);
+ * Enes100.mission(DIRECTION, POS_Y);
+ * Enes100.mission(DIRECTION, NEG_Y);
 
-For the Material mission, valid material types are
+Valid calls for **DATA**:
 
- * `PLASTIC`
- * `COPPER`
+ * Enes100.mission(CYCLE, x);
+ * Enes100.mission(MAGNETISM, MAGNETIC);
+ * Enes100.mission(MAGNETISM, NOT_MAGNETIC);
 
-### The Coordinate Object
+Valid calls for **MATERIAL**:
 
-The ENES100 library also includes a `Coordinate` class that holds an x, y, and theta. Students may use Coordinates in their code as desired. The `destination` and `location` members of `Enes100` are `Coordinate` objects. The x, y, and theta are accessed in the same way as in `destination` and `location`, i.e. `coordinate.x`, `coordinate.y`, and `coordinate.theta`. For convenience, we have included 3 constructors for the Coordinate object.
+ * Enes100.mission(WEIGHT, HEAVY);
+ * Enes100.mission(WEIGHT, MEDIUM);
+ * Enes100.mission(WEIGHT, LIGHT);
+ * Enes100.mission(SQUISHABILITY, SQUISHY);
+ * Enes100.mission(SQUISHABILITY, NOT_SQUISHY);
 
-```
-// Represents the point (0, 0, 0)
-Coordinate coordinate1();
-// Represents the point (1.2, 0.7, 0)
-Coordinate coordinate2(1.2, 0.7);
-// Represents the point (1.2, 0.7, 1.1)
-Coordinate coordinate3(1.2, 0.7, 1.1);
-```
+Valid calls for **FIRE**:
+
+ * Enes100.mission(NUM_CANDLES, x);
+ * Enes100.mission(TOPOGRAPHY, TOP_A);
+ * Enes100.mission(TOPOGRAPHY, TOP_B);
+ * Enes100.mission(TOPOGRAPHY, TOP_C);
+
+Valid calls for **WATER**:
+
+ * Enes100.mission(WATER_TYPE, x);
+ * Enes100.mission(WATER_TYPE, FRESH_UNPOLLUTED);
+ * Enes100.mission(WATER_TYPE, FRESH_POLLUTED);
+ * Enes100.mission(WATER_TYPE, SALT_UNPOLLUTED);
+ * Enes100.mission(WATER_TYPE, SALT_POLLUTED);
+
 
 ## Example Code and Debugging
 
@@ -133,7 +147,7 @@ Initializes the ENES100 library and establishes communication with the Vision Sy
 Returns: `true` on success, `false` on failure.   
 Updates the OSV's location information.
 
-`void mission(value)`   
+`void mission(type, value)`   
 Sends value for a mission objective.
 
 `void print(message)`  
