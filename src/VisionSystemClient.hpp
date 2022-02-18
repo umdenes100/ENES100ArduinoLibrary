@@ -42,7 +42,7 @@ public:
   void println(T message);
   
   Coordinate location;
-  Coordinate destination;
+  Coordinate missionSite;
   
 private:
   bool receive(Coordinate* coordinate = NULL);

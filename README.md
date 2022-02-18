@@ -52,17 +52,17 @@ The first parameter is the name of your team, which will appear on the Vision Sy
 
 (As with all `code samples` in this document, these are case sensitive.) The third argument is the ID number of the aruco marker that your team will be using. The fourth argument is your serial transmit pin. The fifth argument is your serial receive pin.
 
-The `begin()` method returns a `bool` to indicate if the Vision System received your request to start the mission. You can use this return value to make your OSV wait for affirmative communication before starting.
+The `begin()` method returns a `bool` to indicate if the Vision System received your request to start the mission. You can use this return value to make your OTV wait for affirmative communication before starting.
 
 The coordinates of your mission site are transmitted automatically when you call `begin()`. You can access the coordinates using
 
 ```
-Enes100.destination.x; // x Coordinate
-Enes100.destination.y; // y Coordinate
+Enes100.missionSite.x; // x Coordinate
+Enes100.missionSite.y; // y Coordinate
 ```
 
 ### Enes100.updateLocaiton()
-To request an update of your OSV’s location, call the `updateLocation()` method. This method returns a `bool` indicating if it succeeded or not.
+To request an update of your OTV’s location, call the `updateLocation()` method. This method returns a `bool` indicating if it succeeded or not.
 
 ```
 if (Enes100.updateLocation()) {
@@ -82,7 +82,7 @@ Enes100.println(enes.location.x);
 ```
 
 ### Enes100.mission()
-As your OSV completes its objectives, it will need to alert the Vision System. When your OSV completes one of the objectives that requires transmission, call the `mission()` method with the value that you've calculated. There are two arguments associated with this function `mission(arg1, arg2)`. **arg1** is the argument specifying what type of mission call you are sending (for each mission there are a couple types). These C definitions are all defined in `Enes100.h`. **arg2** is the argument specifying the mission value associated with the mission type. These are also C definitions besides those that require integer or float values.
+As your OTV completes its objectives, it will need to alert the Vision System. When your OTV completes one of the objectives that requires transmission, call the `mission()` method with the value that you've calculated. There are two arguments associated with this function `mission(arg1, arg2)`. **arg1** is the argument specifying what type of mission call you are sending (for each mission there are a couple types). These C definitions are all defined in `Enes100.h`. **arg2** is the argument specifying the mission value associated with the mission type. These are also C definitions besides those that require integer or float values.
 
 For the valid mission calls below, the value `x` will denote an integer/float value.
 
@@ -145,7 +145,7 @@ Initializes the ENES100 library and establishes communication with the Vision Sy
 
 `bool updateLocation()`   
 Returns: `true` on success, `false` on failure.   
-Updates the OSV's location information.
+Updates the OTV's location information.
 
 `void mission(type, value)`   
 Sends value for a mission objective.

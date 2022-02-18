@@ -42,7 +42,7 @@ bool VisionSystemClient::begin(const char* teamName, int teamType, int markerId,
   mSerial->write(FLUSH_SEQUENCE, 4);
   mSerial->flush();
   
-  return receive(&destination);
+  return receive(&missionSite);
 }
 
 bool VisionSystemClient::updateLocation() {
