@@ -3,7 +3,7 @@
 void setup() {
     // Initialize Enes100 library
     // Team Name, Mission Type, Marker ID, TX Pin, RX Pin
-    Enes100.begin("Crash Site Team", CRASH_SITE, 3, 8, 9);
+    Enes100.begin("Crash Site Team", CRASH_SITE, 3, 10, 11);
     
     Enes100.print("Destination is at (");
     Enes100.print(Enes100.destination.x);
