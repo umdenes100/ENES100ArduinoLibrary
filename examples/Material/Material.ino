@@ -3,7 +3,7 @@
 void setup() {
     // Initialize Enes100 library
     // Team Name, Mission Type, Marker ID, TX Pin, RX Pin
-    Enes100.begin("Material Team", MATERIAL, 3, 8, 9);
+    Enes100.begin("Material Team", MATERIAL, 3, 10, 11);
 
     //Print Destination Coordinates
     Enes100.print("Destination is at (");
