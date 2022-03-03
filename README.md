@@ -118,11 +118,11 @@ Valid calls for **FIRE**:
 
 Valid calls for **WATER**:
 
- * Enes100.mission(WATER_TYPE, x);
- * Enes100.mission(WATER_TYPE, FRESH_UNPOLLUTED);
- * Enes100.mission(WATER_TYPE, FRESH_POLLUTED);
- * Enes100.mission(WATER_TYPE, SALT_UNPOLLUTED);
- * Enes100.mission(WATER_TYPE, SALT_POLLUTED);
+ * Enes100.mission(WATER_DEPTH, x);
+ * Enes100.mission(WATER\_TYPE, FRESH\_UNPOLLUTED);
+ * Enes100.mission(WATER\_TYPE, FRESH\_POLLUTED);
+ * Enes100.mission(WATER\_TYPE, SALT\_UNPOLLUTED);
+ * Enes100.mission(WATER\_TYPE, SALT\_POLLUTED);
 
 
 ## Example Code and Debugging
