@@ -61,7 +61,7 @@ Enes100.missionSite.x; // x Coordinate
 Enes100.missionSite.y; // y Coordinate
 ```
 
-### Enes100.updateLocaiton()
+### Enes100.updateLocation()
 To request an update of your OTV’s location, call the `updateLocation()` method. This method returns a `bool` indicating if it succeeded or not.
 
 ```
