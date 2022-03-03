@@ -139,7 +139,7 @@ The following are functions of the `Enes100` class.
 Returns: `true` on success, `false` on failure.   
 Confirms that communication with the Vision System is still active.
 
-`bool begin(teamName, teamType, markerId, rxPin, txPin)`   
+`bool begin(teamName, teamType, markerId, txPin, rxPin)`   
 Returns: `true` on success, `false` on failure.   
 Initializes the ENES100 library and establishes communication with the Vision System.
 
