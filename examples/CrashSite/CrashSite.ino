@@ -6,9 +6,9 @@ void setup() {
     Enes100.begin("Crash Site Team", CRASH_SITE, 3, 10, 11);
     
     Enes100.print("Destination is at (");
-    Enes100.print(Enes100.destination.x);
+    Enes100.print(Enes100.missionSite.x);
     Enes100.print(", ");
-    Enes100.print(Enes100.destination.y);
+    Enes100.print(Enes100.missionSite.y);
     Enes100.println(")");
     // Transmit the height of the payload in mm
     Enes100.mission(270);

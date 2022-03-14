@@ -7,9 +7,9 @@ void setup() {
 
     //Print Destination Coordinates
     Enes100.print("Destination is at (");
-    Enes100.print(Enes100.destination.x);
+    Enes100.print(Enes100.missionSite.x);
     Enes100.print(", ");
-    Enes100.print(Enes100.destination.y);
+    Enes100.print(Enes100.missionSite.y);
     Enes100.println(")");
     // Transmit the material of the material (Plastic or Copper)
     Enes100.mission(PLASTIC);

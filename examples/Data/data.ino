@@ -6,9 +6,9 @@ void setup() {
     Enes100.begin("DATA TEAM", DATA, 3, 10, 11);
 
     Enes100.print("Destination is at (");
-    Enes100.print(Enes100.destination.x);
+    Enes100.print(Enes100.missionSite.x);
     Enes100.print(", ");
-    Enes100.print(Enes100.destination.y);
+    Enes100.print(Enes100.missionSite.y);
     Enes100.println(")");
     
     // Transmit the message from the arduino
