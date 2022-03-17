@@ -6,14 +6,16 @@ void setup() {
     Enes100.begin("Crash Site Team", CRASH_SITE, 3, 10, 11);
     
     Enes100.print("Destination is at (");
-    Enes100.print(Enes100.destination.x);
+    Enes100.print(Enes100.missionSite.x);
     Enes100.print(", ");
-    Enes100.print(Enes100.destination.y);
+    Enes100.print(Enes100.missionSite.y);
     Enes100.println(")");
     // Transmit the height of the payload in mm
-    Enes100.mission(270);
-    //Transmit the width of the payload in mm
-    Enes100.mission(180);
+    Enes100.mission(HEIGHT, 270);
+    // Transmit the width of the payload in mm
+    Enes100.mission(WIDTH, 180);
+    // Transmit the direction of the abnormality for +x
+    Enes100.mission(WIDTH, POS_X);
     // Any other setup code...
 }
 
