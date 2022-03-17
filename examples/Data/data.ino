@@ -6,13 +6,15 @@ void setup() {
     Enes100.begin("DATA TEAM", DATA, 3, 10, 11);
 
     Enes100.print("Destination is at (");
-    Enes100.print(Enes100.destination.x);
+    Enes100.print(Enes100.missionSite.x);
     Enes100.print(", ");
-    Enes100.print(Enes100.destination.y);
+    Enes100.print(Enes100.missionSite.y);
     Enes100.println(")");
     
-    // Transmit the message from the arduino
-    Enes100.mission('M');
+    // Transmit the duty cycle of the data mission (7 for 70%)
+    Enes100.mission(CYCLE, 7);
+    // Transmit the magnetism of the data mission (in this case, not magnetic)
+    Enes100.mission(MAGNETISM, NOT_MAGNETIC);
     // Any other setup code...
 }
 
