@@ -12,10 +12,10 @@ void setup() {
     Enes100.println(")");
     // Transmit the height of the payload in mm
     Enes100.mission(HEIGHT, 270);
-    // Transmit the width of the payload in mm
-    Enes100.mission(WIDTH, 180);
+    // Transmit the length of the payload in mm
+    Enes100.mission(LENGTH, 180);
     // Transmit the direction of the abnormality for +x
-    Enes100.mission(WIDTH, POS_X);
+    Enes100.mission(DIRECTION, POS_X);
     // Any other setup code...
 }
 
