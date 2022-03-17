@@ -7,15 +7,14 @@ void setup() {
 
     //Print Destination Coordinates
     Enes100.print("Destination is at (");
-    Enes100.print(Enes100.destination.x);
+    Enes100.print(Enes100.missionSite.x);
     Enes100.print(", ");
-    Enes100.print(Enes100.destination.y);
+    Enes100.print(Enes100.missionSite.y);
     Enes100.println(")");
-    // Transmit the material of the material (Plastic or Copper)
-    Enes100.mission(PLASTIC);
-
-    // Transmit the mass of the material in grams
-    Enes100.mission(2.43);
+    // Transmit the weight of the material (in this case, the material is light)
+    Enes100.mission(WEIGHT, LIGHT);
+    // Transmit the squishability of the material (in this case, not squishy)
+    Enes100.mission(SQUISHABILITY, NOT_SQUISHY);
     // Any other setup code...
 }
 
