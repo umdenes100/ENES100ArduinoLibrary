@@ -6,15 +6,15 @@ void setup() {
     Enes100.begin("Water We Doing", WATER, 3, 10, 11);
 
     Enes100.print("Destination is at (");
-    Enes100.print(Enes100.destination.x);
+    Enes100.print(Enes100.missionSite.x);
     Enes100.print(", ");
-    Enes100.print(Enes100.destination.y);
+    Enes100.print(Enes100.missionSite.y);
     Enes100.println(")");
+    
     // Transmit the state of the pool
-    Enes100.mission(FRESH_POLLUTED);
-
-    // Transmit the depth of the pool in mm
-    Enes100.mission(44.2);
+    Enes100.mission(WATER_TYPE, FRESH_POLLUTED);
+    // Transmit the depth of the pool in mm (20, 30, or 40)
+    Enes100.mission(DEPTH, 30);
     // Any other setup code...
 }
 
