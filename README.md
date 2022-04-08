@@ -97,7 +97,7 @@ Valid calls for **CRASH_SITE**:
 
 Valid calls for **DATA**:
 
- * `Enes100.mission(CYCLE, x);` *x is the duty cycle percent (ex. 10%, 30%, 50%, 70%, 90%)*
+ * `Enes100.mission(CYCLE, x);` *x is the duty cycle percent (ex. 10, 30, 50, 70, 90)*
  * `Enes100.mission(MAGNETISM, MAGNETIC);`
  * `Enes100.mission(MAGNETISM, NOT_MAGNETIC);`
 
