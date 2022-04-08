@@ -88,41 +88,41 @@ For the valid mission calls below, the value `x` will denote an integer/float va
 
 Valid calls for **CRASH_SITE**:
 
- * Enes100.mission(LENGTH, x); *x is in millimeters*
- * Enes100.mission(HEIGHT, x); *x is in millimeters*
- * Enes100.mission(DIRECTION, POS_X); 
- * Enes100.mission(DIRECTION, NEG_X);
- * Enes100.mission(DIRECTION, POS_Y);
- * Enes100.mission(DIRECTION, NEG_Y);
+ * `Enes100.mission(LENGTH, x);` *x is in millimeters*
+ * `Enes100.mission(HEIGHT, x);` *x is in millimeters*
+ * `Enes100.mission(DIRECTION, POS_X);`
+ * `Enes100.mission(DIRECTION, NEG_X);`
+ * `Enes100.mission(DIRECTION, POS_Y);`
+ * `Enes100.mission(DIRECTION, NEG_Y);`
 
 Valid calls for **DATA**:
 
- * Enes100.mission(CYCLE, x); *x is the duty cycle percent (ex. 10%, 30%, 50%, 70%, 90%)*
- * Enes100.mission(MAGNETISM, MAGNETIC);
- * Enes100.mission(MAGNETISM, NOT_MAGNETIC);
+ * `Enes100.mission(CYCLE, x);` *x is the duty cycle percent (ex. 10%, 30%, 50%, 70%, 90%)*
+ * `Enes100.mission(MAGNETISM, MAGNETIC);`
+ * `Enes100.mission(MAGNETISM, NOT_MAGNETIC);`
 
 Valid calls for **MATERIAL**:
 
- * Enes100.mission(WEIGHT, HEAVY);
- * Enes100.mission(WEIGHT, MEDIUM);
- * Enes100.mission(WEIGHT, LIGHT);
- * Enes100.mission(SQUISHABILITY, SQUISHY);
- * Enes100.mission(SQUISHABILITY, NOT_SQUISHY);
+ * `Enes100.mission(WEIGHT, HEAVY);`
+ * `Enes100.mission(WEIGHT, MEDIUM);`
+ * `Enes100.mission(WEIGHT, LIGHT);`
+ * `Enes100.mission(SQUISHABILITY, SQUISHY);`
+ * `Enes100.mission(SQUISHABILITY, NOT_SQUISHY);`
 
 Valid calls for **FIRE**:
 
- * Enes100.mission(NUM_CANDLES, x); *x is an integer (0, 1, 2, 3, 4, 5)*
- * Enes100.mission(TOPOGRAPHY, TOP_A);
- * Enes100.mission(TOPOGRAPHY, TOP_B);
- * Enes100.mission(TOPOGRAPHY, TOP_C);
+ * `Enes100.mission(NUM_CANDLES, x);` *x is an integer (0, 1, 2, 3, 4, 5)*
+ * `Enes100.mission(TOPOGRAPHY, TOP_A);`
+ * `Enes100.mission(TOPOGRAPHY, TOP_B);`
+ * `Enes100.mission(TOPOGRAPHY, TOP_C);`
 
 Valid calls for **WATER**:
 
- * Enes100.mission(WATER_DEPTH, x); *x is in mm*
- * Enes100.mission(WATER\_TYPE, FRESH\_UNPOLLUTED);
- * Enes100.mission(WATER\_TYPE, FRESH\_POLLUTED);
- * Enes100.mission(WATER\_TYPE, SALT\_UNPOLLUTED);
- * Enes100.mission(WATER\_TYPE, SALT\_POLLUTED);
+ * `Enes100.mission(WATER_DEPTH, x);` *x is in mm*
+ * `Enes100.mission(WATER\_TYPE, FRESH\_UNPOLLUTED);`
+ * `Enes100.mission(WATER\_TYPE, FRESH\_POLLUTED);`
+ * `Enes100.mission(WATER\_TYPE, SALT\_UNPOLLUTED);`
+ * `Enes100.mission(WATER\_TYPE, SALT\_POLLUTED);`
 
 
 ## Example Code and Debugging
