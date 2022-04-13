@@ -82,9 +82,18 @@ Enes100.println(enes.location.x);
 ```
 
 ### Enes100.mission()
-As your OTV completes its objectives, it will need to alert the Vision System. When your OTV completes one of the objectives that requires transmission, call the `mission()` method with the value that you've calculated. There are two arguments associated with this function `mission(arg1, arg2)`. **arg1** is the argument specifying what type of mission call you are sending (for each mission there are a couple types). These C definitions are all defined in `Enes100.h`. **arg2** is the argument specifying the mission value associated with the mission type. These are also C definitions besides those that require integer or float values.
+As your OTV completes its objectives, it will need to alert the Vision System. When your OTV completes one of the objectives 
+that requires transmission, call the `mission(int type, int message)` function with appropriate values. 
 
-For the valid mission calls below, the value `x` will denote an integer/float value.
+There are two arguments associated with this function `mission(arg1, arg2)`. 
+- **arg1** is the argument specifying what type of mission call you are sending
+- **arg2** is the argument specifying the mission value associated with the mission type. 
+
+**NOTE:** Some of the values passed as arguments in the examples below are **C definitions**, defined in `Enes100.h`. All of 
+the C definitions defined in `Enes100.h` correlate to an integer. To save you the trouble, you can call the uppercase definition 
+like `LENGTH` for Crash Site teams or `SQUISHABILITY` for Material Identification teams. 
+
+For the valid mission calls below, the value `x` will denote an integer value.
 
 Valid calls for **CRASH_SITE**:
 
