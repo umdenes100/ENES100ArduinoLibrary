@@ -25,7 +25,7 @@ When choosing the pins to use for communication, there are a few things to keep 
 
 To use the library, you have to direct the compiler to include it in your code. Go to **Sketch > Include Library > ENES100**, or add it manually by typing
 
-```c
+```ino
 #include "Enes100.h"
 ```
 
@@ -34,7 +34,7 @@ at the very top of your file.
 ### Enes100.begin()
 Just like the built-in `Serial` interface, you need to initialize the library by calling `begin()`.
 
-```c
+```ino
 void setup() {
     Enes100.begin("It's lit", FIRE, 3, 8, 9);
     
@@ -56,7 +56,7 @@ The `begin()` method returns a `bool` to indicate if the Vision System received 
 
 The coordinates of your mission site are transmitted automatically when you call `begin()`. You can access the coordinates using
 
-```c
+```ino
 Enes100.missionSite.x; // x Coordinate
 Enes100.missionSite.y; // y Coordinate
 ```
@@ -64,7 +64,7 @@ Enes100.missionSite.y; // y Coordinate
 ### Enes100.updateLocation()
 To request an update of your OTV’s location, call the `updateLocation()` method. This method returns a `bool` indicating if it succeeded or not.
 
-```c
+```ino
 if (Enes100.updateLocation()) {
     Enes100.location.x; // x Coordinate
     Enes100.location.y; // y Coordinate
@@ -76,7 +76,7 @@ The x and y coordinates are the distance in meters from the y axis and x axis to
 
 At points in your mission, you may want to send information to be displayed on the Vision System. Writing information to the Vision System is similar to writing information to the Serial console. The `print()` function will write a message to the console. The `println()` function will write a message to the console followed by a new line character. These functions can accept strings, integers, and doubles as arguments.
 
-```c
+```ino
 Enes100.print(“Our x coordinate is: “);
 Enes100.println(enes.location.x);
 ```
