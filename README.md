@@ -127,7 +127,7 @@ Valid calls for **FIRE**:
 
 Valid calls for **WATER**:
 
- * `Enes100.mission(WATER_DEPTH, x);` *x is in mm*
+ * `Enes100.mission(DEPTH, x);` *x is in mm*
  * `Enes100.mission(WATER_TYPE, FRESH_UNPOLLUTED);`
  * `Enes100.mission(WATER_TYPE, FRESH_POLLUTED);`
  * `Enes100.mission(WATER_TYPE, SALT_UNPOLLUTED);`
