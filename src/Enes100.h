@@ -23,9 +23,9 @@
 #define NOT_MAGNETIC      1
 
 #define WEIGHT            0
-#define SQUISHABILITY     1
-#define SQUISHY           0
-#define NOT_SQUISHY       1
+#define MATERIAL_TYPE     1
+#define FOAM              0
+#define PLASTIC           1
 #define HEAVY             0
 #define MEDIUM            1
 #define LIGHT             2
