@@ -115,8 +115,8 @@ Valid calls for **MATERIAL**:
  * `Enes100.mission(WEIGHT, HEAVY);`
  * `Enes100.mission(WEIGHT, MEDIUM);`
  * `Enes100.mission(WEIGHT, LIGHT);`
- * `Enes100.mission(SQUISHABILITY, SQUISHY);`
- * `Enes100.mission(SQUISHABILITY, NOT_SQUISHY);`
+ * `Enes100.mission(MATERIAL_TYPE, FOAM);`
+ * `Enes100.mission(MATERIAL_TYPE, PLASTIC);`
 
 Valid calls for **FIRE**:
 
