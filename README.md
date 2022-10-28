@@ -72,11 +72,7 @@ Enes100.missionSite.y; // y Coordinate
 To request an update of your OTV’s location, call the `updateLocation()` method. This method returns a `bool` indicating if it succeeded or not.
 
 ```arduino
-if (Enes100.updateLocation()) {
-    Enes100.location.x; // x Coordinate
-    Enes100.location.y; // y Coordinate
-    Enes100.location.theta; // Theta
-}
+while (!Enes100.updateLocation()); 
 ```
 
 The x and y coordinates are the distance in meters from the y axis and x axis to the center of your marker. Theta is measured in radians from -π to π, with zero being parallel to the x axis, increasing counter-clockwise.
