@@ -31,8 +31,14 @@ To use the library, you have to direct the compiler to include it in your code. 
 
 at the very top of your file.
 
-### Enes100.begin()
+### Enes100.begin(Team_Name, Mission_Type, Aruco_ID, RX, TX)
 Just like the built-in `Serial` interface, you need to initialize the library by calling `begin()`.
+
+* Team_Name: Name of the team that will show up in the Vision System
+* Mission_Type: Type of mission your team is running. Valid Mission Types:  `CRASH_SITE`, `DATA`, `MATERIAL`, `FIRE`, `WATER`
+* Aruco_ID: ID of your Aruco Marker
+* Rx: Digital Recieve Pin that will be connected to the Rx pin on the wifi module.
+* Tx: Digital Transmit Pin that will be connected to the Tx pin on the wifi module.
 
 ```arduino
 void setup() {
@@ -41,23 +47,6 @@ void setup() {
     // Some other setup code...
 }
 ```
-
-The first parameter is the name of your team, which will appear on the Vision System. `FIRE` refers to the mission type of your team. The full list of valid mission names is:
-
- * `CRASH_SITE`
- * `DATA`
- * `MATERIAL`
- * `FIRE`
- * `WATER`
-
-(As with all `code samples` in this document, these are case sensitive.)
-
-The third argument is the ID number of the aruco marker that your team will be using.
-
-The fourth argument is your serial reveive pin. 
-
-The fifth argument is your serial transmit pin.
-
 
 The `begin()` method returns a `bool` to indicate if the Vision System received your request to start the mission. You can use this return value to make your OTV wait for affirmative communication before starting.
 
