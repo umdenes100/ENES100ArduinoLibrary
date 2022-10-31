@@ -58,7 +58,9 @@ Enes100.missionSite.y; // y Coordinate
 ```
 
 ### Enes100.updateLocation()
-To request an update of your OTV’s location, call the `updateLocation()` method. This method returns a `bool` indicating if it succeeded or not.
+Requests an update of your OTV's location.
+
+Returns a `bool` indicating if it succeeded or not.
 
 ```arduino
 while (!Enes100.updateLocation()); 
