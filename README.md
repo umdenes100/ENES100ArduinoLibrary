@@ -35,7 +35,8 @@ at the very top of your file.
 Just like the built-in `Serial` interface, you need to initialize the library by calling `begin()`.
 
 * Team_Name: Name of the team that will show up in the Vision System
-* Mission_Type: Type of mission your team is running. Valid Mission Types:  `CRASH_SITE`, `DATA`, `MATERIAL`, `FIRE`, `WATER`
+* Mission_Type: Type of mission your team is running. 
+    *  Valid Mission Types:  `CRASH_SITE`, `DATA`, `MATERIAL`, `FIRE`, `WATER`
 * Aruco_ID: ID of your Aruco Marker
 * Rx: Digital Recieve Pin that will be connected to the Rx pin on the wifi module.
 * Tx: Digital Transmit Pin that will be connected to the Tx pin on the wifi module.
