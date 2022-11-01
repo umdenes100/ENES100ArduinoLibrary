@@ -74,6 +74,11 @@ The x and y coordinates are the distance in meters from the y axis and x axis to
 
 ### Enes100.print()
 Sends a message to the vision system. Note that any 'print' or 'println' called after will begin their message on the same line.
+
+Can accept
+   * Strings
+   * Integers\
+   * Doubles
 ```arduino
 These two lines will output "Hello World!Hello World!"
 Enes100.print("Hello World!")
@@ -88,7 +93,10 @@ These two lines will output
 Enes100.println("Hello World!")
 Enes100.println("Hello World!")
 ```
-These functions can accept strings, integers, and doubles as arguments.
+Can accept
+   * Strings
+   * Integers
+   * Doubles
 
 ```arduino
 Enes100.print(“Our x coordinate is: “);
