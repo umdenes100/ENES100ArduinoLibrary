@@ -50,8 +50,8 @@ void setup() {
 ```
 
 Returns a `bool` to indicate if the Vision System received your request to start the mission. You can use this return value to make your OTV wait for affirmative communication before starting.
-   * 0 : Did not work
-   * 1 : Success
+   * 0: Did not work
+   * 1: Success
 The coordinates of your mission site are transmitted automatically when you call `begin()`. You can access the coordinates using
 
 ```arduino
@@ -63,8 +63,8 @@ Enes100.missionSite.y; // y Coordinate
 Requests an update of your OTV's location.
 
 Returns a `bool` indicating if the request for the locaiton succeded or not.
-   * 0 : Did not work
-   * 1 : Success
+   * 0: Did not work
+   * 1: Success
 
 ```arduino
 while (!Enes100.updateLocation()); 
@@ -108,8 +108,8 @@ As your OTV completes its objectives, it will need to alert the Vision System. W
 that requires transmission, call the `mission(int type, int message)` function with appropriate values. 
 
 There are two arguments associated with this function `mission(arg1, arg2)`. 
-- **arg1** is the argument specifying what type of mission call you are sending
-- **arg2** is the argument specifying the mission value associated with the mission type. 
+* type: what type of mission call you are sending
+* message: mission value associated with the mission type. 
 
 **NOTE:** Some of the values passed as arguments in the examples below are **C definitions**, defined in `Enes100.h`. All of 
 the C definitions defined in `Enes100.h` correlate to an integer. To save you the trouble, you can call the uppercase definition 
