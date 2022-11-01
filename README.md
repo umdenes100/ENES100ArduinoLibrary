@@ -31,15 +31,15 @@ To use the library, you have to direct the compiler to include it in your code. 
 
 at the very top of your file.
 
-### Enes100.begin(String Team\_Name,Type Mission\_Type,Int Aruco\_ID,Int RX,Int TX)
+### Enes100.begin(teamName, teamType, markerID, rxPin, txPin)
 Just like the built-in `Serial` interface, you need to initialize the library by calling `begin()`.
 
-* Team_Name: Name of the team that will show up in the Vision System
-* Mission_Type: Type of mission your team is running. 
+* teamName: Name of the team that will show up in the Vision System
+* teamType: Type of mission your team is running. 
     *  Valid Mission Types:  `CRASH_SITE`, `DATA`, `MATERIAL`, `FIRE`, `WATER`
-* Aruco_ID: ID of your Aruco Marker
-* Rx: Digital Recieve Pin that will be connected to the Rx pin on the wifi module.
-* Tx: Digital Transmit Pin that will be connected to the Tx pin on the wifi module.
+* markerID: ID of your Aruco Marker
+* rxPin: Digital Recieve Pin that will be connected to the Rx pin on the wifi module.
+* txPin: Digital Transmit Pin that will be connected to the Tx pin on the wifi module.
 
 ```arduino
 void setup() {
@@ -49,8 +49,9 @@ void setup() {
 }
 ```
 
-The `begin()` method returns a `bool` to indicate if the Vision System received your request to start the mission. You can use this return value to make your OTV wait for affirmative communication before starting.
-
+Returns a `bool` to indicate if the Vision System received your request to start the mission. You can use this return value to make your OTV wait for affirmative communication before starting.
+   * 0 : Did not work
+   * 1 : Success
 The coordinates of your mission site are transmitted automatically when you call `begin()`. You can access the coordinates using
 
 ```arduino
@@ -61,7 +62,7 @@ Enes100.missionSite.y; // y Coordinate
 ### Enes100.updateLocation()
 Requests an update of your OTV's location.
 
-Returns a `bool` indicating if it succeeded or not.
+Returns a `bool` indicating if the request for the locaiton succeded or not.
    * 0 : Did not work
    * 1 : Success
 
@@ -69,19 +70,19 @@ Returns a `bool` indicating if it succeeded or not.
 while (!Enes100.updateLocation()); 
 ```
 
-### Enes100.print()
+### Enes100.print(message)
 Sends a message to the vision system. Note that any 'print' or 'println' called after will begin their message on the same line.
 
 Can accept
    * Strings
-   * Integers\
+   * Integers
    * Doubles
 ```arduino
 These two lines will output "Hello World!Hello World!"
 Enes100.print("Hello World!")
 Enes100.print("Hello World!")
 ```
-### Enes100.println()
+### Enes100.println(messagel)
 Sends a message to the vision system with a new line. Any messages sent after will be printed in a new line below the 'println'
 ```arduino
 These two lines will output 
