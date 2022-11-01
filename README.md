@@ -71,7 +71,24 @@ while (!Enes100.updateLocation());
 ### Coordinates
 The x and y coordinates are the distance in meters from the y axis and x axis to the center of your marker. Theta is measured in radians from -π to π, with zero being parallel to the x axis, increasing counter-clockwise.
 
-At points in your mission, you may want to send information to be displayed on the Vision System. Writing information to the Vision System is similar to writing information to the Serial console. The `print()` function will write a message to the console. The `println()` function will write a message to the console followed by a new line character. These functions can accept strings, integers, and doubles as arguments.
+
+### Enes100.print()
+Sends a message to the vision system. Note that any 'print' or 'println' called after will begin their message on the same line.
+```arduino
+These two lines will output "Hello World!Hello World!"
+Enes100.print("Hello World!")
+Enes100.print("Hello World!")
+```
+### Enes100.println()
+Sends a message to the vision system with a new line. Any messages sent after will be printed in a new line below the 'println'
+```arduino
+These two lines will output 
+// Hello World!
+// Hello World!
+Enes100.println("Hello World!")
+Enes100.println("Hello World!")
+```
+These functions can accept strings, integers, and doubles as arguments.
 
 ```arduino
 Enes100.print(“Our x coordinate is: “);
