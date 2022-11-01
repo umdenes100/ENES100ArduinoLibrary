@@ -31,7 +31,7 @@ To use the library, you have to direct the compiler to include it in your code. 
 
 at the very top of your file.
 
-### Enes100.begin(Team\_Name, Mission\_Type, Aruco\_ID, RX, TX)
+### Enes100.begin(String Team\_Name,Type Mission\_Type,Int Aruco\_ID,Int RX,Int TX)
 Just like the built-in `Serial` interface, you need to initialize the library by calling `begin()`.
 
 * Team_Name: Name of the team that will show up in the Vision System
