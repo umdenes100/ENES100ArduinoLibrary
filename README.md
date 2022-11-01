@@ -68,9 +68,6 @@ Returns a `bool` indicating if it succeeded or not.
 ```arduino
 while (!Enes100.updateLocation()); 
 ```
-### Coordinates
-The x and y coordinates are the distance in meters from the y axis and x axis to the center of your marker. Theta is measured in radians from -π to π, with zero being parallel to the x axis, increasing counter-clockwise.
-
 
 ### Enes100.print()
 Sends a message to the vision system. Note that any 'print' or 'println' called after will begin their message on the same line.
@@ -102,8 +99,10 @@ Can accept
 Enes100.print(“Our x coordinate is: “);
 Enes100.println(enes.location.x);
 ```
+### Coordinates
+The x and y coordinates are the distance in meters from the y axis and x axis to the center of your marker. Theta is measured in radians from -π to π, with zero being parallel to the x axis, increasing counter-clockwise.
 
-### Enes100.mission()
+### Enes100.mission(int type, int message)
 As your OTV completes its objectives, it will need to alert the Vision System. When your OTV completes one of the objectives 
 that requires transmission, call the `mission(int type, int message)` function with appropriate values. 
 
