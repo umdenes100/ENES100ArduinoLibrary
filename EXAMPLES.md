@@ -27,8 +27,10 @@ while(Enes100.location.x < 2.5) {  //move to x = 2.5
 }
 stop();
 if(Enes100.locaiton.y > 1.5) { //if we are above the target, move down, otherwise move up.
-    moveDown();
+   Enes100.updateLocation();
+   moveDown();
 } else {
+    Enes100.updateLocaiton();
     moveUp();
 }
 
@@ -37,6 +39,7 @@ if(Enes100.locaiton.y > 1.5) { //if we are above the target, move down, otherwis
 ```arduino
 //Setting target of theta = 1.5, but will need to set a range
 while(Enes100.location.theta < 1.45 || Enes100.location.theta > 1.55) {
+    //What command am I missing here???
     rotate();
 }
 ```
