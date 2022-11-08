@@ -16,8 +16,8 @@ Communication with the Vision System is done using ESP8266 WiFi-enabled microcon
 | --- | ---             | ---                     |
 | GND | Ground          | Common ground           |
 | VCC | Voltage supply  | +5 V                    |
-| TX  | Serial transmit | Arduino serial receive  |
-| RX  | Serial receive  | Arduino serial transmit |
+| TX  | Serial transmit | Arduino digital pin     |
+| RX  | Serial receive  | Arduino digital pin     |
 
 When choosing the pins to use for communication, there are a few things to keep in mind. You might not want to use PWM pins for your communication so you can save those for things like controlling your motors. That choice simply depends on how many PWM pins you need for your other peripherals. In addition, some pins aren't configured to transmit and recieve. You can find out if a certain pin is suitable to transmit or recieve by looking at the datasheet for your arduino, or by uploading the example code and seeing if you are able to recieve location coordinates. 
 
