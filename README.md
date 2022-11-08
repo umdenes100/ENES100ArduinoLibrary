@@ -55,8 +55,11 @@ The `rxPin` and `txPin` described below refer to the digital pins that will be c
 * txPin: Digital Pin that will be connected to the __Tx pin on the wifi module__.
 
 Note: you can use any digital pin __except 0 or 1__ for the rxPin and txPin. This means that on an Arduino Uno you can use any pin from 2 to 13.
+#### Example
 ```arduino
 void setup() {
+    //Connect digital pin 8 to the Rx pin of the wifi module.
+    //Connect digital pin 9 to the Tx pin of the wifi module.
     Enes100.begin("It's lit", FIRE, 3, 8, 9);
     
     // Some other setup code...
