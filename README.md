@@ -19,7 +19,7 @@ Communication with the Vision System is done using ESP8266 WiFi-enabled microcon
 | TX  | Serial transmit | Arduino serial receive  |
 | RX  | Serial receive  | Arduino serial transmit |
 
-When choosing the pins to use for communication, there are a few things to keep in mind. Firstly, you will want to avoid pins 0 and 1 for communication (or for anything else). The RX and TX labels on those pins refer to the Arduino’s serial transmit and receive with the computer. If you block those pins, you will not be able to upload code to your Arduino. Secondly, you might not want to use PWM pins for your communication so you can save those for things like controlling your motors. That choice simply depends on how many PWM pins you need for your other peripherals. Thirdly, some pins aren't configured to transmit and recieve. You can find out if a certain pin is suitable to transmit or recieve by looking at the datasheet for your arduino, or by uploading the example code and seeing if you are able to recieve location coordinates. 
+When choosing the pins to use for communication, there are a few things to keep in mind. You might not want to use PWM pins for your communication so you can save those for things like controlling your motors. That choice simply depends on how many PWM pins you need for your other peripherals. In addition, some pins aren't configured to transmit and recieve. You can find out if a certain pin is suitable to transmit or recieve by looking at the datasheet for your arduino, or by uploading the example code and seeing if you are able to recieve location coordinates. 
 
 ## Usage
 
@@ -32,7 +32,7 @@ To use the library, you have to direct the compiler to include it in your code. 
 at the very top of your file.
 
 ### Enes100.begin(teamName, teamType, markerID, rxPin, txPin)
-Just like the built-in `Serial` interface, you need to initialize the library by calling `begin()`.
+Initializes the ENES100 library and establishes communication with the Vision System.
 
 * teamName: Name of the team that will show up in the Vision System
 * teamType: Type of mission your team is running. 
@@ -69,7 +69,12 @@ Returns a `bool` indicating if the request for the locaiton succeded or not.
 ```arduino
 while (!Enes100.updateLocation()); 
 ```
+### Enes100.ping()
+Sends a ping to the Vision System. The Vision System will attempt to reply back.
 
+Returns a `bool` indicating if the operation was successfull or not.
+   * 0: Did not work
+   * 1: Success
 ### Enes100.print(message)
 Sends a message to the vision system. Note that any 'print' or 'println' called after will begin their message on the same line.
 
@@ -104,7 +109,7 @@ Enes100.println(enes.location.x);
 The x and y coordinates are the distance in meters from the y axis and x axis to the center of your marker. Theta is measured in radians from -π to π, with zero being parallel to the x axis, increasing counter-clockwise.
 
 ### Enes100.mission(int type, int message)
-Alerts the vision system to mission objectives when completed.
+Sends value for a mission objective.
 
 * type: what type of mission call you are sending
 * message: mission value associated with the mission type. 
@@ -157,33 +162,6 @@ Valid calls for **WATER**:
 ## Example Code and Debugging
 
 Example code for each type of mission is included with the library. To view examples, open Arduino IDE and go to **File > Examples > ENES100**. (You must restart the IDE after installing the library for the examples to show.)
-
-The library also includes a `ping()` function which sends an empty message to the Vision System and waits for an empty reply. You can use this function to troubleshoot communication problems.
-
-## Function List
-
-The following are functions of the `Enes100` class.
-
-`bool ping()`   
-Returns: `true` on success, `false` on failure.   
-Confirms that communication with the Vision System is still active.
-
-`bool begin(teamName, teamType, markerId, txPin, rxPin)`   
-Returns: `true` on success, `false` on failure.   
-Initializes the ENES100 library and establishes communication with the Vision System.
-
-`bool updateLocation()`   
-Returns: `true` on success, `false` on failure.   
-Updates the OTV's location information.
-
-`void mission(type, value)`   
-Sends value for a mission objective.
-
-`void print(message)`  
-Sends a message to be displayed on the Vision System.
-
-`void println(message)`  
-Sends a message to be displayed on the Vision System followed by a new line character.
 
 ## Product Demonstration Procedures
 
