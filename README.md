@@ -74,7 +74,7 @@ Returns a `bool` indicating if the request for the locaiton succeded or not.
    * 1: Success
 
 ```arduino
-while (!Enes100.updateLocation()); 
+Enes100.updateLocation(); 
 ```
 ### Enes100.ping()
 Sends a ping to the Vision System. The Vision System will attempt to reply back.
@@ -107,13 +107,6 @@ Can accept
    * Strings
    * Integers
    * Doubles
-
-```arduino
-Enes100.print(“Our x coordinate is: “);
-Enes100.println(enes.location.x);
-```
-### Coordinates
-The x and y coordinates are the distance in meters from the y axis and x axis to the center of your marker. Theta is measured in radians from -π to π, with zero being parallel to the x axis, increasing counter-clockwise.
 
 ### Enes100.mission(int type, int message)
 Sends value for a mission objective.
