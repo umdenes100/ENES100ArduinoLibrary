@@ -50,9 +50,10 @@ Initializes the ENES100 library and establishes communication with the Vision Sy
 * teamType: Type of mission your team is running. 
     *  Valid Mission Types:  `CRASH_SITE`, `DATA`, `MATERIAL`, `FIRE`, `WATER`
 * markerID: ID of your Aruco Marker
-* rxPin: Digital Recieve Pin that will be connected to the Rx pin on the wifi module.
-* txPin: Digital Transmit Pin that will be connected to the Tx pin on the wifi module.
+* rxPin: Digital Pin that will be connected to the __Rx pin on the wifi module__.
+* txPin: Digital Pin that will be connected to the __Tx pin on the wifi module__.
 
+Note, you can use any digital pin __except 0 or 1__ for the rxPin and txPin. This means that on an Arduino Uno, you can use any pin from 2 to 13.
 ```arduino
 void setup() {
     Enes100.begin("It's lit", FIRE, 3, 8, 9);
