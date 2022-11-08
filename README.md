@@ -87,7 +87,7 @@ These two lines will output "Hello World!Hello World!"
 Enes100.print("Hello World!")
 Enes100.print("Hello World!")
 ```
-### Enes100.println(messagel)
+### Enes100.println(message)
 Sends a message to the vision system with a new line. Any messages sent after will be printed in a new line below the 'println'
 ```arduino
 These two lines will output 
