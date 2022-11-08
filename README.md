@@ -69,11 +69,6 @@ Returns a `bool` to indicate if the Vision System received your request to start
    * 1: Success
 The coordinates of your mission site are transmitted automatically when you call `begin()`. You can access the coordinates using
 
-```arduino
-Enes100.missionSite.x; // x Coordinate
-Enes100.missionSite.y; // y Coordinate
-```
-
 ### Enes100.updateLocation()
 Requests an update of your OTV's location.
 
