@@ -35,16 +35,13 @@ These values are stored in the associated variables
 
 When you call `Enes100.updateLocation()` the Aruco marker values will be updated.
 
-
+In additon, the location of the mission site is also stored in the following variables
+  * Enes100.missionSite.x
+  * Enes100.missionSite.y
 ## Usage
 
 To use the library, you have to direct the compiler to include it in your code. Go to **Sketch > Include Library > ENES100**, or add it manually by typing
-
-```arduino
-#include "Enes100.h"
-```
-
-at the very top of your file.
+`#include "Enes100.h"` at the very top of your file.
 
 ### Enes100.begin(teamName, teamType, markerID, rxPin, txPin)
 Initializes the ENES100 library and establishes communication with the Vision System.
