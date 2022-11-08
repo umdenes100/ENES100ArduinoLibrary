@@ -46,6 +46,7 @@ To use the library, you have to direct the compiler to include it in your code. 
 ### Enes100.begin(teamName, teamType, markerID, rxPin, txPin)
 Initializes the ENES100 library and establishes communication with the Vision System.
 
+The `rxPin` and `txPin` described below refer to the digital pins that will be connected to the __Rx__ and __Tx__ of the __wifi module__. 
 * teamName: Name of the team that will show up in the Vision System
 * teamType: Type of mission your team is running. 
     *  Valid Mission Types:  `CRASH_SITE`, `DATA`, `MATERIAL`, `FIRE`, `WATER`
