@@ -43,7 +43,7 @@ In additon, the location of the mission site is also stored in the following var
 To use the library, you have to direct the compiler to include it in your code. Go to **Sketch > Include Library > ENES100**, or add it manually by typing
 `#include "Enes100.h"` at the very top of your file.
 
-### Enes100.begin(teamName, teamType, markerID, rxPin, txPin)
+### Enes100.begin(String teamName,Type teamType,Int markerID,Int rxPin,Int txPin)
 Initializes the ENES100 library and establishes communication with the Vision System.
 
 The `rxPin` and `txPin` described below refer to the digital pins that will be connected to the __Rx__ and __Tx__ of the __wifi module__. 
@@ -87,7 +87,7 @@ Sends a ping to the Vision System. The Vision System will attempt to reply back.
 Returns a `bool` indicating if the operation was successfull or not.
    * 0: Did not work
    * 1: Success
-### Enes100.print(message)
+### Enes100.print(Type message)
 Sends a message to the vision system. Note that any 'print' or 'println' called after will begin their message on the same line.
 
 Can accept
@@ -99,7 +99,7 @@ These two lines will output "Hello World!Hello World!"
 Enes100.print("Hello World!")
 Enes100.print("Hello World!")
 ```
-### Enes100.println(message)
+### Enes100.println(Type message)
 Sends a message to the vision system with a new line. Any messages sent after will be printed in a new line below the 'println'
 ```arduino
 These two lines will output 
@@ -113,7 +113,7 @@ Can accept
    * Integers
    * Doubles
 
-### Enes100.mission(int type, int message)
+### Enes100.mission(Int type, Int message)
 Sends value for a mission objective.
 
 * type: what type of mission call you are sending
