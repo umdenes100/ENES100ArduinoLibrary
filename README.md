@@ -24,14 +24,16 @@ When choosing the pins to use for communication, there are a few things to keep 
 ## Variables
 
 The Aruco Marker has 3 values
-   * x
-   * y
-   * theta
+   * x: x-coordinate of the Aruco Marker (from 0.0 to 4.0)
+   * y: y-coordinate of the Aruco Marker (From 0.0 to 2.0)
+   * theta: angle of the Aruco Marker (from -pi radians to pi radians)
 
 These values are stored in the associated variables
    * Enes100.location.x
    * Enes100.location.y
    * Enes100.location.theta
+
+When you call `Enes100.updateLocation()` the Aruco marker values will be updated.
 
 
 ## Usage
