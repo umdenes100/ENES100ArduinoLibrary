@@ -16,10 +16,43 @@ void loop(){
     delay(1000); //wait 1 second in order to not overload the vision system
 }
 ```
+# Setting up an Ultrasoni Sensor
+
+```arduino
+#*/
+// defines pins numbers
+const int trigPin = 9;
+const int echoPin = 10;
+// defines variables
+long duration;
+int distance;
+void setup() {
+  pinMode(trigPin, OUTPUT); // Sets the trigPin as an Output
+  pinMode(echoPin, INPUT); // Sets the echoPin as an Input
+  Serial.begin(9600); // Starts the serial communication
+}
+void loop() {
+  // Clears the trigPin
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  // Sets the trigPin on HIGH state for 10 micro seconds
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  // Reads the echoPin, returns the sound wave travel time in microseconds
+  duration = pulseIn(echoPin, HIGH);
+  // Calculating the distance
+  distance = duration * 0.034 / 2;
+  // Prints the distance on the Serial Monitor
+  Serial.print("Distance: ");
+  Serial.println(distance);
+}
+```
+
 # Note: The below code is pseudocode. Its purpose is to help you understand how to do certain actions. There are multiple ways to do this.
 # Drive forward until you reach a certain x and y coordinate.
 ```arduino
-//SEtting a target of x = 2.5, y = 1.5
+//Setting a target of x = 2.5, y = 1.5
 while (!Enes100.updateLocation()); //will keep running until succesfully update location
 while(Enes100.location.x < 2.5) {  //move to x = 2.5
     Enes100.updateLocation();
@@ -43,3 +76,4 @@ while(Enes100.location.theta < 1.45 || Enes100.location.theta > 1.55) {
     rotate();
 }
 ```
+
