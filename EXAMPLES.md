@@ -80,10 +80,10 @@ void setAngle(target) {
     // We take the absolute value of the difference in order to compare it to a single threshold.
     while (abs(target - currentTheta) > threshold) {
         turnValue = someConstant * (target - currentTheta);
-        p = constrain(p, -MAX_TURN_SPEED, MAX_TURN_SPEED); //Constrain your turn speed.
-        setMotors(p, -p); // You will need to implement this yourself. 
+        turnValue = constrain(turnValue, -MAX_TURN_SPEED, MAX_TURN_SPEED); //Constrain your turn speed.
+        setMotors(turnValue, -turnValue); // You will need to implement this yourself. 
     }
-    ps("Got to angle!");
+    print("Got to angle!");
     setMotors(0, 0);
 }
 ```
