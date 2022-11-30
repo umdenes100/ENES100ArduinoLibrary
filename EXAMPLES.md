@@ -1,8 +1,10 @@
 # Initializing the Wifi Module and Updating the Location
-```arduino
+```cpp
 #include "Enes100.h"
 void setup() {
+    delay(2000);
     Enes100.begin("It's lit", FIRE, 3, 8, 9);  // Aruco ID of 3. Rx Pin of 8. Tx Pin of 9.
+    delay(2000);
     Enes100.println("Connected!");
 }
 void loop(){
@@ -16,10 +18,9 @@ void loop(){
     delay(1000); //wait 1 second in order to not overload the vision system
 }
 ```
-# Setting up an Ultrasoni Sensor
+# Setting up an Ultrasonic Sensor
 
-```arduino
-#*/
+```cpp
 // defines pins numbers
 const int trigPin = 9;
 const int echoPin = 10;
@@ -49,9 +50,9 @@ void loop() {
 }
 ```
 
-# Note: The below code is pseudocode. Its purpose is to help you understand how to do certain actions. There are multiple ways to do this.
+## Note: The below code is pseudocode. Its purpose is to help you understand how to do certain actions. There are multiple ways to do this.
 # Drive forward until you reach a certain x and y coordinate.
-```arduino
+```cpp
 //Setting a target of x = 2.5, y = 1.5
 while (!Enes100.updateLocation()); //will keep running until succesfully update location
 while(Enes100.location.x < 2.5) {  //move to x = 2.5
@@ -69,11 +70,21 @@ if(Enes100.locaiton.y > 1.5) { //if we are above the target, move down, otherwis
 
 ```
 # Rotate to a certain theta coordinate
-```arduino
-//Setting target of theta = 1.5, but will need to set a range
-while(Enes100.location.theta < 1.45 || Enes100.location.theta > 1.55) {
-    //What command am I missing here???
-    rotate();
+This is when things start to get fun.
+```cpp
+// This function will make the OTV turn to a certain location.
+void setAngle(target) {
+    print("Targeting angle: "); println(target);
+    updateLocation();
+    // The following line runs our targeting code WHILE the DIFFERENCE (subtraction is taking he difference) is between -thresh and thresh. 
+    // We take the absolute value of the difference in order to compare it to a single threshold.
+    while (abs(target - currentTheta) > threshold) {
+        turnValue = someConstant * (target - currentTheta);
+        p = constrain(p, -MAX_TURN_SPEED, MAX_TURN_SPEED); //Constrain your turn speed.
+        setMotors(p, -p); // You will need to implement this yourself. 
+    }
+    ps("Got to angle!");
+    setMotors(0, 0);
 }
 ```
 
