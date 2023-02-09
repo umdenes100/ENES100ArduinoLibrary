@@ -23,71 +23,74 @@
 
 # Setting up an Ultrasonic Sensor
 
-```cpp
-// defines pins numbers
-const int trigPin = 9;
-const int echoPin = 10;
-// defines variables
-long duration;
-int distance;
-void setup() {
-  pinMode(trigPin, OUTPUT); // Sets the trigPin as an Output
-  pinMode(echoPin, INPUT); // Sets the echoPin as an Input
-  Serial.begin(9600); // Starts the serial communication
-}
-void loop() {
-  // Clears the trigPin
-  digitalWrite(trigPin, LOW);
-  delayMicroseconds(2);
-  // Sets the trigPin on HIGH state for 10 micro seconds
-  digitalWrite(trigPin, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(trigPin, LOW);
-  // Reads the echoPin, returns the sound wave travel time in microseconds
-  duration = pulseIn(echoPin, HIGH);
-  // Calculating the distance
-  distance = duration * 0.034 / 2;
-  // Prints the distance on the Serial Monitor
-  Serial.print("Distance: ");
-  Serial.println(distance);
-}
-```
+<pre>
+<font color="#434f54">&#47;&#47; defines pins numbers</font>
+<font color="#00979c">const</font> <font color="#00979c">int</font> <font color="#000000">trigPin</font> <font color="#434f54">=</font> <font color="#000000">9</font><font color="#000000">;</font>
+<font color="#00979c">const</font> <font color="#00979c">int</font> <font color="#000000">echoPin</font> <font color="#434f54">=</font> <font color="#000000">10</font><font color="#000000">;</font>
+<font color="#434f54">&#47;&#47; defines variables</font>
+<font color="#00979c">long</font> <font color="#000000">duration</font><font color="#000000">;</font>
+<font color="#00979c">int</font> <font color="#000000">distance</font><font color="#000000">;</font>
+<font color="#00979c">void</font> <font color="#5e6d03">setup</font><font color="#000000">(</font><font color="#000000">)</font> <font color="#000000">{</font>
+ &nbsp;<font color="#d35400">pinMode</font><font color="#000000">(</font><font color="#000000">trigPin</font><font color="#434f54">,</font> <font color="#00979c">OUTPUT</font><font color="#000000">)</font><font color="#000000">;</font> <font color="#434f54">&#47;&#47; Sets the trigPin as an Output</font>
+ &nbsp;<font color="#d35400">pinMode</font><font color="#000000">(</font><font color="#000000">echoPin</font><font color="#434f54">,</font> <font color="#00979c">INPUT</font><font color="#000000">)</font><font color="#000000">;</font> <font color="#434f54">&#47;&#47; Sets the echoPin as an Input</font>
+ &nbsp;<b><font color="#d35400">Serial</font></b><font color="#434f54">.</font><font color="#d35400">begin</font><font color="#000000">(</font><font color="#000000">9600</font><font color="#000000">)</font><font color="#000000">;</font> <font color="#434f54">&#47;&#47; Starts the serial communication</font>
+<font color="#000000">}</font>
+<font color="#00979c">void</font> <font color="#5e6d03">loop</font><font color="#000000">(</font><font color="#000000">)</font> <font color="#000000">{</font>
+ &nbsp;<font color="#434f54">&#47;&#47; Clears the trigPin</font>
+ &nbsp;<font color="#d35400">digitalWrite</font><font color="#000000">(</font><font color="#000000">trigPin</font><font color="#434f54">,</font> <font color="#00979c">LOW</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;<font color="#d35400">delayMicroseconds</font><font color="#000000">(</font><font color="#000000">2</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;<font color="#434f54">&#47;&#47; Sets the trigPin on HIGH state for 10 micro seconds</font>
+ &nbsp;<font color="#d35400">digitalWrite</font><font color="#000000">(</font><font color="#000000">trigPin</font><font color="#434f54">,</font> <font color="#00979c">HIGH</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;<font color="#d35400">delayMicroseconds</font><font color="#000000">(</font><font color="#000000">10</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;<font color="#d35400">digitalWrite</font><font color="#000000">(</font><font color="#000000">trigPin</font><font color="#434f54">,</font> <font color="#00979c">LOW</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;<font color="#434f54">&#47;&#47; Reads the echoPin, returns the sound wave travel time in microseconds</font>
+ &nbsp;<font color="#000000">duration</font> <font color="#434f54">=</font> <font color="#d35400">pulseIn</font><font color="#000000">(</font><font color="#000000">echoPin</font><font color="#434f54">,</font> <font color="#00979c">HIGH</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;<font color="#434f54">&#47;&#47; Calculating the distance</font>
+ &nbsp;<font color="#000000">distance</font> <font color="#434f54">=</font> <font color="#000000">duration</font> <font color="#434f54">*</font> <font color="#000000">0.034</font> <font color="#434f54">&#47;</font> <font color="#000000">2</font><font color="#000000">;</font>
+ &nbsp;<font color="#434f54">&#47;&#47; Prints the distance on the Serial Monitor</font>
+ &nbsp;<b><font color="#d35400">Serial</font></b><font color="#434f54">.</font><font color="#d35400">print</font><font color="#000000">(</font><font color="#005c5f">&#34;Distance: &#34;</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;<b><font color="#d35400">Serial</font></b><font color="#434f54">.</font><font color="#d35400">println</font><font color="#000000">(</font><font color="#000000">distance</font><font color="#000000">)</font><font color="#000000">;</font>
+<font color="#000000">}</font>
+
+</pre>
 
 ## Note: The below code is pseudocode. Its purpose is to help you understand how to do certain actions. There are multiple ways to do this.
 # Drive forward until you reach a certain x and y coordinate.
-```cpp
-//Setting a target of x = 2.5, y = 1.5
-while (!Enes100.updateLocation()); //will keep running until succesfully update location
-while(Enes100.location.x < 2.5) {  //move to x = 2.5
-    Enes100.updateLocation();
-    moveForward();
-}
-stop();
-if(Enes100.locaiton.y > 1.5) { //if we are above the target, move down, otherwise move up.
-   Enes100.updateLocation();
-   moveDown();
-} else {
-    Enes100.updateLocaiton();
-    moveUp();
-}
+<pre>
+<font color="#434f54">&#47;&#47;Setting a target of x = 2.5, y = 1.5</font>
+<font color="#5e6d03">while</font> <font color="#000000">(</font><font color="#434f54">!</font><b><font color="#d35400">Enes100</font></b><font color="#434f54">.</font><font color="#d35400">updateLocation</font><font color="#000000">(</font><font color="#000000">)</font><font color="#000000">)</font><font color="#000000">;</font> <font color="#434f54">&#47;&#47;will keep running until succesfully update location</font>
+<font color="#5e6d03">while</font><font color="#000000">(</font><b><font color="#d35400">Enes100</font></b><font color="#434f54">.</font><font color="#000000">location</font><font color="#434f54">.</font><font color="#000000">x</font> <font color="#434f54">&lt;</font> <font color="#000000">2.5</font><font color="#000000">)</font> <font color="#000000">{</font> &nbsp;<font color="#434f54">&#47;&#47;move to x = 2.5</font>
+ &nbsp;&nbsp;&nbsp;<b><font color="#d35400">Enes100</font></b><font color="#434f54">.</font><font color="#d35400">updateLocation</font><font color="#000000">(</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;&nbsp;&nbsp;<font color="#000000">moveForward</font><font color="#000000">(</font><font color="#000000">)</font><font color="#000000">;</font>
+<font color="#000000">}</font>
+<font color="#d35400">stop</font><font color="#000000">(</font><font color="#000000">)</font><font color="#000000">;</font>
+<font color="#5e6d03">if</font><font color="#000000">(</font><b><font color="#d35400">Enes100</font></b><font color="#434f54">.</font><font color="#000000">locaiton</font><font color="#434f54">.</font><font color="#000000">y</font> <font color="#434f54">&gt;</font> <font color="#000000">1.5</font><font color="#000000">)</font> <font color="#000000">{</font> <font color="#434f54">&#47;&#47;if we are above the target, move down, otherwise move up.</font>
+ &nbsp;&nbsp;<b><font color="#d35400">Enes100</font></b><font color="#434f54">.</font><font color="#d35400">updateLocation</font><font color="#000000">(</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;&nbsp;<font color="#000000">moveDown</font><font color="#000000">(</font><font color="#000000">)</font><font color="#000000">;</font>
+<font color="#000000">}</font> <font color="#5e6d03">else</font> <font color="#000000">{</font>
+ &nbsp;&nbsp;&nbsp;<b><font color="#d35400">Enes100</font></b><font color="#434f54">.</font><font color="#000000">updateLocaiton</font><font color="#000000">(</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;&nbsp;&nbsp;<font color="#000000">moveUp</font><font color="#000000">(</font><font color="#000000">)</font><font color="#000000">;</font>
+<font color="#000000">}</font>
 
-```
-# Rotate to a certain theta coordinate
-This is when things start to get fun.
-```cpp
-// This function will make the OTV turn to a certain location.
-void setAngle(target) {
-    print("Targeting angle: "); println(target);
-    updateLocation();
-    // The following line runs our targeting code WHILE the DIFFERENCE (subtraction is taking he difference) is between -thresh and thresh. 
-    // We take the absolute value of the difference in order to compare it to a single threshold.
-    while (abs(target - currentTheta) > threshold) {
-        turnValue = someConstant * (target - currentTheta);
-        turnValue = constrain(turnValue, -MAX_TURN_SPEED, MAX_TURN_SPEED); //Constrain your turn speed.
-        setMotors(turnValue, -turnValue); // You will need to implement this yourself. 
-    }
-    print("Got to angle!");
-    setMotors(0, 0);
-}
-```
+<font color="#000000">```</font>
+<font color="#000000">#</font> <font color="#000000">Rotate</font> <font color="#d35400">to</font> <font color="#000000">a</font> <font color="#000000">certain</font> <font color="#000000">theta</font> <font color="#000000">coordinate</font>
+<font color="#000000">This</font> <font color="#000000">is</font> <font color="#000000">when</font> <font color="#000000">things</font> <font color="#d35400">start</font> <font color="#d35400">to</font> <font color="#d35400">get</font> <font color="#000000">fun</font><font color="#434f54">.</font>
+<font color="#000000">```cpp</font>
+<font color="#434f54">&#47;&#47; This function will make the OTV turn to a certain location.</font>
+<font color="#00979c">void</font> <font color="#000000">setAngle</font><font color="#000000">(</font><font color="#000000">target</font><font color="#000000">)</font> <font color="#000000">{</font>
+ &nbsp;&nbsp;&nbsp;<font color="#d35400">print</font><font color="#000000">(</font><font color="#005c5f">&#34;Targeting angle: &#34;</font><font color="#000000">)</font><font color="#000000">;</font> <font color="#d35400">println</font><font color="#000000">(</font><font color="#000000">target</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;&nbsp;&nbsp;<font color="#d35400">updateLocation</font><font color="#000000">(</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;&nbsp;&nbsp;<font color="#434f54">&#47;&#47; The following line runs our targeting code WHILE the DIFFERENCE (subtraction is taking he difference) is between -thresh and thresh. </font>
+ &nbsp;&nbsp;&nbsp;<font color="#434f54">&#47;&#47; We take the absolute value of the difference in order to compare it to a single threshold.</font>
+ &nbsp;&nbsp;&nbsp;<font color="#5e6d03">while</font> <font color="#000000">(</font><font color="#d35400">abs</font><font color="#000000">(</font><font color="#000000">target</font> <font color="#434f54">-</font> <font color="#000000">currentTheta</font><font color="#000000">)</font> <font color="#434f54">&gt;</font> <font color="#000000">threshold</font><font color="#000000">)</font> <font color="#000000">{</font>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#000000">turnValue</font> <font color="#434f54">=</font> <font color="#000000">someConstant</font> <font color="#434f54">*</font> <font color="#000000">(</font><font color="#000000">target</font> <font color="#434f54">-</font> <font color="#000000">currentTheta</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#000000">turnValue</font> <font color="#434f54">=</font> <font color="#d35400">constrain</font><font color="#000000">(</font><font color="#000000">turnValue</font><font color="#434f54">,</font> <font color="#434f54">-</font><font color="#000000">MAX_TURN_SPEED</font><font color="#434f54">,</font> <font color="#000000">MAX_TURN_SPEED</font><font color="#000000">)</font><font color="#000000">;</font> <font color="#434f54">&#47;&#47;Constrain your turn speed.</font>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#000000">setMotors</font><font color="#000000">(</font><font color="#000000">turnValue</font><font color="#434f54">,</font> <font color="#434f54">-</font><font color="#000000">turnValue</font><font color="#000000">)</font><font color="#000000">;</font> <font color="#434f54">&#47;&#47; You will need to implement this yourself. </font>
+ &nbsp;&nbsp;&nbsp;<font color="#000000">}</font>
+ &nbsp;&nbsp;&nbsp;<font color="#d35400">print</font><font color="#000000">(</font><font color="#005c5f">&#34;Got to angle!&#34;</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;&nbsp;&nbsp;<font color="#000000">setMotors</font><font color="#000000">(</font><font color="#000000">0</font><font color="#434f54">,</font> <font color="#000000">0</font><font color="#000000">)</font><font color="#000000">;</font>
+<font color="#000000">}</font>
+
+</pre>
+
 
