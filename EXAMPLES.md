@@ -56,6 +56,7 @@
 
 ## Note: The below code is pseudocode. Its purpose is to help you understand how to do certain actions. There are multiple ways to do this.
 # Drive forward until you reach a certain x and y coordinate.
+
 <pre>
 <font color="#434f54">&#47;&#47;Setting a target of x = 2.5, y = 1.5</font>
 <font color="#5e6d03">while</font> <font color="#000000">(</font><font color="#434f54">!</font><b><font color="#d35400">Enes100</font></b><font color="#434f54">.</font><font color="#d35400">updateLocation</font><font color="#000000">(</font><font color="#000000">)</font><font color="#000000">)</font><font color="#000000">;</font> <font color="#434f54">&#47;&#47;will keep running until succesfully update location</font>
@@ -72,10 +73,11 @@
  &nbsp;&nbsp;&nbsp;<font color="#000000">moveUp</font><font color="#000000">(</font><font color="#000000">)</font><font color="#000000">;</font>
 <font color="#000000">}</font>
 
-<font color="#000000">```</font>
-<font color="#000000">#</font> <font color="#000000">Rotate</font> <font color="#d35400">to</font> <font color="#000000">a</font> <font color="#000000">certain</font> <font color="#000000">theta</font> <font color="#000000">coordinate</font>
-<font color="#000000">This</font> <font color="#000000">is</font> <font color="#000000">when</font> <font color="#000000">things</font> <font color="#d35400">start</font> <font color="#d35400">to</font> <font color="#d35400">get</font> <font color="#000000">fun</font><font color="#434f54">.</font>
-<font color="#000000">```cpp</font>
+</pre>
+
+# Rotate to a certain theta coordinate
+
+<pre>
 <font color="#434f54">&#47;&#47; This function will make the OTV turn to a certain location.</font>
 <font color="#00979c">void</font> <font color="#000000">setAngle</font><font color="#000000">(</font><font color="#000000">target</font><font color="#000000">)</font> <font color="#000000">{</font>
  &nbsp;&nbsp;&nbsp;<font color="#d35400">print</font><font color="#000000">(</font><font color="#005c5f">&#34;Targeting angle: &#34;</font><font color="#000000">)</font><font color="#000000">;</font> <font color="#d35400">println</font><font color="#000000">(</font><font color="#000000">target</font><font color="#000000">)</font><font color="#000000">;</font>
@@ -92,5 +94,3 @@
 <font color="#000000">}</font>
 
 </pre>
-
-
