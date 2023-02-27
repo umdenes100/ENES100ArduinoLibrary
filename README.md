@@ -43,7 +43,7 @@ In additon, the location of the mission site is also stored in the following var
 To use the library, you have to direct the compiler to include it in your code. Go to **Sketch > Include Library > ENES100**, or add it manually by typing
 `#include "Enes100.h"` at the very top of your file.
 
-### <span style="color:red">Enes100.begin(String teamName,Type teamType,Int markerID,Int txPin,Int rxPin)<a name="print"></a>
+### <span style="color:red">Enes100.begin(String teamName,Type teamType,Int markerID,Int txPin,Int rxPin)<a name="begin"></a>
 Initializes the ENES100 library and establishes communication with the Vision System.
 
 The `txPin` and `rxPin` described below refer to the digital pins that will be connected to the __Tx__ and __Rx__ of the __wifi module__. 
