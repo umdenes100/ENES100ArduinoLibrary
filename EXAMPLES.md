@@ -1,4 +1,4 @@
-# Initializing the Wifi Module and Updating the Location
+# <span style="color:red">Initializing the Wifi Module and Updating the Location<a name="wifi_mod"></a>
 <pre>
 <font color="#5e6d03">#include</font> <font color="#005c5f">&#34;Enes100.h&#34;</font>
 <font color="#00979c">void</font> <font color="#5e6d03">setup</font><font color="#000000">(</font><font color="#000000">)</font> <font color="#000000">{</font>
@@ -21,7 +21,7 @@
 </pre>
 
 
-# Setting up an Ultrasonic Sensor
+# <span style="color:red">Setting up an Ultrasonic Sensor<a name="ultrasonic"></a>
 
 <pre>
 <font color="#434f54">&#47;&#47; defines pins numbers</font>
@@ -55,7 +55,7 @@
 </pre>
 
 ## Note: The below code is pseudocode. Its purpose is to help you understand how to do certain actions. There are multiple ways to do this.
-# Drive forward until you reach a certain x and y coordinate.
+# <span style="color:red">Drive forward until you reach a certain x and y coordinate.<a name="drivef"></a>
 
 <pre>
 <font color="#434f54">&#47;&#47;Setting a target of x = 2.5, y = 1.5</font>
@@ -75,7 +75,7 @@
 
 </pre>
 
-# Rotate to a certain theta coordinate
+# <span style="color:red">Rotate to a certain theta coordinate<a name="rotate"></a>
 
 <pre>
 <font color="#434f54">&#47;&#47; This function will make the OTV turn to a certain location.</font>
