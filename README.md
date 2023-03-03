@@ -183,8 +183,6 @@ String 'label' is the category of the image you are sending.
 Image will be stored on the Jetson in a folder sith the name of the label you provide, so **make sure you keep names consistent**.
 For recommendations on best methods for collecting data, see provided Jetson documentation for more information.
 
-### <span style="color:red">ML <a name="ex"></a>
-
 ## <span style="color:red">Example Code and Debugging<a name="ex"></a>
 
 Example code for each type of mission is included with the library. To view examples, open Arduino IDE and go to **File > Examples > ENES100**. (You must restart the IDE after installing the library for the examples to show.)
