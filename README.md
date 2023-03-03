@@ -163,6 +163,27 @@ Valid calls for **WATER**:
  * `Enes100.mission(WATER_TYPE, SALT_UNPOLLUTED);`
  * `Enes100.mission(WATER_TYPE, SALT_POLLUTED);`
 
+## <span style="color:red">Machine Learning Functions<a name="ex"></a>
+
+### <span style="color:red">int Enes100.MLGetPrediction()<a name="ex"></a>
+Sends current image from the ESPCAM to the Jetson to get processed by machine learning algorithm on the Jetson.
+Returns the index of the category that the model predicts.
+
+#### **NOTE**: 
+You **MUST** have Python script running on Jetson in order for this function to return anything. See provided Jetson documentation for more information on writing that script.
+
+Example:
+If the Jetson contained the categories:
+**Thumbs Up**, **Thumbs Down**, **Thumb Sideways** 
+in an array in that order, calling `Enes100.MLGetPrediction()` would return `0` if **Thumbs Up** is predicted, `1` if **Thumbs Down** is predicted, and `2` if **Thumb Sideways** is predicted.
+
+### <span style="color:red">Enes100.MLCaptureTrainingImage(String label)<a name="ex"></a>
+Sends current image from the ESPCAM to the Jetson for storage for use in training a model later. 
+String 'label' is the category of the image you are sending.
+Image will be stored on the Jetson in a folder sith the name of the label you provide, so **make sure you keep names consistent**.
+For recommendations on best methods for collecting data, see provided Jetson documentation for more information.
+
+### <span style="color:red">ML <a name="ex"></a>
 
 ## <span style="color:red">Example Code and Debugging<a name="ex"></a>
 
