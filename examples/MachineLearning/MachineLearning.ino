@@ -1,24 +1,17 @@
 #include "Enes100.h"
 
 void setup() {
-    // Initialize Enes100 library
+    // Initialize Enes100 Library
     // Team Name, Mission Type, Marker ID, Wifi Module RX Pin, Wifi Module TX Pin
-    Enes100.begin("Crash Site Team", CRASH_SITE, 3, 10, 11);
-    
+    Enes100.begin("Team WALL-E", MACHINE_LEARNING, 114, 10, 11);
+
     Enes100.print("Destination is at (");
     Enes100.print(Enes100.missionSite.x);
     Enes100.print(", ");
     Enes100.print(Enes100.missionSite.y);
     Enes100.println(")");
-    // Transmit the height of the payload in mm
-    Enes100.mission(HEIGHT, 270);
-    // Transmit the length of the payload in mm
-    Enes100.mission(LENGTH, 180);
-    // Transmit the direction of the abnormality for +x
-    Enes100.mission(DIRECTION, POS_X);
-    // Any other setup code...
 }
-
+bool sent = false;
 void loop() {
     float x, y, t; bool v; // Declare variables to hold the data
     x = Enes100.getX();
@@ -37,5 +30,10 @@ void loop() {
         Enes100.println("Not visible"); // print not visible
     }
     delay(1000);
-}
 
+    if(millis() > 5000 && !sent) { // After 5 seconds, capture an image.
+        Enes100.MLCaptureTrainingImage("dirt");
+        //int result = Enes100.MLGetPrediction(); // How you get the prediction from your model given the camera image.
+        sent = true; //We only will request to send one image.
+    }
+}

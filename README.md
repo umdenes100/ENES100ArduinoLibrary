@@ -1,6 +1,6 @@
 # Enes100ArduinoLibrary
 
-Arduino library for use in the ENES100 course with Vision System v5.1 over WiFi
+An Arduino library for use in the ENES100 course with Vision System over WiFi
 
 ## Download and Installation <a name="download"></a>
 
@@ -12,12 +12,12 @@ To download this library, click on the blue **Download** button on the right. Ma
 
 Communication with the Vision System is done using ESP8266 WiFi-enabled microcontrollers. WiFi modules are available for checkout through a Teaching Fellow. The WiFi module has 4 pins:
 
-| Pin | Description     | Connect to...           |
-| --- | ---             | ---                     |
-| GND | Ground          | Common ground           |
-| VCC | Voltage supply  | +5 V                    |
-| TX  | Serial transmit | Arduino digital pin     |
-| RX  | Serial receive  | Arduino digital pin     |
+| Pin | Description     | Connect to...       |
+|-----|-----------------|---------------------|
+| GND | Ground          | Common ground       |
+| VCC | Voltage supply  | +5 V                |
+| TX  | Serial transmit | Arduino digital pin |
+| RX  | Serial receive  | Arduino digital pin |
 
 When choosing the pins to use for communication, there are a few things to keep in mind. You might not want to use PWM pins for your communication so you can save those for things like controlling your motors. That choice simply depends on how many PWM pins you need for your other peripherals. In addition, some pins aren't configured to transmit and recieve. You can find out if a certain pin is suitable to transmit or recieve by looking at the datasheet for your arduino, or by uploading the example code and seeing if you are able to recieve location coordinates. 
 
@@ -43,7 +43,10 @@ In additon, the location of the mission site is also stored in the following var
 To use the library, you have to direct the compiler to include it in your code. Go to **Sketch > Include Library > ENES100**, or add it manually by typing
 `#include "Enes100.h"` at the very top of your file.
 
-### <span style="color:red">Enes100.begin(String teamName,Type teamType,Int markerID,Int txPin,Int rxPin)<a name="begin"></a>
+### Enes100.begin
+Format:
+
+```Enes100.begin(const char* teamName, byte teamType, int markerId, int wifiModuleRX, int wifiModuleTX)```
 Initializes the ENES100 library and establishes communication with the Vision System.
 
 The `txPin` and `rxPin` described below refer to the digital pins that will be connected to the __Tx__ and __Rx__ of the __wifi module__. 

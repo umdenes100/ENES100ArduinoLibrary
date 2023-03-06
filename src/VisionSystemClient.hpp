@@ -6,10 +6,15 @@
 
 // Transmission opcodes
 #define OP_PING     0
-#define OP_BEGIN    2
-#define OP_LOCATION 4
+#define OP_BEGIN    3
+#define OP_LOCATION 5
 #define OP_MISSION  6
+#define OP_ML_PREDICTION 7
 #define OP_PRINT    8
+#define OP_ML_CAPTURE 9
+//OP_CHECK is the same as OP_LOCATION but can return different first values if the value is not available or hasn't changed.
+#define OP_CHECK    51
+
 
 const byte FLUSH_SEQUENCE[] = {0xFF, 0xFE, 0xFD, 0xFC};
 
@@ -30,12 +35,20 @@ private:
 class VisionSystemClient {
 public:
   bool ping();
-  bool begin(const char* teamName, int teamType, int markerId, int rxPin, int txPin);
+  bool begin(const char* teamName, byte teamType, int markerId, int wifiModuleRX, int wifiModuleTX);
   bool updateLocation();
-  bool mission(int type, int message);
-  bool mission(int type, double message);
-  bool mission(int type, char message);
-  bool mission(int type, Coordinate& message);
+  void mission(int type, int message);
+  void mission(int type, double message);
+  void mission(int type, char message);
+  void mission(int type, Coordinate& message);
+  int MLGetPrediction();
+  void MLCaptureTrainingImage(const char * label);
+
+  float getX();
+  float getY();
+  float getTheta();
+  bool getVisibility();
+
   template <typename T>
   void print(T message);
   template <typename T>
@@ -46,6 +59,11 @@ public:
   
 private:
   bool receive(Coordinate* coordinate = NULL);
+  void updateIfNeeded();
+  bool visible;
+  void readBytes(byte* buffer, int length);
+  void waitForConnection();
+  uint32_t lastUpdate;
   
   int mMarkerId;
   SoftwareSerial* mSerial;

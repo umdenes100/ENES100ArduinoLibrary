@@ -8,6 +8,7 @@
 #define MATERIAL          2
 #define FIRE              3
 #define WATER             4
+#define MACHINE_LEARNING  5
 
 #define DIRECTION         0
 #define LENGTH            1
