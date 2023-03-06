@@ -163,7 +163,7 @@ Valid calls for **WATER**:
  * `Enes100.mission(WATER_TYPE, SALT_UNPOLLUTED);`
  * `Enes100.mission(WATER_TYPE, SALT_POLLUTED);`
 
-## Machine Learning Functions<a name="ml_func"></a>
+## Machine Learning Functions
 
 ### <span style="color:red">int Enes100.MLGetPrediction()<a name="ml_pred"></a>
 Sends current image from the ESPCAM to the Jetson to get processed by machine learning algorithm on the Jetson.
