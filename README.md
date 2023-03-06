@@ -2,13 +2,13 @@
 
 Arduino library for use in the ENES100 course with Vision System v5.1 over WiFi
 
-## <span style="color:red">Download and Installation <a name="download"></a>
+## Download and Installation <a name="download"></a>
 
 To download this library, click on the blue **Download** button on the right. Make sure the file is unzipped and move it to the arduino libraries folder (Documents->Arduino->libraries). You must have Arduino IDE version 1.5.0 or above. The most current version of Arduino IDE can be downloaded from the [Arduino website](https://www.arduino.cc/en/Main/Software).
 
 **If you have an older version of the library on your computer, you _must_ delete it before adding a newer version.** Failure to do this may cause file conflicts and it is not guaranteed that the library will work properly.
 
-## <span style="color:red">Setup<a name="setup"></a>
+## Setup<a name="setup"></a>
 
 Communication with the Vision System is done using ESP8266 WiFi-enabled microcontrollers. WiFi modules are available for checkout through a Teaching Fellow. The WiFi module has 4 pins:
 
@@ -21,7 +21,7 @@ Communication with the Vision System is done using ESP8266 WiFi-enabled microcon
 
 When choosing the pins to use for communication, there are a few things to keep in mind. You might not want to use PWM pins for your communication so you can save those for things like controlling your motors. That choice simply depends on how many PWM pins you need for your other peripherals. In addition, some pins aren't configured to transmit and recieve. You can find out if a certain pin is suitable to transmit or recieve by looking at the datasheet for your arduino, or by uploading the example code and seeing if you are able to recieve location coordinates. 
 
-## <span style="color:red">Variables<a name="var"></a>
+## Variables<a name="var"></a>
 
 The Aruco Marker has 3 values
    * x: x-coordinate of the Aruco Marker (from 0.0 to 4.0)
@@ -163,9 +163,9 @@ Valid calls for **WATER**:
  * `Enes100.mission(WATER_TYPE, SALT_UNPOLLUTED);`
  * `Enes100.mission(WATER_TYPE, SALT_POLLUTED);`
 
-## <span style="color:red">Machine Learning Functions<a name="ex"></a>
+## Machine Learning Functions<a name="ml_func"></a>
 
-### <span style="color:red">int Enes100.MLGetPrediction()<a name="ex"></a>
+### <span style="color:red">int Enes100.MLGetPrediction()<a name="ml_pred"></a>
 Sends current image from the ESPCAM to the Jetson to get processed by machine learning algorithm on the Jetson.
 Returns the index of the category that the model predicts.
 
@@ -177,16 +177,16 @@ If the Jetson contained the categories:
 **Thumbs Up**, **Thumbs Down**, **Thumb Sideways** 
 in an array in that order, calling `Enes100.MLGetPrediction()` would return `0` if **Thumbs Up** is predicted, `1` if **Thumbs Down** is predicted, and `2` if **Thumb Sideways** is predicted.
 
-### <span style="color:red">Enes100.MLCaptureTrainingImage(String label)<a name="ex"></a>
+### <span style="color:red">Enes100.MLCaptureTrainingImage(String label)<a name="ml_cap"></a>
 Sends current image from the ESPCAM to the Jetson for storage for use in training a model later. 
 String 'label' is the category of the image you are sending.
 Image will be stored on the Jetson in a folder sith the name of the label you provide, so **make sure you keep names consistent**.
 For recommendations on best methods for collecting data, see provided Jetson documentation for more information.
 
-## <span style="color:red">Example Code and Debugging<a name="ex"></a>
+## Example Code and Debugging<a name="ex"></a>
 
 Example code for each type of mission is included with the library. To view examples, open Arduino IDE and go to **File > Examples > ENES100**. (You must restart the IDE after installing the library for the examples to show.)
 
-## <span style="color:red">Product Demonstration Procedures<a name="prod"></a>
+## Product Demonstration Procedures<a name="prod"></a>
 
 During the product demonstration, messages sent using `print()` and `println()` will not be shown on the Vision System console. The console will only print out the values that you send using `mission()`.
