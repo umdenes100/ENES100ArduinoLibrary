@@ -177,11 +177,14 @@ If the Jetson contained the categories:
 **Thumbs Up**, **Thumbs Down**, **Thumb Sideways** 
 in an array in that order, calling `Enes100.MLGetPrediction()` would return `0` if **Thumbs Up** is predicted, `1` if **Thumbs Down** is predicted, and `2` if **Thumb Sideways** is predicted.
 
-### <span style="color:red">Enes100.MLCaptureTrainingImage(String label)<a name="ml_cap"></a>
+### <span style="color:red">Enes100.MLCaptureTrainingImage(const char *label)<a name="ml_cap"></a>
 Sends current image from the ESPCAM to the Jetson for storage for use in training a model later. 
 String 'label' is the category of the image you are sending.
 Image will be stored on the Jetson in a folder sith the name of the label you provide, so **make sure you keep names consistent**.
 For recommendations on best methods for collecting data, see provided Jetson documentation for more information.
+
+#### **NOTE**: 
+You **MUST** have Python script running on Jetson in order for this function to return anything. See provided Jetson documentation for more information on writing that script.
 
 ## Example Code and Debugging<a name="ex"></a>
 
