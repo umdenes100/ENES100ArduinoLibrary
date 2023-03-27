@@ -93,10 +93,7 @@ Returns a `bool` indicating if the operation was successfull or not.
 ### <span style="color:red">Enes100.print(Type message)<a name="print"></a>
 Sends a message to the vision system. Note that any 'print' or 'println' called after will begin their message on the same line.
 
-Can accept
-   * Strings
-   * Integers
-   * Doubles
+The function can accept most types. It uses the arduino SoftwareSerial print under the hood, so check out documentation for that for specifics on types.
 ```arduino
 These two lines will output "Hello World!Hello World!"
 Enes100.print("Hello World!")
@@ -111,10 +108,7 @@ These two lines will output
 Enes100.println("Hello World!")
 Enes100.println("Hello World!")
 ```
-Can accept
-   * Strings
-   * Integers
-   * Doubles
+The function can accept most types. It uses the arduino SoftwareSerial print under the hood, so check out documentation for that for specifics on types.
 
 ### <span style="color:red">Enes100.mission(Int type, Int message)<a name="mission"></a>
 Sends value for a mission objective.
@@ -166,6 +160,13 @@ Valid calls for **WATER**:
  * `Enes100.mission(WATER_TYPE, SALT_UNPOLLUTED);`
  * `Enes100.mission(WATER_TYPE, SALT_POLLUTED);`
 
+Valid calls for **MACHINE_LEARNING**:
+ * `Enes100.mission(PERCENTAGE, x);` *x is a percentage*
+ * `Enes100.mission(LOCATION, cord);` *where cord is a Coordinate object*
+<br/>
+or 
+ * `Enes100.mission(LOCATION, Coordinate(x, y));` *x and y are floats in millimeters*
+
 ## Machine Learning Functions
 
 ### <span style="color:red">int Enes100.MLGetPrediction()<a name="ml_pred"></a>
@@ -180,9 +181,9 @@ If the Jetson contained the categories:
 **Thumbs Up**, **Thumbs Down**, **Thumb Sideways** 
 in an array in that order, calling `Enes100.MLGetPrediction()` would return `0` if **Thumbs Up** is predicted, `1` if **Thumbs Down** is predicted, and `2` if **Thumb Sideways** is predicted.
 
-### <span style="color:red">Enes100.MLCaptureTrainingImage(String label)<a name="ml_cap"></a>
+### <span style="color:red">Enes100.MLCaptureTrainingImage(const char * label)<a name="ml_cap"></a>
 Sends current image from the ESPCAM to the Jetson for storage for use in training a model later. 
-String 'label' is the category of the image you are sending.
+const char * 'label' is the category of the image you are sending.
 Image will be stored on the Jetson in a folder sith the name of the label you provide, so **make sure you keep names consistent**.
 For recommendations on best methods for collecting data, see provided Jetson documentation for more information.
 

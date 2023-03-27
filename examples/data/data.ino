@@ -1,7 +1,7 @@
 #include "Enes100.h"
 
 void setup() {
-    // Initialize Enes100 Library 
+    // Initialize Enes100 Library
     // Team Name, Mission Type, Marker ID, TX Pin, RX Pin
     Enes100.begin("DATA TEAM", DATA, 3, 10, 11);
 

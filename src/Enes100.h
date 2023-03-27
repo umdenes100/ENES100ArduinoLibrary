@@ -44,6 +44,8 @@
 #define SALT_UNPOLLUTED   2
 #define SALT_POLLUTED     3
 
+#define LOCATION 0
+#define PERCENTAGE 1
 
 VisionSystemClient Enes100;
 
