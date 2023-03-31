@@ -58,8 +58,8 @@ Note: you can use any digital pin __except 0 or 1__ for the rxPin and txPin. Thi
 #### Example
 ```arduino
 void setup() {
-    //Connect digital pin 8 to the Rx pin of the wifi module.
-    //Connect digital pin 9 to the Tx pin of the wifi module.
+    //Connect digital pin 8 to the Tx pin of the wifi module.
+    //Connect digital pin 9 to the Rx pin of the wifi module.
     Enes100.begin("It's lit", FIRE, 3, 8, 9);
     
     // Some other setup code...
