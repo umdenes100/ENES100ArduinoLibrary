@@ -31,7 +31,7 @@ bool VisionSystemClient::ping() {
 bool VisionSystemClient::begin(const char* teamName, byte teamType, int markerId, int wifiModuleRX, int wifiModuleTX) {
   mMarkerId = markerId;
   mSerial = new SoftwareSerial(wifiModuleTX, wifiModuleRX);
-  mSerial->begin(9600);
+  mSerial->begin(115200);
 
   //Wait for the esp module to connect. It will send a '0x99' byte when it is ready.
   byte it = 0;
@@ -114,6 +114,7 @@ void VisionSystemClient::MLCaptureTrainingImage(const char * label) {
     //OP_ML_CAPTURE
     mSerial->write(OP_ML_CAPTURE);
     mSerial->print(label);
+    mSerial->print('\0');
     mSerial->write(FLUSH_SEQUENCE, 4);
     mSerial->flush();
 }
