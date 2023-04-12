@@ -188,12 +188,12 @@ void VisionSystemClient::updateIfNeeded() {
     visible = true;
 //    auto read_s = micros();
     byte buff[2];
-    readBytes(buff, 1);
-    location.x = float(buff[0]) / 100.0;
-//    auto read_1 = micros();
     readBytes(buff, 2);
-    location.y = float(buff[1] << 8 | buff[0]) / 100.0;
+    location.x = float(buff[1] << 8 | buff[0]) / 100.0;
 //    auto read_2 = micros();
+    readBytes(buff, 1);
+    location.y = float(buff[0]) / 100.0;
+//    auto read_1 = micros();
     readBytes(buff, 2); //Remember this number is singed. Dereference buff to get the data
     int16_t intData = *((int16_t *) buff);
     location.theta = float(intData) / 100.0;
