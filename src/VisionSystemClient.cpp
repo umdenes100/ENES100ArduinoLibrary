@@ -85,7 +85,7 @@ void VisionSystemClient::mission(int type, char message) {
   mSerial->flush();
 }
 
-void VisionSystemClient::mission(int type, Coordinate& message) {
+void VisionSystemClient::mission(int type, Coordinate message) {
   mSerial->write(OP_MISSION);
   mSerial->write(type);
   mSerial->print(message.x);
@@ -154,6 +154,7 @@ void VisionSystemClient::readBytes(byte* buffer, int length) {
             }
         }
         buffer[i] = mSerial->read();
+        //Serial.println(buffer[i], HEX);
     }
 }
 

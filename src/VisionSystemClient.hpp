@@ -40,7 +40,7 @@ public:
   void mission(int type, int message);
   void mission(int type, double message);
   void mission(int type, char message);
-  void mission(int type, Coordinate& message);
+  void mission(int type, Coordinate message);
   int MLGetPrediction();
   void MLCaptureTrainingImage(const char * label);
 
