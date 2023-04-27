@@ -39,7 +39,7 @@ bool VisionSystemClient::begin(const char* teamName, byte teamType, int markerId
     mSerial->write(0x99); delay(2);
     it = mSerial->read();
     delay(10);
-    Serial.println(it);
+    //Serial.println(it);
   } while (it != 0x99);
 
   //At this point we know the ESP is ready for us to send shit.
@@ -102,12 +102,18 @@ int VisionSystemClient::MLGetPrediction() {
     mSerial->write(FLUSH_SEQUENCE, 4);
     mSerial->flush();
 
+    delay(500);
+
+    while (mSerial->available()) {
+        mSerial->read();
+    }
+
     byte buffer[2];
     while(!mSerial->available());
     buffer[0] = mSerial->read();
     while(!mSerial->available());
     buffer[1] = mSerial->read();
-    return buffer[1] << 8 | buffer[0];
+    return (buffer[1] << 8) | buffer[0];
 }
 
 void VisionSystemClient::MLCaptureTrainingImage(const char * label) {
@@ -154,7 +160,8 @@ void VisionSystemClient::readBytes(byte* buffer, int length) {
             }
         }
         buffer[i] = mSerial->read();
-        //Serial.println(buffer[i], HEX);
+        // Serial.print(buffer[i], HEX);
+        // Serial.print(" ");
     }
 }
 
@@ -173,7 +180,8 @@ void VisionSystemClient::updateIfNeeded() {
     }
     auto received = micros();
     byte b = mSerial->read();
-//    Serial.println(b);
+    //Serial.print(b, HEX);
+    //Serial.print(" ");
     if(b == 0x00) return; //Zero means no update.
     if(b == 0x01) { // One means no marker found.
         location.x = -1;
