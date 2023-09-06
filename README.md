@@ -52,7 +52,7 @@ Initializes the ENES100 library and establishes communication with the Vision Sy
 The `txPin` and `rxPin` described below refer to the digital pins that will be connected to the __Tx__ and __Rx__ of the __wifi module__. 
 * teamName: Name of the team that will show up in the Vision System
 * teamType: Type of mission your team is running. 
-    *  Valid Mission Types:  `CRASH_SITE`, `DATA`, `MATERIAL`, `FIRE`, `WATER`
+    *  Valid Mission Types:  `CRASH_SITE`, `DATA`, `MATERIAL`, `FIRE`, `WATER`, `SEED`
 * markerID: ID of your Aruco Marker
 * txPin: Digital Pin that will be connected to the __Tx pin on the wifi module__.
 * rxPin: Digital Pin that will be connected to the __Rx pin on the wifi module__.
@@ -126,10 +126,8 @@ Valid calls for **CRASH_SITE**:
 
  * `Enes100.mission(LENGTH, x);` *x is in millimeters*
  * `Enes100.mission(HEIGHT, x);` *x is in millimeters*
- * `Enes100.mission(DIRECTION, POS_X);`
- * `Enes100.mission(DIRECTION, NEG_X);`
- * `Enes100.mission(DIRECTION, POS_Y);`
- * `Enes100.mission(DIRECTION, NEG_Y);`
+ * `Enes100.mission(DIRECTION, NORMAL_X);` *the normal of the exposed panels points in the positive and negative x direction*
+ * `Enes100.mission(DIRECTION, NORMAL_Y);` *the normal of the exposed panels points in the positive and negative y direction*
 
 Valid calls for **DATA**:
 
@@ -160,7 +158,7 @@ Valid calls for **WATER**:
  * `Enes100.mission(WATER_TYPE, SALT_UNPOLLUTED);`
  * `Enes100.mission(WATER_TYPE, SALT_POLLUTED);`
 
-Valid calls for **MACHINE_LEARNING**:
+Valid calls for **SEED**:
  * `Enes100.mission(PERCENTAGE, x);` *x is a percentage*
  * `Enes100.mission(LOCATION, cord);` *where cord is a Coordinate object*
 <br/>
