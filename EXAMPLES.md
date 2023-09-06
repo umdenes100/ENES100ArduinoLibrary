@@ -1,25 +1,7 @@
 # <span style="color:red">Initializing the Wifi Module and Updating the Location<a name="wifi_mod"></a>
-<pre>
-<font color="#5e6d03">#include</font> <font color="#005c5f">&#34;Enes100.h&#34;</font>
-<font color="#00979c">void</font> <font color="#5e6d03">setup</font><font color="#000000">(</font><font color="#000000">)</font> <font color="#000000">{</font>
- &nbsp;&nbsp;&nbsp;<font color="#d35400">delay</font><font color="#000000">(</font><font color="#000000">2000</font><font color="#000000">)</font><font color="#000000">;</font>
- &nbsp;&nbsp;&nbsp;<b><font color="#d35400">Enes100</font></b><font color="#434f54">.</font><font color="#d35400">begin</font><font color="#000000">(</font><font color="#005c5f">&#34;It&#39;s lit&#34;</font><font color="#434f54">,</font> <font color="#000000">FIRE</font><font color="#434f54">,</font> <font color="#000000">3</font><font color="#434f54">,</font> <font color="#000000">8</font><font color="#434f54">,</font> <font color="#000000">9</font><font color="#000000">)</font><font color="#000000">;</font> &nbsp;<font color="#434f54">&#47;&#47; Aruco ID of 3. Rx Pin of 8. Tx Pin of 9.</font>
- &nbsp;&nbsp;&nbsp;<font color="#d35400">delay</font><font color="#000000">(</font><font color="#000000">2000</font><font color="#000000">)</font><font color="#000000">;</font>
- &nbsp;&nbsp;&nbsp;<b><font color="#d35400">Enes100</font></b><font color="#434f54">.</font><font color="#d35400">println</font><font color="#000000">(</font><font color="#005c5f">&#34;Connected!&#34;</font><font color="#000000">)</font><font color="#000000">;</font>
-<font color="#000000">}</font>
-<font color="#00979c">void</font> <font color="#5e6d03">loop</font><font color="#000000">(</font><font color="#000000">)</font><font color="#000000">{</font>
- &nbsp;&nbsp;&nbsp;<font color="#5e6d03">while</font> <font color="#000000">(</font><font color="#434f54">!</font><b><font color="#d35400">Enes100</font></b><font color="#434f54">.</font><font color="#d35400">updateLocation</font><font color="#000000">(</font><font color="#000000">)</font><font color="#000000">)</font><font color="#000000">;</font> <font color="#434f54">&#47;&#47;will keep running until succesfully update location</font>
- &nbsp;&nbsp;&nbsp;<b><font color="#d35400">Enes100</font></b><font color="#434f54">.</font><font color="#d35400">print</font><font color="#000000">(</font><font color="#005c5f">&#34;X coord:&#34;</font><font color="#000000">)</font><font color="#000000">;</font>
- &nbsp;&nbsp;&nbsp;<b><font color="#d35400">Enes100</font></b><font color="#434f54">.</font><font color="#d35400">println</font><font color="#000000">(</font><b><font color="#d35400">Enes100</font></b><font color="#434f54">.</font><font color="#000000">location</font><font color="#434f54">.</font><font color="#000000">x</font><font color="#000000">)</font><font color="#000000">;</font>
- &nbsp;&nbsp;&nbsp;<b><font color="#d35400">Enes100</font></b><font color="#434f54">.</font><font color="#d35400">print</font><font color="#000000">(</font><font color="#005c5f">&#34;Y coord:&#34;</font><font color="#000000">)</font><font color="#000000">;</font>
- &nbsp;&nbsp;&nbsp;<b><font color="#d35400">Enes100</font></b><font color="#434f54">.</font><font color="#d35400">println</font><font color="#000000">(</font><b><font color="#d35400">Enes100</font></b><font color="#434f54">.</font><font color="#000000">location</font><font color="#434f54">.</font><font color="#000000">y</font><font color="#000000">)</font><font color="#000000">;</font>
- &nbsp;&nbsp;&nbsp;<b><font color="#d35400">Enes100</font></b><font color="#434f54">.</font><font color="#d35400">print</font><font color="#000000">(</font><font color="#005c5f">&#34;Theta coord:&#34;</font><font color="#000000">)</font><font color="#000000">;</font>
- &nbsp;&nbsp;&nbsp;<b><font color="#d35400">Enes100</font></b><font color="#434f54">.</font><font color="#d35400">println</font><font color="#000000">(</font><b><font color="#d35400">Enes100</font></b><font color="#434f54">.</font><font color="#000000">location</font><font color="#434f54">.</font><font color="#000000">theta</font><font color="#000000">)</font><font color="#000000">;</font>
- &nbsp;&nbsp;&nbsp;<font color="#d35400">delay</font><font color="#000000">(</font><font color="#000000">1000</font><font color="#000000">)</font><font color="#000000">;</font> <font color="#434f54">&#47;&#47;wait 1 second in order to not overload the vision system</font>
-<font color="#000000">}</font>
 
-</pre>
-
+See the example "SimpleTest.ino" by opening the Arduino editor with the library installed. Then click File->Examples->
+Enes100->SimpleTest
 
 # <span style="color:red">Setting up an Ultrasonic Sensor<a name="ultrasonic"></a>
 
@@ -55,8 +37,9 @@
 </pre>
 
 ## Note: The below code is pseudocode. Its purpose is to help you understand how to do certain actions. There are multiple ways to do this.
-# <span style="color:red">Drive forward until you reach a certain x and y coordinate.<a name="drivef"></a>
 
+# <span style="color:red">Drive forward until you reach a certain x and y coordinate.<a name="drivef"></a>
+This code uses the old style of updateLocation and Enes100.location.x
 <pre>
 <font color="#434f54">&#47;&#47;Setting a target of x = 2.5, y = 1.5</font>
 <font color="#5e6d03">while</font> <font color="#000000">(</font><font color="#434f54">!</font><b><font color="#d35400">Enes100</font></b><font color="#434f54">.</font><font color="#d35400">updateLocation</font><font color="#000000">(</font><font color="#000000">)</font><font color="#000000">)</font><font color="#000000">;</font> <font color="#434f54">&#47;&#47;will keep running until succesfully update location</font>
@@ -81,8 +64,7 @@
 <font color="#434f54">&#47;&#47; This function will make the OTV turn to a certain location.</font>
 <font color="#00979c">void</font> <font color="#000000">setAngle</font><font color="#000000">(</font><font color="#000000">target</font><font color="#000000">)</font> <font color="#000000">{</font>
  &nbsp;&nbsp;&nbsp;<font color="#d35400">print</font><font color="#000000">(</font><font color="#005c5f">&#34;Targeting angle: &#34;</font><font color="#000000">)</font><font color="#000000">;</font> <font color="#d35400">println</font><font color="#000000">(</font><font color="#000000">target</font><font color="#000000">)</font><font color="#000000">;</font>
- &nbsp;&nbsp;&nbsp;<font color="#d35400">updateLocation</font><font color="#000000">(</font><font color="#000000">)</font><font color="#000000">;</font>
- &nbsp;&nbsp;&nbsp;<font color="#434f54">&#47;&#47; The following line runs our targeting code WHILE the DIFFERENCE (subtraction is taking he difference) is between -thresh and thresh. </font>
+ &nbsp;&nbsp;&nbsp;<font color="#434f54">&#47;&#47; The following line runs our targeting code WHILE the DIFFERENCE (subtraction is taking the difference) is between -thresh and thresh. </font>
  &nbsp;&nbsp;&nbsp;<font color="#434f54">&#47;&#47; We take the absolute value of the difference in order to compare it to a single threshold.</font>
  &nbsp;&nbsp;&nbsp;<font color="#5e6d03">while</font> <font color="#000000">(</font><font color="#d35400">abs</font><font color="#000000">(</font><font color="#000000">target</font> <font color="#434f54">-</font> <font color="#000000">currentTheta</font><font color="#000000">)</font> <font color="#434f54">&gt;</font> <font color="#000000">threshold</font><font color="#000000">)</font> <font color="#000000">{</font>
  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#000000">turnValue</font> <font color="#434f54">=</font> <font color="#000000">someConstant</font> <font color="#434f54">*</font> <font color="#000000">(</font><font color="#000000">target</font> <font color="#434f54">-</font> <font color="#000000">currentTheta</font><font color="#000000">)</font><font color="#000000">;</font>

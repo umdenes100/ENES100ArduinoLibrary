@@ -1,6 +1,6 @@
 # Enes100ArduinoLibrary
 
-Arduino library for use in the ENES100 course with Vision System v5.1 over WiFi
+An Arduino library for use in the ENES100 course with Vision System over WiFi
 
 ## Download and Installation <a name="download"></a>
 
@@ -12,12 +12,12 @@ To download this library, click on the blue **Download** button on the right. Ma
 
 Communication with the Vision System is done using ESP8266 WiFi-enabled microcontrollers. WiFi modules are available for checkout through a Teaching Fellow. The WiFi module has 4 pins:
 
-| Pin | Description     | Connect to...           |
-| --- | ---             | ---                     |
-| GND | Ground          | Common ground           |
-| VCC | Voltage supply  | +5 V                    |
-| TX  | Serial transmit | Arduino digital pin     |
-| RX  | Serial receive  | Arduino digital pin     |
+| Pin | Description     | Connect to...       |
+|-----|-----------------|---------------------|
+| GND | Ground          | Common ground       |
+| VCC | Voltage supply  | +5 V                |
+| TX  | Serial transmit | Arduino digital pin |
+| RX  | Serial receive  | Arduino digital pin |
 
 When choosing the pins to use for communication, there are a few things to keep in mind. You might not want to use PWM pins for your communication so you can save those for things like controlling your motors. That choice simply depends on how many PWM pins you need for your other peripherals. In addition, some pins aren't configured to transmit and recieve. You can find out if a certain pin is suitable to transmit or recieve by looking at the datasheet for your arduino, or by uploading the example code and seeing if you are able to recieve location coordinates. 
 
@@ -43,13 +43,16 @@ In additon, the location of the mission site is also stored in the following var
 To use the library, you have to direct the compiler to include it in your code. Go to **Sketch > Include Library > ENES100**, or add it manually by typing
 `#include "Enes100.h"` at the very top of your file.
 
-### <span style="color:red">Enes100.begin(String teamName,Type teamType,Int markerID,Int txPin,Int rxPin)<a name="begin"></a>
+### Enes100.begin
+Format:
+
+```Enes100.begin(const char* teamName, byte teamType, int markerId, int wifiModuleRX, int wifiModuleTX)```
 Initializes the ENES100 library and establishes communication with the Vision System.
 
 The `txPin` and `rxPin` described below refer to the digital pins that will be connected to the __Tx__ and __Rx__ of the __wifi module__. 
 * teamName: Name of the team that will show up in the Vision System
 * teamType: Type of mission your team is running. 
-    *  Valid Mission Types:  `CRASH_SITE`, `DATA`, `MATERIAL`, `FIRE`, `WATER`
+    *  Valid Mission Types:  `CRASH_SITE`, `DATA`, `MATERIAL`, `FIRE`, `WATER`, `SEED`
 * markerID: ID of your Aruco Marker
 * txPin: Digital Pin that will be connected to the __Tx pin on the wifi module__.
 * rxPin: Digital Pin that will be connected to the __Rx pin on the wifi module__.
@@ -90,10 +93,7 @@ Returns a `bool` indicating if the operation was successfull or not.
 ### <span style="color:red">Enes100.print(Type message)<a name="print"></a>
 Sends a message to the vision system. Note that any 'print' or 'println' called after will begin their message on the same line.
 
-Can accept
-   * Strings
-   * Integers
-   * Doubles
+The function can accept most types. It uses the arduino SoftwareSerial print under the hood, so check out documentation for that for specifics on types.
 ```arduino
 These two lines will output "Hello World!Hello World!"
 Enes100.print("Hello World!")
@@ -108,10 +108,7 @@ These two lines will output
 Enes100.println("Hello World!")
 Enes100.println("Hello World!")
 ```
-Can accept
-   * Strings
-   * Integers
-   * Doubles
+The function can accept most types. It uses the arduino SoftwareSerial print under the hood, so check out documentation for that for specifics on types.
 
 ### <span style="color:red">Enes100.mission(Int type, Int message)<a name="mission"></a>
 Sends value for a mission objective.
@@ -129,10 +126,8 @@ Valid calls for **CRASH_SITE**:
 
  * `Enes100.mission(LENGTH, x);` *x is in millimeters*
  * `Enes100.mission(HEIGHT, x);` *x is in millimeters*
- * `Enes100.mission(DIRECTION, POS_X);`
- * `Enes100.mission(DIRECTION, NEG_X);`
- * `Enes100.mission(DIRECTION, POS_Y);`
- * `Enes100.mission(DIRECTION, NEG_Y);`
+ * `Enes100.mission(DIRECTION, NORMAL_X);` *the normal of the exposed panels points in the positive and negative x direction*
+ * `Enes100.mission(DIRECTION, NORMAL_Y);` *the normal of the exposed panels points in the positive and negative y direction*
 
 Valid calls for **DATA**:
 
@@ -163,6 +158,13 @@ Valid calls for **WATER**:
  * `Enes100.mission(WATER_TYPE, SALT_UNPOLLUTED);`
  * `Enes100.mission(WATER_TYPE, SALT_POLLUTED);`
 
+Valid calls for **SEED**:
+ * `Enes100.mission(PERCENTAGE, x);` *x is a percentage*
+ * `Enes100.mission(LOCATION, cord);` *where cord is a Coordinate object*
+<br/>
+or 
+ * `Enes100.mission(LOCATION, Coordinate(x, y));` *x and y are floats in millimeters*
+
 ## Machine Learning Functions
 
 ### <span style="color:red">int Enes100.MLGetPrediction()<a name="ml_pred"></a>
@@ -179,7 +181,7 @@ in an array in that order, calling `Enes100.MLGetPrediction()` would return `0` 
 
 ### <span style="color:red">Enes100.MLCaptureTrainingImage(const char *label)<a name="ml_cap"></a>
 Sends current image from the ESPCAM to the Jetson for storage for use in training a model later. 
-String 'label' is the category of the image you are sending.
+const char * 'label' is the category of the image you are sending.
 Image will be stored on the Jetson in a folder sith the name of the label you provide, so **make sure you keep names consistent**.
 For recommendations on best methods for collecting data, see provided Jetson documentation for more information.
 

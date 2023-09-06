@@ -2,7 +2,7 @@
 
 void setup() {
     // Initialize Enes100 library
-    // Team Name, Mission Type, Marker ID, TX Pin, RX Pin
+    // Team Name, Mission Type, Marker ID, Wifi Module RX Pin, Wifi Module TX Pin
     Enes100.begin("Material Team", MATERIAL, 3, 10, 11);
 
     //Print Destination Coordinates
@@ -19,16 +19,21 @@ void setup() {
 }
 
 void loop() {
-    // Update the OSV's current location
-    while(!Enes100.updateLocation()) {
-        // OSV's location was not found
-        Enes100.println("404 Not Found");
+    float x, y, t; bool v; // Declare variables to hold the data
+    x = Enes100.getX();
+    y = Enes100.getY();
+    t = Enes100.getTheta();
+    v = Enes100.getVisibility();
+    if (v) // If the ArUco marker is visible
+    {
+        Enes100.print(x); // print out the location
+        Enes100.print(",");
+        Enes100.println(y);
+        Enes100.print(",");
+        Enes100.println(t);
     }
-    Enes100.print("OSV is at (");
-    Enes100.print(Enes100.location.x);
-    Enes100.print(", ");
-    Enes100.print(Enes100.location.y);
-    Enes100.print(", ");
-    Enes100.print(Enes100.location.theta);
-    Enes100.println(")");
+    else { // otherwise
+        Enes100.println("Not visible"); // print not visible
+    }
+    delay(1000);
 }
