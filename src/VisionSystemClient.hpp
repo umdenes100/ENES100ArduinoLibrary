@@ -5,15 +5,13 @@
 #include "SoftwareSerial.h"
 
 // Transmission opcodes
-#define OP_PING     0
-#define OP_BEGIN    3
-#define OP_LOCATION 5
-#define OP_MISSION  6
-#define OP_ML_PREDICTION 7
-#define OP_PRINT    8
-#define OP_ML_CAPTURE 9
-//OP_CHECK is the same as OP_LOCATION but can return different first values if the value is not available or hasn't changed.
-#define OP_CHECK    51
+#define OP_BEGIN            0x1
+#define OP_PRINT            0x2
+#define OP_CHECK            0x3
+#define OP_MISSION          0x4
+#define OP_ML_PREDICTION    0x5
+#define OP_ML_CAPTURE       0x6
+#define OP_IS_CONNECTED     0x7
 
 
 const byte FLUSH_SEQUENCE[] = {0xFF, 0xFE, 0xFD, 0xFC};
@@ -27,16 +25,18 @@ public:
   double x;
   double y;
   double theta;
-
-private:
-  void init(double x, double y, double theta);
 };
 
 class VisionSystemClient {
 public:
-  bool ping();
-  bool begin(const char* teamName, byte teamType, int markerId, int wifiModuleRX, int wifiModuleTX);
-  bool updateLocation();
+  bool isConnected();
+  void begin(const char* teamName, byte teamType, int markerId, int wifiModuleRX, int wifiModuleTX);
+
+  float getX();
+  float getY();
+  float getTheta();
+  bool getVisibility();
+
   void mission(int type, int message);
   void mission(int type, double message);
   void mission(int type, char message);
@@ -44,25 +44,17 @@ public:
   int MLGetPrediction();
   void MLCaptureTrainingImage(const char * label);
 
-  float getX();
-  float getY();
-  float getTheta();
-  bool getVisibility();
-
   template <typename T>
   void print(T message);
   template <typename T>
   void println(T message);
   
-  Coordinate location;
-  Coordinate missionSite;
-  
 private:
   bool receive(Coordinate* coordinate = NULL);
+  Coordinate location; // Cached values for x,y,theta
+  bool visible; // Cached value for visibility
   void updateIfNeeded();
-  bool visible;
   void readBytes(byte* buffer, int length);
-  void waitForConnection();
   uint32_t lastUpdate;
   
   int mMarkerId;
@@ -76,6 +68,7 @@ template <typename T>
 void VisionSystemClient::print(T message) {
   mSerial->write(OP_PRINT);
   mSerial->print(message);
+  mSerial->write(0);
   mSerial->write(FLUSH_SEQUENCE, 4);
   mSerial->flush();
 }
@@ -85,6 +78,7 @@ void VisionSystemClient::println(T message) {
   mSerial->write(OP_PRINT);
   mSerial->print(message);
   mSerial->write('\n');
+  mSerial->write(0);
   mSerial->write(FLUSH_SEQUENCE, 4);
   mSerial->flush();
 }

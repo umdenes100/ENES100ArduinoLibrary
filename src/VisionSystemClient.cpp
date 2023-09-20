@@ -1,71 +1,60 @@
 #include "VisionSystemClient.hpp"
 
 Coordinate::Coordinate() {
-  init(0, 0, 0);
+  this->x = 0;
+    this->y = 0;
+    this->theta = 0;
 }
 
 Coordinate::Coordinate(double x, double y) {
-  init(x, y, 0);
+    this->x = x;
+    this->y = y;
+    this->theta = 0;
 }
 
 Coordinate::Coordinate(double x, double y, double theta) {
-  init(x, y, theta);
+    this->x = x;
+    this->y = y;
+    this->theta = theta;
 }
 
-void Coordinate::init(double x, double y, double theta) {
-  this->x = x;
-  this->y = y;
-  this->theta = theta;
+void VisionSystemClient::begin(const char* teamName, byte teamType, int markerId, int wifiModuleRX, int wifiModuleTX) {
+    mMarkerId = markerId;
+
+    mSerial = new SoftwareSerial(wifiModuleRX, wifiModuleTX);
+    mSerial->begin(57600);
+
+    //Wait for the esp module to connect. It will send a '0x01' byte when it is ready.
+    while(!isConnected());
+
+    //At this point we know the ESP is ready for us to send shit.
+    mSerial->write(OP_BEGIN);
+    mSerial->write(teamType);
+    mSerial->write(markerId >> 8);
+    mSerial->write(markerId & 0xFF);
+    mSerial->write(teamName);
+    mSerial->write(FLUSH_SEQUENCE, 4);
+    mSerial->flush();
+
+    return receive(&missionSite);
 }
 
-bool VisionSystemClient::ping() {
-  mSerial->write((byte) OP_PING);
-  mSerial->write(FLUSH_SEQUENCE, 4);
-  mSerial->flush();
-
-  return receive(NULL);
-}
-#pragma message "VisionSystemClient - Note: Using new version! Downloaded after (6/6/2023)"
-
-
-bool VisionSystemClient::begin(const char* teamName, byte teamType, int markerId, int wifiModuleRX, int wifiModuleTX) {
-  mMarkerId = markerId;
-  mSerial = new SoftwareSerial(wifiModuleTX, wifiModuleRX);
-  mSerial->begin(115200);
-
-  //Wait for the esp module to connect. It will send a '0x99' byte when it is ready.
-  byte it = 0;
-  do {
-    mSerial->write(0x99); delay(2);
-    it = mSerial->read();
-    delay(10);
-    //Serial.println(it);
-  } while (it != 0x99);
-
-  //At this point we know the ESP is ready for us to send shit.
-  mSerial->write(OP_BEGIN);
-  mSerial->write(teamType);
-  mSerial->write(markerId >> 8);
-  mSerial->write(markerId & 0xFF);
-  mSerial->write(teamName);
-  mSerial->write(FLUSH_SEQUENCE, 4);
-  mSerial->flush();
-
-  return receive(&missionSite);
-}
-
-bool VisionSystemClient::updateLocation() {
-  mSerial->write(OP_LOCATION);
-  mSerial->write(FLUSH_SEQUENCE, 4);
-  mSerial->flush();
-
-  return receive(&location);
+bool VisionSystemClient::isConnected() {
+    while(mSerial->available()) mSerial->read(); // Remove bytes from incoming buffer.
+    mSerial->write(OP_IS_CONNECTED);
+    unsigned long start = millis();
+    // While we have been waiting less than 10ms and there are no bytes available.
+    while (millis() - start < 10 && mSerial->available() == 0); //Do nothing.
+    byte it = mSerial->read();
+    Serial.println(it);
+    return (it == 0x01);
 }
 
 void VisionSystemClient::mission(int type, int message) {
   mSerial->write(OP_MISSION);
   mSerial->write(type);
   mSerial->print(message);
+  mSerial->write(0);
   mSerial->write(FLUSH_SEQUENCE, 4);
   mSerial->flush();
 }
@@ -74,13 +63,16 @@ void VisionSystemClient::mission(int type, double message) {
   mSerial->write(OP_MISSION);
   mSerial->write(type);
   mSerial->print(message);
+  mSerial->write(0);
   mSerial->write(FLUSH_SEQUENCE, 4);
   mSerial->flush();
 }
+
 void VisionSystemClient::mission(int type, char message) {
   mSerial->write(OP_MISSION);
   mSerial->write(type);
   mSerial->print(message);
+  mSerial->write(0);
   mSerial->write(FLUSH_SEQUENCE, 4);
   mSerial->flush();
 }
@@ -93,6 +85,7 @@ void VisionSystemClient::mission(int type, Coordinate message) {
   mSerial->print(message.y);
   mSerial->print(',');
   mSerial->print(message.theta);
+  mSerial->write(0);
   mSerial->write(FLUSH_SEQUENCE, 4);
   mSerial->flush();
 }
@@ -125,32 +118,6 @@ void VisionSystemClient::MLCaptureTrainingImage(const char * label) {
     mSerial->flush();
 }
 
-bool VisionSystemClient::receive(Coordinate* coordinate) {
-  unsigned long start = millis();
-  int pos = 0;
-  byte buffer[13];
-
-  while (millis() - start < 120 && pos < 13) {
-    if (mSerial->available()) {
-      buffer[pos++] = mSerial->read();
-      if (buffer[0] == 1 || buffer[0] == 7 || buffer[0] == 9) {
-        return coordinate == NULL;
-      } else if (pos == 13) {
-        if (coordinate != NULL) {
-          coordinate->x = *(float *) (buffer + 1);
-          coordinate->y = *(float *) (buffer + 5);
-          coordinate->theta = *(float *) (buffer + 9);
-          return true;
-        } else {
-          return false;
-        }
-      }
-    }
-  }
-
-  return false;
-}
-
 void VisionSystemClient::readBytes(byte* buffer, int length) {
     auto start = millis();
     for(int i = 0; i < length; i++) {
@@ -170,15 +137,16 @@ void VisionSystemClient::updateIfNeeded() {
     auto start = micros();
     if(millis() - lastUpdate < 50) return; // Don't check if we recently checked.
     lastUpdate = millis();
+
     mSerial->write(OP_CHECK);
     mSerial->flush();
-    auto sent = micros();
+//    auto sent = micros();
     while(!mSerial->available()) {
         if(millis() - lastUpdate > 100) {
             return;
         }
     }
-    auto received = micros();
+//    auto received = micros();
     byte b = mSerial->read();
     //Serial.print(b, HEX);
     //Serial.print(" ");
@@ -190,10 +158,12 @@ void VisionSystemClient::updateIfNeeded() {
         visible = false;
         return;
     }
-    // Two means marker found.
-    // The response will be three ints, x, y, theta. X is a single byte representing 0-255, which is divided by 100 to get location.x
-    // The response will be three ints, x, y, theta. Y is two bytes representing 0-65535, which is divided by 100 to get location.y
-    // The response will be three ints, x, y, theta. Theta is two bytes, signed, representing -32768-32767, which is divided by 100 to get location.theta
+    if (b != 0x02) return; // All other invalid values should be returned.
+
+    // The response will be three ints, x, y, theta.
+    // X is a single byte representing 0-255, which is divided by 100 to get location.x
+    // Y is two bytes representing 0-65535, which is divided by 100 to get location.y
+    // Theta is two bytes, signed, representing -32768-32767, which is divided by 100 to get location.theta
     visible = true;
 //    auto read_s = micros();
     byte buff[2];
