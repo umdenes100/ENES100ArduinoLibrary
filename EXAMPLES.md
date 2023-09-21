@@ -1,9 +1,9 @@
-# <span style="color:red">Initializing the Wifi Module and Updating the Location<a name="wifi_mod"></a>
+# <span >Initializing the Wifi Module and Updating the Location<a name="wifi_mod"></a>
 
 See the example "SimpleTest.ino" by opening the Arduino editor with the library installed. Then click File->Examples->
 Enes100->SimpleTest
 
-# <span style="color:red">Setting up an Ultrasonic Sensor<a name="ultrasonic"></a>
+# <span >Setting up an Ultrasonic Sensor<a name="ultrasonic"></a>
 
 <pre>
 <font color="#434f54">&#47;&#47; defines pins numbers</font>
@@ -38,7 +38,7 @@ Enes100->SimpleTest
 
 ## Note: The below code is pseudocode. Its purpose is to help you understand how to do certain actions. There are multiple ways to do this.
 
-# <span style="color:red">Drive forward until you reach a certain x and y coordinate.<a name="drivef"></a>
+# <span >Drive forward until you reach a certain x and y coordinate.<a name="drivef"></a>
 This code uses the old style of updateLocation and Enes100.location.x
 <pre>
 <font color="#434f54">&#47;&#47;Setting a target of x = 2.5, y = 1.5</font>
@@ -58,7 +58,7 @@ This code uses the old style of updateLocation and Enes100.location.x
 
 </pre>
 
-# <span style="color:red">Rotate to a certain theta coordinate<a name="rotate"></a>
+# <span >Rotate to a certain theta coordinate<a name="rotate"></a>
 
 <pre>
 <font color="#434f54">&#47;&#47; This function will make the OTV turn to a certain location.</font>

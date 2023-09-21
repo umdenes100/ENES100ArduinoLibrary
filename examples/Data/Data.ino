@@ -2,33 +2,38 @@
 
 void setup() {
     // Initialize Enes100 Library
-    // Team Name, Mission Type, Marker ID, TX Pin, RX Pin
-    Enes100.begin("DATA TEAM", DATA, 3, 10, 11);
+    // Team Name, Mission Type, Marker ID, Wifi Module RX Pin, Wifi Module TX Pin
+    Enes100.begin("Bit Happens", DATA, 205, 3, 2);
+    // At this point we know we are connected.
+    Enes100.println("Connected...");
+}
 
-    Enes100.print("Destination is at (");
-    Enes100.print(Enes100.missionSite.x);
-    Enes100.print(", ");
-    Enes100.print(Enes100.missionSite.y);
-    Enes100.println(")");
-    
+void loop() {
+    float x, y, t; bool v; // Declare variables to hold the data
+    //Enes100.getX will make sure you get the latest data available to you about your OTV's location.
+    //The first time getX is called, X, Y, theta and visibility are queried and cached.
+    //Subsequent calls return from the cache, so there is no performance gain to saving the function response to a variable.
+
+    x = Enes100.getX();  // Your X coordinate! 0-4, in meters, -1 if no aruco is not visibility (but you should use Enes100.getVisibility to check that instead)
+    y = Enes100.getY();  // Your Y coordinate! 0-2, in meters, also -1 if your aruco is not visible.
+    t = Enes100.getTheta();  //Your theta! -pi to +pi, in radians, -1 if your aruco is not visible.
+    v = Enes100.getVisibility(); // Is your aruco visible? True or False.
+
+    if (v) // If the ArUco marker is visible
+    {
+        Enes100.print(x); // print out the location
+        Enes100.print(",");
+        Enes100.print(y);
+        Enes100.print(",");
+        Enes100.println(t);
+    }
+    else { // otherwise
+        Enes100.println("Not visible"); // print not visible
+    }
+
     // Transmit the duty cycle of the data mission (7 for 70%)
     Enes100.mission(CYCLE, 7);
     // Transmit the magnetism of the data mission (in this case, not magnetic)
     Enes100.mission(MAGNETISM, NOT_MAGNETIC);
-    // Any other setup code...
-}
-
-void loop() {
-    // Update the OSV's current location
-    while (!Enes100.updateLocation()) {
-        // OSV's location was not found
-        Enes100.println("404 Not Found");
-    }
-    Enes100.print("OSV is at (");
-    Enes100.print(Enes100.location.x);
-    Enes100.print(", ");
-    Enes100.print(Enes100.location.y);
-    Enes100.print(", ");
-    Enes100.print(Enes100.location.theta);
-    Enes100.println(")");
+    delay(1000);
 }

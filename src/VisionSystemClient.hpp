@@ -30,7 +30,7 @@ public:
 class VisionSystemClient {
 public:
   bool isConnected();
-  void begin(const char* teamName, byte teamType, int markerId, int wifiModuleRX, int wifiModuleTX);
+  void begin(const char* teamName, byte teamType, int markerId, int wifiModuleTX, int wifiModuleRX);
 
   float getX();
   float getY();
@@ -68,7 +68,7 @@ template <typename T>
 void VisionSystemClient::print(T message) {
   mSerial->write(OP_PRINT);
   mSerial->print(message);
-  mSerial->write(0);
+  mSerial->write((byte) 0x00);
   mSerial->write(FLUSH_SEQUENCE, 4);
   mSerial->flush();
 }
@@ -78,7 +78,7 @@ void VisionSystemClient::println(T message) {
   mSerial->write(OP_PRINT);
   mSerial->print(message);
   mSerial->write('\n');
-  mSerial->write(0);
+  mSerial->write((byte) 0x00);
   mSerial->write(FLUSH_SEQUENCE, 4);
   mSerial->flush();
 }
