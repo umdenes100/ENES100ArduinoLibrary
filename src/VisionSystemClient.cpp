@@ -20,7 +20,7 @@ Coordinate::Coordinate(double x, double y, double theta) {
 
 void VisionSystemClient::begin(const char* teamName, byte teamType, int markerId, int wifiModuleTX, int wifiModuleRX) {
     mMarkerId = markerId;
-
+    if (mSerial != nullptr) delete mSerial;
     mSerial = new SoftwareSerial(wifiModuleTX, wifiModuleRX);
     mSerial->begin(57600);
 
@@ -213,7 +213,7 @@ float VisionSystemClient::getTheta() {
     return location.theta;
 }
 
-bool VisionSystemClient::getVisibility() {
+bool VisionSystemClient::isVisible() {
     updateIfNeeded();
     return visible;
 }

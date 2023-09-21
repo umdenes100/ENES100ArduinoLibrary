@@ -35,7 +35,7 @@ public:
   float getX();
   float getY();
   float getTheta();
-  bool getVisibility();
+  bool isVisible();
 
   void mission(int type, int message);
   void mission(int type, double message);

@@ -74,9 +74,16 @@ Allowed Pins:
 - Romeo V1 - Same as Uno
 - Romeo V2 - Same as Leonardo
 
-#### **NOTE**:
+#### **NOTE**: Want to call begin multiple times?
 
-There are some of you who wish to use begin in combination with the isConnected method to 'reconnect' if needed. The begin method allocates some resources with new.
+There are some of you who will wish to use begin in combination with the isConnected method to 'reconnect' if needed.
+<b> Here is your warning.</b> The begin method allocates some resources with new/delete to allow calling the
+SoftwareSerial constructor in the begin method instead of in the Enes100 object constructor (the constructor not being
+student facing). You may call begin multiple times and the resources should be freed and reallocated (untested, no
+guarantees). You should consider the dangers of heap fragmentation.
+
+My opinion and experience - the connection is rarely dropped - and if so usually because of power regulation issues.
+Reconnect code is not needed. KISS.
 
 #### Example
 
@@ -104,7 +111,7 @@ These values can be queried by calling the following functions:
 * `Enes100.getX()`
 * `Enes100.getY()`
 * `Enes100.getTheta()`
-* `Enes100.getVisibility()`
+* `Enes100.isVisible()`
 
 Enes100.get variants will make sure you get the latest data available to you about your OTV's location. The first time
 getX is
@@ -118,19 +125,7 @@ is no performance gain to saving the function response to a variable.
 Returns true if the ESP8266 is connected to the Vision System, false otherwise.
 Note: Enes100.begin will not return until this function is true.
 
-```arduino
-Enes100.begin(...);
-if (!Enes100.isConnected()) {
-    // Obviously after the begin statement, this will never be true.
-    // Why would you do this? It makes no sense.
-    // Like I would understand if you did this later in your code...
-    // Or if you wanted to debug your connection status.
-}
-
-if (!Enes100.isConnected()) {
-    Enes100.begin(...);
-}
-```
+See my warning above about calling Enes100.begin multiple times - if you plan on using isConnecting in that fashion I would discourage it.
 
 ### <span >Enes100.print(Type message)<a name="print"></a>
 

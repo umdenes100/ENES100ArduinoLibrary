@@ -14,10 +14,10 @@ void loop() {
     //The first time getX is called, X, Y, theta and visibility are queried and cached.
     //Subsequent calls return from the cache, so there is no performance gain to saving the function response to a variable.
 
-    x = Enes100.getX();  // Your X coordinate! 0-4, in meters, -1 if no aruco is not visibility (but you should use Enes100.getVisibility to check that instead)
+    x = Enes100.getX();  // Your X coordinate! 0-4, in meters, -1 if no aruco is not visibility (but you should use Enes100.isVisible to check that instead)
     y = Enes100.getY();  // Your Y coordinate! 0-2, in meters, also -1 if your aruco is not visible.
     t = Enes100.getTheta();  //Your theta! -pi to +pi, in radians, -1 if your aruco is not visible.
-    v = Enes100.getVisibility(); // Is your aruco visible? True or False.
+    v = Enes100.isVisible(); // Is your aruco visible? True or False.
 
     if (v) // If the ArUco marker is visible
     {
