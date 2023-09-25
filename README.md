@@ -167,6 +167,10 @@ or
 
 ## Machine Learning Functions
 
+### About
+
+The ESPCAM will be mounted to your OTV and act as your wifi module, with the added capabilities of camera vision. Note, this is not the overhead vision system above the arena - this is a development board provided that has a camera on it that will put on your otv.    
+
 ### <span style="color:red">int Enes100.MLGetPrediction()<a name="ml_pred"></a>
 Sends current image from the ESPCAM to the Jetson to get processed by machine learning algorithm on the Jetson.
 Returns the index of the category that the model predicts.
