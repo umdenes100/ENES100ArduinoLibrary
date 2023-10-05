@@ -2,6 +2,8 @@
 
 An Arduino library for use in the ENES100 course with Vision System over WiFi
 
+[***CLICK ME TO DOWNLOAD OLD LIBRARY IN CASE NEW ONE DOESN'T WORK!!!!!***](https://drive.google.com/file/d/1RCzHHw2J1X5ShC8vRkiC_ga148e5GWcd/view?usp=sharing)
+
 ## Download and Installation <a name="download"></a>
 
 To download this library, click on the blue **Download** button on the right. Make sure the file is unzipped and move it to the arduino libraries folder (Documents->Arduino->libraries). You must have Arduino IDE version 1.5.0 or above. The most current version of Arduino IDE can be downloaded from the [Arduino website](https://www.arduino.cc/en/Main/Software).
