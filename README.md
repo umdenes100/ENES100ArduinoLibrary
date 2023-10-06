@@ -3,6 +3,8 @@
 An Arduino library for use in the ENES100 course to allow Arduino boards to communicate with the ENES100 Vision System
 via ESP8266 Wi-Fi modules.
 
+[***CLICK ME TO DOWNLOAD OLD LIBRARY IN CASE NEW ONE DOESN'T WORK!!!!!***](https://drive.google.com/file/d/1RCzHHw2J1X5ShC8vRkiC_ga148e5GWcd/view?usp=sharing)
+
 ## Download and Installation <a name="download"></a>
 
 To download this library, click on the blue **Download** button on the right. Make sure the file is unzipped and move it
@@ -222,7 +224,11 @@ Valid calls for **SEED**:
 
 ## Machine Learning Functions
 
-### <span >int Enes100.MLGetPrediction()<a name="ml_pred"></a>
+### About
+
+The ESPCAM will be mounted to your OTV and act as your wifi module, with the added capabilities of camera vision. Note, this is not the overhead vision system above the arena - this is a development board provided that has a camera on it that will put on your otv.    
+
+### <span>int Enes100.MLGetPrediction()<a name="ml_pred"></a>
 
 Sends current image from the ESPCAM to the Jetson to get processed by machine learning algorithm on the Jetson.
 Returns the index of the category that the model predicts.
