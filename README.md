@@ -11,12 +11,13 @@ most current version of Arduino IDE can be downloaded from
 the [Arduino website](https://www.arduino.cc/en/Main/Software).
 
 **If you have an older version of the library on your computer, you _must_ delete it before adding a newer version.**
-Failure to do this may cause file conflicts and it is not guaranteed that the library will work properly.
+Failure to do this may cause file conflicts, and it is not guaranteed that the library will work properly.
 
 ## Setup<a name="setup"></a>
 
-Communication with the Vision System is done using ESP8266 WiFi-enabled microcontrollers. WiFi modules are available for
-checkout through a Teaching Fellow. The WiFi module has 4 pins:
+Communication with the Vision System is done using ESP8266 WiFi-enabled microcontrollers. Wi-Fi modules are available
+for
+checkout through a Teaching Fellow. The Wi-Fi module has 4 pins:
 
 | Pin | Description     | Connect to...       |
 |-----|-----------------|---------------------|
@@ -53,14 +54,14 @@ Initializes the ENES100 library and establishes communication with the Vision Sy
 
 The `wifiModuleTX` and `wifiModuleRX` described below refer to the digital pins that will be connected to the __Tx__ and
 __Rx__ of the
-__wifi module__.
+__Wi-Fi module__.
 
 * teamName: Name of the team that will show up in the Vision System
 * teamType: Type of mission your team is running.
     * Valid Mission Types:  `CRASH_SITE`, `DATA`, `MATERIAL`, `FIRE`, `WATER`, `SEED`
 * markerID: ID of your Aruco Marker
-* wifiModuleTX: Digital Pin that will be connected to the __Tx pin on the wifi module__.
-* wifiModuleRX: Digital Pin that will be connected to the __Rx pin on the wifi module__.
+* wifiModuleTX: Digital Pin that will be connected to the __Tx pin on the Wi-Fi module__.
+* wifiModuleRX: Digital Pin that will be connected to the __Rx pin on the Wi-Fi module__.
 
 Boards have limitations around what pins can be connected to Wi-Fi module TX.
 Allowed Pins:
@@ -79,7 +80,7 @@ Allowed Pins:
 There are some of you who will wish to use begin in combination with the isConnected method to 'reconnect' if needed.
 <b> Here is your warning.</b> The begin method allocates some resources with new/delete to allow calling the
 SoftwareSerial constructor in the begin method instead of in the Enes100 object constructor (the constructor not being
-student facing). You may call begin multiple times and the resources should be freed and reallocated (untested, no
+student facing). You may call begin multiple times, and the resources should be freed and reallocated (untested, no
 guarantees). You should consider the dangers of heap fragmentation.
 
 My opinion and experience - the connection is rarely dropped - and if so usually because of power regulation issues.
@@ -125,7 +126,8 @@ is no performance gain to saving the function response to a variable.
 Returns true if the ESP8266 is connected to the Vision System, false otherwise.
 Note: Enes100.begin will not return until this function is true.
 
-See my warning above about calling Enes100.begin multiple times - if you plan on using isConnecting in that fashion I would discourage it.
+See my warning above about calling Enes100.begin multiple times - if you plan on using isConnecting in that fashion I
+would discourage it.
 
 ### <span >Enes100.print(Type message)<a name="print"></a>
 
@@ -164,11 +166,10 @@ Sends value for a mission objective.
 * type: what type of mission call you are sending
 * message: mission value associated with the mission type.
 
-**NOTE:** Some of the values passed as arguments in the examples below are **C++ preproccesor definitions** (#define),
+**NOTE:** Some of the values passed as arguments in the examples below are **C++ preprocessor definitions** (#define),
 defined in `Enes100.h`.
-All of
-the C definitions defined in `Enes100.h` correlate to an integer. To save you the trouble, you can call the uppercase
-definition
+All the C definitions defined in `Enes100.h` correlate to an integer. To save you the trouble, you can call the
+uppercase definition
 like `LENGTH` for Crash Site teams or `MATERIAL_TYPE` for Material Identification teams.
 
 For the valid mission calls below, the value `i` will denote an integer value.
@@ -236,19 +237,6 @@ If the Jetson contained the categories:
 **Thumbs Up**, **Thumbs Down**, **Thumb Sideways**
 in an array in that order, calling `Enes100.MLGetPrediction()` would return `0` if **Thumbs Up** is predicted, `1` if *
 *Thumbs Down** is predicted, and `2` if **Thumb Sideways** is predicted.
-
-### <span >Enes100.MLCaptureTrainingImage(const char *label)<a name="ml_cap"></a>
-
-Sends current image from the ESPCAM to the Jetson for storage for use in training a model later.
-const char * 'label' is the category of the image you are sending.
-Image will be stored on the Jetson in a folder sith the name of the label you provide, so **make sure you keep names
-consistent**.
-For recommendations on best methods for collecting data, see provided Jetson documentation for more information.
-
-#### **NOTE**:
-
-You **MUST** have Python script running on Jetson in order for this function to return anything. See provided Jetson
-documentation for more information on writing that script.
 
 ## Example Code and Debugging<a name="ex"></a>
 

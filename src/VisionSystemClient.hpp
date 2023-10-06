@@ -18,47 +18,48 @@ const byte FLUSH_SEQUENCE[] = {0xFF, 0xFE, 0xFD, 0xFC};
 
 class Coordinate {
 public:
-  Coordinate();
-  Coordinate(double x, double y);
-  Coordinate(double x, double y, double theta);
-  
-  double x;
-  double y;
-  double theta;
+    Coordinate();
+    Coordinate(double x, double y);
+    Coordinate(double x, double y, double theta);
+
+    double x;
+    double y;
+    double theta;
 };
 
 class VisionSystemClient {
 public:
-  bool isConnected();
-  void begin(const char* teamName, byte teamType, int markerId, int wifiModuleTX, int wifiModuleRX);
+    bool isConnected();
+    void begin(const char* teamName, byte teamType, int markerId, int wifiModuleTX, int wifiModuleRX);
 
-  float getX();
-  float getY();
-  float getTheta();
-  bool isVisible();
+    float getX();
+    float getY();
+    float getTheta();
+    bool isVisible();
+    bool updateLocation();
 
-  void mission(int type, int message);
-  void mission(int type, double message);
-  void mission(int type, char message);
-  void mission(int type, Coordinate message);
-  int MLGetPrediction();
-  void MLCaptureTrainingImage(const char * label);
+    void mission(int type, int message);
+    void mission(int type, double message);
+    void mission(int type, char message);
+    void mission(int type, Coordinate message);
+    int MLGetPrediction();
+    void MLCaptureTrainingImage(const char * label);
 
-  template <typename T>
-  void print(T message);
-  template <typename T>
-  void println(T message);
-  
+    template <typename T>
+    void print(T message);
+    template <typename T>
+    void println(T message);
+    Coordinate location; // Cached values for x,y,theta
+
 private:
-  bool receive(Coordinate* coordinate = NULL);
-  Coordinate location; // Cached values for x,y,theta
-  bool visible; // Cached value for visibility
-  void updateIfNeeded();
-  void readBytes(byte* buffer, int length);
-  uint32_t lastUpdate;
-  
-  int mMarkerId;
-  SoftwareSerial* mSerial;
+    bool receive(Coordinate* coordinate = NULL);
+    bool visible; // Cached value for visibility
+    void updateIfNeeded();
+    void readBytes(byte* buffer, int length);
+    uint32_t lastUpdate;
+
+    int mMarkerId;
+    SoftwareSerial* mSerial;
 };
 
 /**
@@ -66,21 +67,21 @@ private:
  **/
 template <typename T>
 void VisionSystemClient::print(T message) {
-  mSerial->write(OP_PRINT);
-  mSerial->print(message);
-  mSerial->write((byte) 0x00);
-  mSerial->write(FLUSH_SEQUENCE, 4);
-  mSerial->flush();
+    mSerial->write(OP_PRINT);
+    mSerial->print(message);
+    mSerial->write((byte) 0x00);
+    mSerial->write(FLUSH_SEQUENCE, 4);
+    mSerial->flush();
 }
 
 template <typename T>
 void VisionSystemClient::println(T message) {
-  mSerial->write(OP_PRINT);
-  mSerial->print(message);
-  mSerial->write('\n');
-  mSerial->write((byte) 0x00);
-  mSerial->write(FLUSH_SEQUENCE, 4);
-  mSerial->flush();
+    mSerial->write(OP_PRINT);
+    mSerial->print(message);
+    mSerial->write('\n');
+    mSerial->write((byte) 0x00);
+    mSerial->write(FLUSH_SEQUENCE, 4);
+    mSerial->flush();
 }
 
 #endif /* VisionSystemClient_hpp */
