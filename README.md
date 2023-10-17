@@ -3,8 +3,6 @@
 An Arduino library for use in the ENES100 course to allow Arduino boards to communicate with the ENES100 Vision System
 via ESP8266 Wi-Fi modules.
 
-[***CLICK ME TO DOWNLOAD OLD LIBRARY IN CASE NEW ONE DOESN'T WORK!!!!!***](https://drive.google.com/file/d/1RCzHHw2J1X5ShC8vRkiC_ga148e5GWcd/view?usp=sharing)
-
 ## Download and Installation <a name="download"></a>
 
 To download this library, click on the blue **Download** button on the right. Make sure the file is unzipped and move it
