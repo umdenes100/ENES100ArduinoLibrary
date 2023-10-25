@@ -251,3 +251,37 @@ Example code for each type of mission is included with the library. To view exam
 
 During the product demonstration, messages sent using `print()` and `println()` will not be shown on the Vision System
 console. The console will only print out the values that you send using `mission()`.
+
+## For Simulator 
+
+The function calls to get the Aurco values are a little bit different than what they will be when you code for your otv 
+but they are functionally the same. 
+
+```arduino
+void setup() {
+    // Your begin statement with arbitrary values
+    Enes100.begin("It's lit", FIRE, 3, 8, 9);  
+}
+```
+Once this is called you will use the function
+
+`Enes100.updateLocation()`
+
+Calling this will allow you to access the values of aurco marker by writing
+the following
+
+* `Enes100.location.x`
+* `Enes100.location.y`
+* `Enes100.location.theta`
+
+```arduino
+void loop() {
+    // This code will continuously print out the x cordinate 
+    Enes100.updateLocation();
+    Enes100.println(Enes100.location.x);
+		setBothMotors(25);
+      
+}
+```
+
+
