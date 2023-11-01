@@ -283,5 +283,7 @@ void loop() {
       
 }
 ```
+#### **Common Issues**:
 
-
+If you get an error **AxiosError: Network Error** remove the 's' from the 
+https link in url and reload the simulator 
