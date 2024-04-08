@@ -228,19 +228,11 @@ The ESPCAM will be mounted to your OTV and act as your wifi module, with the add
 
 ### <span>int Enes100.MLGetPrediction()<a name="ml_pred"></a>
 
-Sends current image from the ESPCAM to the Jetson to get processed by machine learning algorithm on the Jetson.
-Returns the index of the category that the model predicts.
-
-#### **NOTE**:
-
-You **MUST** have Python script running on Jetson in order for this function to return anything. See provided Jetson
-documentation for more information on writing that script.
+Sends current image from the ESPCAM to the Vision System to get processed by your team's machine learning model. Models must have been uploaded to the [ENES100 Model Uploader](https://enes100.umd.edu/uploadmodel) beforehand to use this function. The function uses your team name (from the Enes100.begin() statement) to find your model. As such, **make sure your team name matches the model name exactly**.
 
 Example:
-If the Jetson contained the categories:
-**Thumbs Up**, **Thumbs Down**, **Thumb Sideways**
-in an array in that order, calling `Enes100.MLGetPrediction()` would return `0` if **Thumbs Up** is predicted, `1` if *
-*Thumbs Down** is predicted, and `2` if **Thumb Sideways** is predicted.
+If your ML model contained the categories: **Thumbs Up**, **Thumbs Down**, **Thumb Sideways** in an array in that order, 
+calling `Enes100.MLGetPrediction()` would return `0` if **Thumbs Up** is predicted, `1` if **Thumbs Down** is predicted, and `2` if **Thumb Sideways** is predicted.   
 
 ## Example Code and Debugging<a name="ex"></a>
 
