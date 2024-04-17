@@ -2,7 +2,7 @@
 
 void setup() {
     // Initialize Enes100 Library
-    // Team Name, Mission Type, Marker ID, Wifi Module RX Pin, Wifi Module TX Pin
+    // Team Name, Mission Type, Marker ID, Wifi Module TX Pin, Wifi Module RX Pin
     Enes100.begin("Drop it like its Block", CRASH_SITE, 205, 3, 2);
     // At this point we know we are connected.
     Enes100.println("Connected...");
