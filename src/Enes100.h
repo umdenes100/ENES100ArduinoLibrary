@@ -16,7 +16,7 @@
 #define LENGTH            1
 #define HEIGHT            2
 #define NORMAL_X          0
-#define MORMAL_Y          1
+#define NORMAL_Y          1
 
 
 
