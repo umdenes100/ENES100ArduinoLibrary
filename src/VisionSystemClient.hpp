@@ -42,7 +42,7 @@ public:
     void mission(int type, double message);
     void mission(int type, char message);
     void mission(int type, Coordinate message);
-    int MLGetPrediction();
+    int MLGetPrediction(int);
     void MLCaptureTrainingImage(const char * label);
 
     template <typename T>

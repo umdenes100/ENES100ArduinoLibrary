@@ -226,9 +226,9 @@ Valid calls for **SEED**:
 
 The ESPCAM will be mounted to your OTV and act as your wifi module, with the added capabilities of camera vision. Note, this is not the overhead vision system above the arena - this is a development board provided that has a camera on it that will put on your otv.    
 
-### <span>int Enes100.MLGetPrediction()<a name="ml_pred"></a>
+### <span>int Enes100.MLGetPrediction(int modelIndex)<a name="ml_pred"></a>
 
-Sends current image from the ESPCAM to the Vision System to get processed by your team's machine learning model. Models must have been uploaded to the [ENES100 Model Uploader](https://enes100.umd.edu/uploadmodel) beforehand to use this function. The function uses your team name (from the Enes100.begin() statement) to find your model. As such, **make sure your team name matches the model name exactly**.
+Sends current image from the ESPCAM to the Vision System to get processed by your team's machine learning model with the provided index. Models must have been uploaded to the [ENES100 Model Uploader](https://enes100.umd.edu/uploadmodel) with the index requested beforehand to use this function. The function uses your team name (from the Enes100.begin() statement) to find your model. As such, **make sure your team name matches the model name exactly**.
 
 Example:
 If your ML model contained the categories: **Thumbs Up**, **Thumbs Down**, **Thumb Sideways** in an array in that order, 

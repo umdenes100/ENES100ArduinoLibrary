@@ -90,8 +90,9 @@ void VisionSystemClient::mission(int type, Coordinate message) {
     mSerial->flush();
 }
 
-int VisionSystemClient::MLGetPrediction() {
+int VisionSystemClient::MLGetPrediction(int model_index) {
     mSerial->write(OP_ML_PREDICTION);
+    mSerial->write(model_index);
     mSerial->write(FLUSH_SEQUENCE, 4);
     mSerial->flush();
 
