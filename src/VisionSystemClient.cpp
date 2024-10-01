@@ -96,7 +96,7 @@ int VisionSystemClient::MLGetPrediction(int model_index) {
     mSerial->write(FLUSH_SEQUENCE, 4);
     mSerial->flush();
 
-    delay(500);
+    delay(1);
 
     while (mSerial->available()) {
         mSerial->read();
