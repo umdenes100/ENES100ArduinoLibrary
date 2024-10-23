@@ -211,7 +211,6 @@ bool VisionSystemClient::isVisible() {
 }
 
 bool VisionSystemClient::updateLocation() {
-    _Pragma("message(\"\nWarning: The use of Enes100.updateLocation is not recommended. Instead use the Enes100.get...() family of functions.\")");
     updateIfNeeded();
     return true;
 }
