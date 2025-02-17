@@ -30,7 +30,9 @@ public:
 class VisionSystemClient {
 public:
     bool isConnected();
-    void begin(const char* teamName, byte teamType, int markerId, int wifiModuleTX, int wifiModuleRX);
+    // 0: Arduino is connected to wifi module, but wifi module not connected to vision system, 1: both connected, 255: not connected
+	byte state();
+    void begin(const char* teamName, byte teamType, int markerId, int roomNumber, int wifiModuleTX, int wifiModuleRX);
 
     float getX();
     float getY();
