@@ -30,14 +30,8 @@ void loop() {
     else { // otherwise
         Enes100.println("Not visible"); // print not visible
     }
-
-    if(millis() > 5000 && !sent) {
-        int result = Enes100.MLGetPrediction(); // How you get the prediction from your model given the camera image.
-        sent = true; //We only will request to send one image.
-        Enes100.mission(PERCENTAGE, 50); //This how you should sent the percentage of the mission site contains plantable substrate.
-        Enes100.mission(LOCATION, Coordinate(2000, 1900)); //This is how you should send the location of each mission site that contains a plantable substrate.
-        Enes100.mission(LOCATION, Coordinate(2000, 2100)); //Run this command multiple times for each plantable substrate location.
-    }
+    
+     Enes100.mission(LOCATION, 'A'); //This is how you should send the location of the mission site that contains a plantable substrate.
 
     delay(1000);
 }
