@@ -214,11 +214,8 @@ Valid calls for **WATER**:
 
 Valid calls for **SEED**:
 
-* `Enes100.mission(PERCENTAGE, i);` *i is a percentage*
-* `Enes100.mission(LOCATION, cord);` *where cord is a Coordinate object*
-  <br/>
-  or
-* `Enes100.mission(LOCATION, Coordinate(x, y));` *x and y are floats in millimeters*
+* `Enes100.mission(LOCATION, plot);` *where plot is a single character A, B, C, or D*
+  
 
 ## Machine Learning Functions
 
