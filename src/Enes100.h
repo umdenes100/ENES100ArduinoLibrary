@@ -9,7 +9,7 @@
 #define FIRE              3
 #define WATER             4
 #define SEED              5
-
+#define HYDROGEN          6
 
 // Crash Mission
 #define DIRECTION         0
