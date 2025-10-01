@@ -58,6 +58,23 @@
 #define LOCATION 0
 #define PERCENTAGE 1
 
+
+//Hydrogen
+#define VOLTAGE_OUTPUT 0
+#define LED_COLOR 1
+#define VOLTAGE_1 0
+#define VOLTAGE_2 1
+#define VOLTAGE_3 2
+#define VOLTAGE_4 3
+#define VOLTAGE_5 4
+#define WHITE 0
+#define RED 1
+#define YELLOW 2
+#define GREEN 3
+#define BLUE 4
+
+
+
 VisionSystemClient Enes100;
 
 #endif /* Enes100_h */
