@@ -13,8 +13,8 @@ the [Arduino website](https://www.arduino.cc/en/Main/Software).
 **If you have an older version of the library on your computer, you _must_ delete it before adding a newer version.**
 Failure to do this may cause file conflicts, and it is not guaranteed that the library will work properly.
 
-**If using an in-built Wi-Fi module, you must download:**
-ArduinoWebSockets - Gil Maimon
+**If using an in-built Wi-Fi module, you must download:**  
+ArduinoWebSockets - Gil Maimon,  
 ArduinoJson - Benoit Blanchon
 
 ## Setup<a name="setup"></a>
@@ -44,8 +44,8 @@ Allowed Pins:
 
 ## Usage
 
-**MAKE SURE THE CORRECT .HPP FILE IS INCLUDED IN Enes100.h**
-(uncomment either VisionSystemClient.hpp for external Wi-Fi module and WSVisionSystemClient.hpp for internal Wi-Fi modules)
+**MAKE SURE THE CORRECT .HPP FILE IS INCLUDED IN Enes100.h**  
+(uncomment either `VisionSystemClient.hpp` for external Wi-Fi module and `WSVisionSystemClient.hpp` for internal Wi-Fi modules)
 
 To use the library, you have to direct the compiler to include it in your code. Go to **Sketch > Include Library >
 ENES100**, or add it manually by typing
@@ -81,6 +81,8 @@ Allowed Pins:
 - Leonardo - 8, 9, 10, 11, 14, 15, 16.
 - Romeo V1 - Same as Uno
 - Romeo V2 - Same as Leonardo
+
+
 
 **If using the ESP-32, simply omit the wifiModuleTX and wifiModuleRX parameters.**
 
