@@ -56,8 +56,10 @@
 
 // Seed
 #define LOCATION 0
-#define PERCENTAGE 1
-
+#define BOTH 0
+#define NEITHER 1
+#define ADJACENT 2
+#define DIAGONAL 3
 
 //Hydrogen
 #define VOLTAGE_OUTPUT 0
