@@ -31,7 +31,7 @@ void loop() {
         Enes100.println("Not visible"); // print not visible
     }
     
-     Enes100.mission(LOCATION, 'A'); //This is how you should send the location of the mission site that contains a plantable substrate.
+     Enes100.mission(LOCATION, 'DIAGONAL'); //This is how you should send the pattern of plantable substrate for the far plots.
 
     delay(1000);
 }
