@@ -13,7 +13,6 @@
 #define OP_ML_CAPTURE       0x6
 #define OP_IS_CONNECTED     0x7
 
-
 const byte FLUSH_SEQUENCE[] = {0xFF, 0xFE, 0xFD, 0xFC};
 
 class Coordinate {
@@ -30,8 +29,9 @@ public:
 class VisionSystemClient {
 public:
     bool isConnected();
-    // 0: Arduino is connected to wifi module, but wifi module not connected to vision system, 1: both connected, 255: not connected
-	byte state();
+    // 0: Arduino is connected to wifi module, but wifi module not connected to vision system,
+    // 1: both connected, 255: module not responding.
+    byte state();
     void begin(const char* teamName, byte teamType, int markerId, int roomNumber, int wifiModuleTX, int wifiModuleRX);
 
     float getX();
@@ -51,17 +51,32 @@ public:
     void print(T message);
     template <typename T>
     void println(T message);
+
     Coordinate location; // Cached values for x,y,theta
 
 private:
     bool receive(Coordinate* coordinate = NULL);
-    bool visible; // Cached value for visibility
+    bool visible = false; // Cached value for visibility
     void updateIfNeeded();
     void readBytes(byte* buffer, int length);
-    uint32_t lastUpdate;
 
-    int mMarkerId;
-    SoftwareSerial* mSerial;
+    void clearInput(uint16_t quietMs = 3, uint16_t maxMs = 30);
+    byte queryState(uint16_t timeoutMs = 40);
+    void sendBeginPacket();
+    void maintainConnection(bool aggressive = false);
+
+    uint32_t lastUpdate = 0;
+    uint32_t mLastBeginSendMs = 0;
+    uint32_t mLastStatePollMs = 0;
+    byte mLastState = 0xFF;
+
+    int mMarkerId = 0;
+    int mRoomNumber = 0;
+    byte mTeamType = 0;
+    char mTeamName[64] = {0};
+    bool mConfigValid = false;
+
+    SoftwareSerial* mSerial = nullptr;
 };
 
 /**
@@ -69,6 +84,8 @@ private:
  **/
 template <typename T>
 void VisionSystemClient::print(T message) {
+    if (mSerial == nullptr) return;
+    maintainConnection();
     mSerial->write(OP_PRINT);
     mSerial->print(message);
     mSerial->write((byte) 0x00);
@@ -78,6 +95,8 @@ void VisionSystemClient::print(T message) {
 
 template <typename T>
 void VisionSystemClient::println(T message) {
+    if (mSerial == nullptr) return;
+    maintainConnection();
     mSerial->write(OP_PRINT);
     mSerial->print(message);
     mSerial->write('\n');
