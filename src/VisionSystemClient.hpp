@@ -29,9 +29,11 @@ public:
 class VisionSystemClient {
 public:
     bool isConnected();
-    // 0: Arduino is connected to wifi module, but wifi module not connected to vision system,
-    // 1: both connected, 255: module not responding.
+    // 0: Arduino connected to wifi module, but wifi module not connected to vision system
+    // 1: Arduino + wifi module + vision system connected
+    // 255: wifi module not responding
     byte state();
+
     void begin(const char* teamName, byte teamType, int markerId, int roomNumber, int wifiModuleTX, int wifiModuleRX);
 
     float getX();
@@ -49,19 +51,20 @@ public:
 
     template <typename T>
     void print(T message);
+
     template <typename T>
     void println(T message);
 
-    Coordinate location; // Cached values for x,y,theta
+    Coordinate location;
 
 private:
     bool receive(Coordinate* coordinate = NULL);
-    bool visible = false; // Cached value for visibility
+    bool visible = false;
     void updateIfNeeded();
     void readBytes(byte* buffer, int length);
 
-    void clearInput(uint16_t quietMs = 3, uint16_t maxMs = 30);
-    byte queryState(uint16_t timeoutMs = 40);
+    void clearInput(uint16_t quietMs = 4, uint16_t maxMs = 40);
+    byte queryState(uint16_t timeoutMs = 30);
     void sendBeginPacket();
     void maintainConnection(bool aggressive = false);
 
@@ -86,6 +89,7 @@ template <typename T>
 void VisionSystemClient::print(T message) {
     if (mSerial == nullptr) return;
     maintainConnection();
+
     mSerial->write(OP_PRINT);
     mSerial->print(message);
     mSerial->write((byte) 0x00);
@@ -97,6 +101,7 @@ template <typename T>
 void VisionSystemClient::println(T message) {
     if (mSerial == nullptr) return;
     maintainConnection();
+
     mSerial->write(OP_PRINT);
     mSerial->print(message);
     mSerial->write('\n');
