@@ -8,6 +8,16 @@ static const uint32_t VS_BOOT_SETTLE_MS    = 25;
 static const uint32_t VS_BEGIN_QUERY_MS    = 50;
 static const uint32_t VS_RX_TIMEOUT_MS     = 100;
 
+static const char* wsEventName(uint8_t e) {
+    switch (e) {
+        case 1: return "open";
+        case 2: return "close";
+        case 3: return "ping";
+        case 4: return "pong";
+        default: return "none";
+    }
+}
+
 Coordinate::Coordinate() {
     this->x = 0;
     this->y = 0;
@@ -45,6 +55,31 @@ void VisionSystemClient::clearInput(uint16_t quietMs, uint16_t maxMs) {
             return;
         }
     }
+}
+
+bool VisionSystemClient::readByteTimeout(byte& out, uint16_t timeoutMs) {
+    if (mSerial == nullptr) return false;
+
+    const unsigned long start = millis();
+    while (!mSerial->available()) {
+        if ((millis() - start) > timeoutMs) {
+            return false;
+        }
+    }
+
+    int raw = mSerial->read();
+    if (raw < 0) return false;
+    out = (byte)raw;
+    return true;
+}
+
+bool VisionSystemClient::readExact(byte* buffer, int length, uint16_t timeoutMs) {
+    for (int i = 0; i < length; i++) {
+        if (!readByteTimeout(buffer[i], timeoutMs)) {
+            return false;
+        }
+    }
+    return true;
 }
 
 byte VisionSystemClient::queryState(uint16_t timeoutMs) {
@@ -129,9 +164,6 @@ void VisionSystemClient::begin(const char* teamName, byte teamType, int markerId
     mSerial = new SoftwareSerial(wifiModuleTX, wifiModuleRX);
     mSerial->begin(VS_SERIAL_BAUD);
 
-    // IMPORTANT:
-    // Do not block here. Just set up the link, clear startup garbage,
-    // send the first begin packet, do one short state probe, and return.
     delay(VS_BOOT_SETTLE_MS);
     clearInput(5, 120);
 
@@ -149,6 +181,123 @@ bool VisionSystemClient::isConnected() {
     return mLastState == 0x01;
 }
 
+bool VisionSystemClient::debugStatus(Enes100DebugStatus& out) {
+    out = Enes100DebugStatus();
+
+    if (mSerial == nullptr) return false;
+    maintainConnection();
+
+    clearInput();
+    mSerial->write(OP_DEBUG_STATUS);
+    mSerial->flush();
+
+    byte hdr[19];
+    if (!readExact(hdr, 19, VS_RX_TIMEOUT_MS)) {
+        return false;
+    }
+
+    if (hdr[0] != 0xA5 || hdr[1] != 0x01) {
+        return false;
+    }
+
+    const byte flags = hdr[2];
+    out.wifiConnected      = (flags & 0x01) != 0;
+    out.wsStarted          = (flags & 0x02) != 0;
+    out.wsConnected        = (flags & 0x04) != 0;
+    out.hasBegin           = (flags & 0x08) != 0;
+    out.everWsConnected    = (flags & 0x10) != 0;
+    out.lastConnectCallOk  = (flags & 0x20) != 0;
+    out.routeIsFallback    = (flags & 0x40) != 0;
+
+    out.wifiStatus         = hdr[3];
+    out.room               = (uint16_t)(((uint16_t)hdr[4] << 8) | hdr[5]);
+    out.routeIndex         = hdr[6];
+    out.routeCount         = hdr[7];
+    out.connectAttempts    = (uint16_t)(((uint16_t)hdr[9] << 8) | hdr[8]);
+    out.openEvents         = hdr[10];
+    out.closeEvents        = hdr[11];
+    out.lastEvent          = hdr[12];
+    out.rssi               = (int8_t)hdr[13];
+    out.localIp[0]         = hdr[14];
+    out.localIp[1]         = hdr[15];
+    out.localIp[2]         = hdr[16];
+    out.localIp[3]         = hdr[17];
+
+    byte urlLen = hdr[18];
+    if (urlLen >= sizeof(out.currentUrl)) {
+        urlLen = sizeof(out.currentUrl) - 1;
+    }
+
+    if (urlLen > 0) {
+        if (!readExact((byte*)out.currentUrl, urlLen, VS_RX_TIMEOUT_MS)) {
+            return false;
+        }
+    }
+    out.currentUrl[urlLen] = '\0';
+    out.valid = true;
+    return true;
+}
+
+void VisionSystemClient::debugDump(Stream& out) {
+    Enes100DebugStatus d;
+    if (!debugStatus(d)) {
+        out.println("ENES100 debug read failed");
+        return;
+    }
+
+    out.println("----- ENES100 DEBUG -----");
+    out.print("state() = ");
+    out.println((int)mLastState);
+
+    out.print("wifiConnected = ");
+    out.println(d.wifiConnected ? "true" : "false");
+    out.print("wsStarted = ");
+    out.println(d.wsStarted ? "true" : "false");
+    out.print("wsConnected = ");
+    out.println(d.wsConnected ? "true" : "false");
+    out.print("hasBegin = ");
+    out.println(d.hasBegin ? "true" : "false");
+    out.print("everWsConnected = ");
+    out.println(d.everWsConnected ? "true" : "false");
+    out.print("lastConnectCallOk = ");
+    out.println(d.lastConnectCallOk ? "true" : "false");
+    out.print("routeIsFallback = ");
+    out.println(d.routeIsFallback ? "true" : "false");
+
+    out.print("wifiStatus = ");
+    out.println((int)d.wifiStatus);
+    out.print("room = ");
+    out.println((int)d.room);
+
+    out.print("route = ");
+    out.print((int)d.routeIndex + 1);
+    out.print("/");
+    out.println((int)d.routeCount);
+
+    out.print("connectAttempts = ");
+    out.println((int)d.connectAttempts);
+    out.print("openEvents = ");
+    out.println((int)d.openEvents);
+    out.print("closeEvents = ");
+    out.println((int)d.closeEvents);
+    out.print("lastEvent = ");
+    out.println(wsEventName(d.lastEvent));
+
+    out.print("RSSI = ");
+    out.println((int)d.rssi);
+
+    out.print("localIP = ");
+    out.print((int)d.localIp[0]); out.print(".");
+    out.print((int)d.localIp[1]); out.print(".");
+    out.print((int)d.localIp[2]); out.print(".");
+    out.println((int)d.localIp[3]);
+
+    out.print("currentUrl = ");
+    out.println(d.currentUrl[0] ? d.currentUrl : "(empty)");
+
+    out.println("-------------------------");
+}
+
 void VisionSystemClient::mission(int type, int message) {
     if(mSerial == nullptr) return;
     maintainConnection();
@@ -156,7 +305,7 @@ void VisionSystemClient::mission(int type, int message) {
     mSerial->write(OP_MISSION);
     mSerial->write(type);
     mSerial->print(message);
-    mSerial->write((byte) 0x00);
+    mSerial->write((byte)0x00);
     mSerial->write(FLUSH_SEQUENCE, 4);
     mSerial->flush();
 }
@@ -168,7 +317,7 @@ void VisionSystemClient::mission(int type, double message) {
     mSerial->write(OP_MISSION);
     mSerial->write(type);
     mSerial->print(message);
-    mSerial->write((byte) 0x00);
+    mSerial->write((byte)0x00);
     mSerial->write(FLUSH_SEQUENCE, 4);
     mSerial->flush();
 }
@@ -180,7 +329,7 @@ void VisionSystemClient::mission(int type, char message) {
     mSerial->write(OP_MISSION);
     mSerial->write(type);
     mSerial->print(message);
-    mSerial->write((byte) 0x00);
+    mSerial->write((byte)0x00);
     mSerial->write(FLUSH_SEQUENCE, 4);
     mSerial->flush();
 }
@@ -196,7 +345,7 @@ void VisionSystemClient::mission(int type, Coordinate message) {
     mSerial->print(message.y);
     mSerial->print(',');
     mSerial->print(message.theta);
-    mSerial->write((byte) 0x00);
+    mSerial->write((byte)0x00);
     mSerial->write(FLUSH_SEQUENCE, 4);
     mSerial->flush();
 }

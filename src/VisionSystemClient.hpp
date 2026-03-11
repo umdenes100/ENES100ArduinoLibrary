@@ -12,6 +12,7 @@
 #define OP_ML_PREDICTION    0x5
 #define OP_ML_CAPTURE       0x6
 #define OP_IS_CONNECTED     0x7
+#define OP_DEBUG_STATUS     0x8
 
 const byte FLUSH_SEQUENCE[] = {0xFF, 0xFE, 0xFD, 0xFC};
 
@@ -26,14 +27,35 @@ public:
     double theta;
 };
 
+struct Enes100DebugStatus {
+    bool valid = false;
+
+    bool wifiConnected = false;
+    bool wsStarted = false;
+    bool wsConnected = false;
+    bool hasBegin = false;
+    bool everWsConnected = false;
+    bool lastConnectCallOk = false;
+    bool routeIsFallback = false;
+
+    uint8_t wifiStatus = 0;
+    uint16_t room = 0;
+    uint8_t routeIndex = 0;
+    uint8_t routeCount = 0;
+    uint16_t connectAttempts = 0;
+    uint8_t openEvents = 0;
+    uint8_t closeEvents = 0;
+    uint8_t lastEvent = 0;
+    int8_t rssi = 0;
+
+    uint8_t localIp[4] = {0, 0, 0, 0};
+    char currentUrl[64] = {0};
+};
+
 class VisionSystemClient {
 public:
     bool isConnected();
-    // 0: Arduino connected to wifi module, but wifi module not connected to vision system
-    // 1: Arduino + wifi module + vision system connected
-    // 255: wifi module not responding
     byte state();
-
     void begin(const char* teamName, byte teamType, int markerId, int roomNumber, int wifiModuleTX, int wifiModuleRX);
 
     float getX();
@@ -49,9 +71,11 @@ public:
     int MLGetPrediction(int);
     void MLCaptureTrainingImage(const char * label);
 
+    bool debugStatus(Enes100DebugStatus& out);
+    void debugDump(Stream& out);
+
     template <typename T>
     void print(T message);
-
     template <typename T>
     void println(T message);
 
@@ -68,6 +92,9 @@ private:
     void sendBeginPacket();
     void maintainConnection(bool aggressive = false);
 
+    bool readByteTimeout(byte& out, uint16_t timeoutMs);
+    bool readExact(byte* buffer, int length, uint16_t timeoutMs);
+
     uint32_t lastUpdate = 0;
     uint32_t mLastBeginSendMs = 0;
     uint32_t mLastStatePollMs = 0;
@@ -82,9 +109,6 @@ private:
     SoftwareSerial* mSerial = nullptr;
 };
 
-/**
- * Templated functions have to be in the header file
- **/
 template <typename T>
 void VisionSystemClient::print(T message) {
     if (mSerial == nullptr) return;
@@ -92,7 +116,7 @@ void VisionSystemClient::print(T message) {
 
     mSerial->write(OP_PRINT);
     mSerial->print(message);
-    mSerial->write((byte) 0x00);
+    mSerial->write((byte)0x00);
     mSerial->write(FLUSH_SEQUENCE, 4);
     mSerial->flush();
 }
@@ -105,7 +129,7 @@ void VisionSystemClient::println(T message) {
     mSerial->write(OP_PRINT);
     mSerial->print(message);
     mSerial->write('\n');
-    mSerial->write((byte) 0x00);
+    mSerial->write((byte)0x00);
     mSerial->write(FLUSH_SEQUENCE, 4);
     mSerial->flush();
 }
