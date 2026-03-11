@@ -37,6 +37,7 @@ struct Enes100DebugStatus {
     bool everWsConnected = false;
     bool lastConnectCallOk = false;
     bool routeIsFallback = false;
+    bool wifiJoinInProgress = false;
 
     uint8_t wifiStatus = 0;
     uint16_t room = 0;
@@ -49,6 +50,11 @@ struct Enes100DebugStatus {
     int8_t rssi = 0;
 
     uint8_t localIp[4] = {0, 0, 0, 0};
+    uint8_t lastDisconnectReason = 0;
+    uint16_t wifiBeginCount = 0;
+    uint16_t wifiGotIpCount = 0;
+    uint8_t wifiJoinAgeSec = 0;
+
     char currentUrl[64] = {0};
 };
 

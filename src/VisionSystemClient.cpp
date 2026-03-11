@@ -18,6 +18,24 @@ static const char* wsEventName(uint8_t e) {
     }
 }
 
+static const char* wifiDiscReasonName(uint8_t r) {
+    switch (r) {
+        case 0:   return "none";
+        case 2:   return "auth_expire";
+        case 4:   return "assoc_expire";
+        case 8:   return "assoc_leave";
+        case 15:  return "4way_timeout";
+        case 200: return "beacon_timeout";
+        case 201: return "no_ap_found";
+        case 202: return "auth_fail";
+        case 203: return "assoc_fail";
+        case 204: return "handshake_timeout";
+        case 253: return "dhcp_timeout";
+        case 254: return "join_timeout";
+        default:  return "other";
+    }
+}
+
 Coordinate::Coordinate() {
     this->x = 0;
     this->y = 0;
@@ -191,16 +209,16 @@ bool VisionSystemClient::debugStatus(Enes100DebugStatus& out) {
     mSerial->write(OP_DEBUG_STATUS);
     mSerial->flush();
 
-    byte hdr[19];
-    if (!readExact(hdr, 19, VS_RX_TIMEOUT_MS)) {
+    byte header[25];
+    if (!readExact(header, 25, VS_RX_TIMEOUT_MS)) {
         return false;
     }
 
-    if (hdr[0] != 0xA5 || hdr[1] != 0x01) {
+    if (header[0] != 0xA5 || header[1] != 0x02) {
         return false;
     }
 
-    const byte flags = hdr[2];
+    const byte flags = header[2];
     out.wifiConnected      = (flags & 0x01) != 0;
     out.wsStarted          = (flags & 0x02) != 0;
     out.wsConnected        = (flags & 0x04) != 0;
@@ -208,22 +226,27 @@ bool VisionSystemClient::debugStatus(Enes100DebugStatus& out) {
     out.everWsConnected    = (flags & 0x10) != 0;
     out.lastConnectCallOk  = (flags & 0x20) != 0;
     out.routeIsFallback    = (flags & 0x40) != 0;
+    out.wifiJoinInProgress = (flags & 0x80) != 0;
 
-    out.wifiStatus         = hdr[3];
-    out.room               = (uint16_t)(((uint16_t)hdr[4] << 8) | hdr[5]);
-    out.routeIndex         = hdr[6];
-    out.routeCount         = hdr[7];
-    out.connectAttempts    = (uint16_t)(((uint16_t)hdr[9] << 8) | hdr[8]);
-    out.openEvents         = hdr[10];
-    out.closeEvents        = hdr[11];
-    out.lastEvent          = hdr[12];
-    out.rssi               = (int8_t)hdr[13];
-    out.localIp[0]         = hdr[14];
-    out.localIp[1]         = hdr[15];
-    out.localIp[2]         = hdr[16];
-    out.localIp[3]         = hdr[17];
+    out.wifiStatus         = header[3];
+    out.room               = (uint16_t)(((uint16_t)header[4] << 8) | header[5]);
+    out.routeIndex         = header[6];
+    out.routeCount         = header[7];
+    out.connectAttempts    = (uint16_t)(((uint16_t)header[9] << 8) | header[8]);
+    out.openEvents         = header[10];
+    out.closeEvents        = header[11];
+    out.lastEvent          = header[12];
+    out.rssi               = (int8_t)header[13];
+    out.localIp[0]         = header[14];
+    out.localIp[1]         = header[15];
+    out.localIp[2]         = header[16];
+    out.localIp[3]         = header[17];
+    out.lastDisconnectReason = header[18];
+    out.wifiBeginCount     = (uint16_t)(((uint16_t)header[20] << 8) | header[19]);
+    out.wifiGotIpCount     = (uint16_t)(((uint16_t)header[22] << 8) | header[21]);
+    out.wifiJoinAgeSec     = header[23];
 
-    byte urlLen = hdr[18];
+    byte urlLen = header[24];
     if (urlLen >= sizeof(out.currentUrl)) {
         urlLen = sizeof(out.currentUrl) - 1;
     }
@@ -251,6 +274,8 @@ void VisionSystemClient::debugDump(Stream& out) {
 
     out.print("wifiConnected = ");
     out.println(d.wifiConnected ? "true" : "false");
+    out.print("wifiJoinInProgress = ");
+    out.println(d.wifiJoinInProgress ? "true" : "false");
     out.print("wsStarted = ");
     out.println(d.wsStarted ? "true" : "false");
     out.print("wsConnected = ");
@@ -291,6 +316,18 @@ void VisionSystemClient::debugDump(Stream& out) {
     out.print((int)d.localIp[1]); out.print(".");
     out.print((int)d.localIp[2]); out.print(".");
     out.println((int)d.localIp[3]);
+
+    out.print("wifiBeginCount = ");
+    out.println((int)d.wifiBeginCount);
+    out.print("wifiGotIpCount = ");
+    out.println((int)d.wifiGotIpCount);
+    out.print("wifiJoinAgeSec = ");
+    out.println((int)d.wifiJoinAgeSec);
+    out.print("lastDisconnectReason = ");
+    out.print((int)d.lastDisconnectReason);
+    out.print(" (");
+    out.print(wifiDiscReasonName(d.lastDisconnectReason));
+    out.println(")");
 
     out.print("currentUrl = ");
     out.println(d.currentUrl[0] ? d.currentUrl : "(empty)");
