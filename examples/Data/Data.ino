@@ -31,8 +31,8 @@ void loop() {
         Enes100.println("Not visible"); // print not visible
     }
 
-    // Transmit the duty cycle of the data mission (7 for 70%)
-    Enes100.mission(CYCLE, 7);
+    // Transmit the duty cycle of the data mission (70 for 70%)
+    Enes100.mission(CYCLE, 70);
     // Transmit the magnetism of the data mission (in this case, not magnetic)
     Enes100.mission(MAGNETISM, NOT_MAGNETIC);
     delay(1000);
