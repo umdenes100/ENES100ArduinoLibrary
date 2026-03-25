@@ -6,7 +6,7 @@ static const uint32_t VS_BEGIN_RETRY_MS    = 700;
 static const uint32_t VS_STATE_POLL_MS     = 250;
 static const uint32_t VS_BOOT_SETTLE_MS    = 25;
 static const uint32_t VS_BEGIN_QUERY_MS    = 50;
-static const uint32_t VS_RX_TIMEOUT_MS     = 350;
+static const uint32_t VS_RX_TIMEOUT_MS     = 100;
 
 static const char* wsEventName(uint8_t e) {
     switch (e) {
@@ -399,9 +399,11 @@ int VisionSystemClient::MLGetPrediction(int model_index) {
 
     byte buffer[2] = {0xFF, 0xFF};
 
+    // changing VS_RX_TIMEOUT_MS to accomodate prediction time
+    static const uint32_t VS_ML_RX_TIMEOUT_MS  = 500;
     unsigned long start = millis();
     while(!mSerial->available()) {
-        if(millis() - start > VS_RX_TIMEOUT_MS) {
+        if(millis() - start > VS_ML_RX_TIMEOUT_MS) {
             return -1;
         }
     }
@@ -409,7 +411,7 @@ int VisionSystemClient::MLGetPrediction(int model_index) {
 
     start = millis();
     while(!mSerial->available()) {
-        if(millis() - start > VS_RX_TIMEOUT_MS) {
+        if(millis() - start > VS_ML_RX_TIMEOUT_MS) {
             return -1;
         }
     }
