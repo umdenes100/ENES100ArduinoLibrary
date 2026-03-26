@@ -397,26 +397,15 @@ int VisionSystemClient::MLGetPrediction(int model_index) {
     mSerial->write(FLUSH_SEQUENCE, 4);
     mSerial->flush();
 
-    byte buffer[2] = {0xFF, 0xFF};
-
-    // changing VS_RX_TIMEOUT_MS to accomodate prediction time
-    static const uint32_t VS_ML_RX_TIMEOUT_MS  = 500;
-    unsigned long start = millis();
-    while(!mSerial->available()) {
-        if(millis() - start > VS_ML_RX_TIMEOUT_MS) {
-            return -1;
-        }
+    while (mSerial->available()) {
+        mSerial->read();
     }
+
+    byte buffer[2];
+    while(!mSerial->available());
     buffer[0] = mSerial->read();
-
-    start = millis();
-    while(!mSerial->available()) {
-        if(millis() - start > VS_ML_RX_TIMEOUT_MS) {
-            return -1;
-        }
-    }
+    while(!mSerial->available());
     buffer[1] = mSerial->read();
-
     return (buffer[1] << 8) | buffer[0];
 }
 
