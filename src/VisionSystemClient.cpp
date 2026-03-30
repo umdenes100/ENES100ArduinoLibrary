@@ -388,7 +388,7 @@ void VisionSystemClient::mission(int type, Coordinate message) {
 }
 
 int VisionSystemClient::MLGetPrediction(int model_index) {
-    if(mSerial == nullptr) return -1;
+if(mSerial == nullptr) return -1;
     maintainConnection();
     clearInput();
 
@@ -397,15 +397,26 @@ int VisionSystemClient::MLGetPrediction(int model_index) {
     mSerial->write(FLUSH_SEQUENCE, 4);
     mSerial->flush();
 
-    while (mSerial->available()) {
-        mSerial->read();
-    }
+    byte buffer[2] = {0xFF, 0xFF};
 
-    byte buffer[2];
-    while(!mSerial->available());
+    // changing VS_RX_TIMEOUT_MS to accomodate prediction time
+    static const uint32_t VS_ML_RX_TIMEOUT_MS  = 5000;
+    unsigned long start = millis();
+    while(!mSerial->available()) {
+        if(millis() - start > VS_ML_RX_TIMEOUT_MS) {
+            return -1;
+        }
+    }
     buffer[0] = mSerial->read();
-    while(!mSerial->available());
+
+    start = millis();
+    while(!mSerial->available()) {
+        if(millis() - start > VS_ML_RX_TIMEOUT_MS) {
+            return -1;
+        }
+    }
     buffer[1] = mSerial->read();
+
     return (buffer[1] << 8) | buffer[0];
 }
 
