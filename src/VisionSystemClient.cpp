@@ -401,21 +401,15 @@ if(mSerial == nullptr) return -1;
 
     // changing VS_RX_TIMEOUT_MS to accomodate prediction time
     static const uint32_t VS_ML_RX_TIMEOUT_MS  = 5000;
-    unsigned long start = millis();
-    while(!mSerial->available()) {
+    while(count < 2) {
+        if(mSerial->available()) {
+            buffer[count++] = mSerial->read();
+        }
+    
         if(millis() - start > VS_ML_RX_TIMEOUT_MS) {
             return -1;
         }
     }
-    buffer[0] = mSerial->read();
-
-    start = millis();
-    while(!mSerial->available()) {
-        if(millis() - start > VS_ML_RX_TIMEOUT_MS) {
-            return -1;
-        }
-    }
-    buffer[1] = mSerial->read();
 
     return (buffer[1] << 8) | buffer[0];
 }
