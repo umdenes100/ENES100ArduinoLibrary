@@ -1,4 +1,4 @@
-#if defined(ARDUINO_AVR_UNO)
+#if !defined(ARDUINO_UNOR4_WIFI)
 
 #include "VisionSystemClient.hpp"
 #include <string.h>
@@ -503,7 +503,7 @@ bool VisionSystemClient::updateLocation() {
 }
 
 
-#elif defined(ARDUINO_UNOR4_WIFI)
+#else
 
 #include "Enes100R4.h"
 
@@ -2679,6 +2679,4 @@ void VisionSystemClientR4::debugValue(const char* label, const char* value) cons
 }
 
 
-#else
-#error "ENES100 supports only the Arduino Uno and Arduino UNO R4 WiFi."
 #endif
