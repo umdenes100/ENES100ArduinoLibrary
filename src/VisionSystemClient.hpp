@@ -62,6 +62,12 @@ class VisionSystemClient {
 public:
     bool isConnected();
     byte state();
+    // Simple form: works with the standard ENES100 WiFi-module wiring (TX=3, RX=2).
+    void begin(const char* teamName, byte teamType, int markerId, int roomNumber) {
+        begin(teamName, teamType, markerId, roomNumber, 3, 2);
+    }
+
+    // Use this form when the external WiFi module is connected to different TX/RX pins.
     void begin(const char* teamName, byte teamType, int markerId, int roomNumber, int wifiModuleTX, int wifiModuleRX);
 
     float getX();

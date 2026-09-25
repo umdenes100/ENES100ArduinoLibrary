@@ -1,5 +1,6 @@
-#ifndef Enes100_h
-#define Enes100_h
+#pragma once
+
+#if defined(ARDUINO_AVR_UNO)
 
 #include "VisionSystemClient.hpp"
 
@@ -79,4 +80,10 @@
 
 VisionSystemClient Enes100;
 
-#endif /* Enes100_h */
+#elif defined(ARDUINO_UNOR4_WIFI)
+
+#include "Enes100R4.h"
+
+#else
+#error "ENES100 supports only the Arduino Uno and Arduino UNO R4 WiFi."
+#endif
