@@ -92,6 +92,15 @@ public:
   double theta;
 };
 
+// MLGetPrediction() returns -1 on any failure (same as the classic library).
+// MLLastError() then says why.
+#define ML_OK                    0
+#define ML_ERR_NOT_CONNECTED     1  // never reached the vision system before the timeout
+#define ML_ERR_CAMERA_NOT_FOUND  2  // no ML camera answered the handshake on Serial1 (pins 0/1)
+#define ML_ERR_CAPTURE_FAILED    3  // camera answered but could not take a picture
+#define ML_ERR_TRANSFER_FAILED   4  // image bytes were lost/corrupted between camera and R4, or WiFi send failed
+#define ML_ERR_TIMEOUT           5  // image was sent but no prediction came back (check team name, model index, uploaded model)
+
 struct Enes100R4DebugStatus {
   bool profileMatched = false;
   bool wifiConnected = false;
@@ -136,9 +145,14 @@ public:
   void mission(int type, char message);
   void mission(int type, Coordinate message);
 
-  // There is no camera attached to the UNO R4 WiFi itself. Prediction is
-  // therefore unavailable; capture still sends the server-side capture opcode.
+  // Machine learning with the ENES100 ML camera wired to Serial1 (D0/D1).
+  // The camera captures a QVGA JPEG, sends it to the R4 over UART, and the R4
+  // forwards it to the vision system over its own WiFi. Blocks until the
+  // prediction arrives or the timeout expires. Returns the predicted class
+  // index, or -1 on failure (see MLLastError()).
   int MLGetPrediction(int modelIndex);
+  int MLLastError() const;
+  void MLSetTimeout(uint32_t timeoutMs);
   void MLCaptureTrainingImage(const char* label);
 
   template <typename... Args>
@@ -222,6 +236,22 @@ private:
   void handleIncoming(const String& message);
   void handleAruco(const String& message);
   void handlePing(const String& message);
+  void handlePrediction(const String& message);
+
+  // ML camera link (Serial1) and streamed prediction_request.
+  static constexpr uint16_t CAM_CHUNK_SIZE = 192;  // must match camera firmware; multiple of 3
+  enum MlState : uint8_t { ML_IDLE = 0, ML_REQUESTED, ML_SENDING, ML_AWAITING_REPLY, ML_DONE };
+  void serviceMlRequest();
+  uint8_t sendPredictionRequest(uint8_t modelIndex, bool& socketDirty);
+  bool camHandshake();
+  bool camReadHelloReply(uint32_t timeoutMs);
+  bool camWaitFor(uint8_t op, uint32_t timeoutMs);
+  bool camReadExact(uint8_t* out, size_t n, uint32_t timeoutMs);
+  bool camCapture(uint32_t& length, uint8_t& status);
+  bool camReadChunk(uint32_t offset, uint16_t expected);
+  void camRelease();
+  void camDrain();
+  bool wsWriteMasked(uint8_t* data, size_t n);
 
   void enqueueUserMessage(const String& message, bool newline);
   bool enqueueRaw(const char* message, uint8_t kind = TX_PRINT);
@@ -278,6 +308,19 @@ private:
 
   WiFiClient* _tcpPtr;
   WebSocketClient* _wsPtr;
+
+  volatile uint8_t _mlState;
+  volatile uint8_t _mlModelIndex;
+  volatile uint32_t _mlSeq;
+  volatile int _mlResult;
+  volatile uint8_t _mlError;
+  uint32_t _mlTimeoutMs;
+  uint32_t _mlAwaitStart;
+  bool _camReady;
+  uint8_t _wsMask[4];
+  size_t _wsMaskPos;
+  uint8_t _camChunk[CAM_CHUNK_SIZE];
+  uint8_t _camB64[CAM_CHUNK_SIZE / 3 * 4];
 };
 
 extern VisionSystemClientR4 Enes100;

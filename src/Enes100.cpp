@@ -535,7 +535,22 @@ constexpr uint32_t WS_RETRY_MS = 500;
 constexpr uint32_t PING_PERIOD_MS = 5000;
 constexpr uint8_t PING_MISS_LIMIT = 5;
 constexpr uint32_t POSE_REQUEST_PERIOD_MS = 250;
-constexpr uint16_t ENES100_STACK_WORDS = 448;
+constexpr uint16_t ENES100_STACK_WORDS = 512;  // +64 words headroom for the ML streaming path
+
+// ML camera link. Must match enes100-ml-cam-firmware src/cameramode.hpp.
+constexpr uint8_t CAM_SYNC = 0xA5;
+constexpr uint8_t CAM_OP_HELLO = 0x10;
+constexpr uint8_t CAM_OP_CAPTURE = 0x11;
+constexpr uint8_t CAM_OP_CHUNK = 0x12;
+constexpr uint8_t CAM_OP_RELEASE = 0x13;
+constexpr uint8_t CAM_STATUS_OK = 0;
+constexpr uint32_t CAM_HANDSHAKE_BAUD = 19200;   // camera listens here until it knows which controller it has
+constexpr uint32_t CAM_FAST_BAUD = 115200;       // camera-only mode
+constexpr uint32_t CAM_CAPTURE_TIMEOUT_MS = 1500;
+constexpr uint32_t CAM_CHUNK_TIMEOUT_MS = 300;
+constexpr uint8_t CAM_CHUNK_RETRIES = 5;
+constexpr uint32_t ML_MAX_JPEG_BYTES = 48000;
+constexpr uint32_t ML_DEFAULT_TIMEOUT_MS = 10000;
 
 struct DeviceProfile {
   uint8_t mac[6];
@@ -1801,7 +1816,16 @@ VisionSystemClientR4::VisionSystemClientR4()
     _txTail(0),
     _txCount(0),
     _tcpPtr(nullptr),
-    _wsPtr(nullptr) {
+    _wsPtr(nullptr),
+    _mlState(ML_IDLE),
+    _mlModelIndex(0),
+    _mlSeq(0),
+    _mlResult(-1),
+    _mlError(ML_OK),
+    _mlTimeoutMs(ML_DEFAULT_TIMEOUT_MS),
+    _mlAwaitStart(0),
+    _camReady(false),
+    _wsMaskPos(0) {
   _teamName[0] = '\0';
   _hostname[0] = '\0';
   _wifiPassword[0] = '\0';
@@ -1949,6 +1973,9 @@ void VisionSystemClientR4::taskLoop() {
         break;
       }
     }
+    if (!_wsConnected) continue;
+
+    serviceMlRequest();
     if (!_wsConnected) continue;
 
     if (lastPoseRequest == 0 || (now - lastPoseRequest) >= POSE_REQUEST_PERIOD_MS) {
@@ -2298,6 +2325,18 @@ void VisionSystemClientR4::handleIncoming(const String& message) {
 
   if (op == "aruco") handleAruco(message);
   else if (op == "ping") handlePing(message);
+  else if (op == "prediction") handlePrediction(message);
+}
+
+void VisionSystemClientR4::handlePrediction(const String& message) {
+  // The server reply carries no request id; only accept it while a request
+  // is outstanding so replies to abandoned (timed-out) requests are ignored.
+  if (_mlState != ML_AWAITING_REPLY) return;
+  float value;
+  if (!extractFloat(message, "\"prediction\":", value)) return;
+  _mlResult = static_cast<int>(value);
+  _mlError = ML_OK;
+  _mlState = ML_DONE;
 }
 
 void VisionSystemClientR4::handleAruco(const String& message) {
@@ -2494,8 +2533,367 @@ String VisionSystemClientR4::formatMission(int type, const String& rawValue) con
 }
 
 int VisionSystemClientR4::MLGetPrediction(int modelIndex) {
-  (void)modelIndex;
+  if (!_taskRunning) {
+    _mlError = ML_ERR_NOT_CONNECTED;
+    return -1;
+  }
+
+  const uint32_t start = millis();
+
+  // Wait for any transfer still on the wire (e.g. from a timed-out call).
+  while (_mlState == ML_SENDING && (millis() - start) < _mlTimeoutMs) {
+    vTaskDelay(pdMS_TO_TICKS(10));
+  }
+
+  taskENTER_CRITICAL();
+  const uint32_t seq = ++_mlSeq;
+  _mlModelIndex = static_cast<uint8_t>(modelIndex);
+  _mlResult = -1;
+  _mlError = ML_OK;
+  _mlState = ML_REQUESTED;
+  taskEXIT_CRITICAL();
+
+  // The network task does the work; it also waits for WiFi/WebSocket first,
+  // so calling this right after begin() is fine.
+  while ((millis() - start) < _mlTimeoutMs) {
+    if (_mlState == ML_DONE && _mlSeq == seq) {
+      taskENTER_CRITICAL();
+      const int result = _mlResult;
+      _mlState = ML_IDLE;
+      taskEXIT_CRITICAL();
+      return (_mlError == ML_OK) ? result : -1;
+    }
+    vTaskDelay(pdMS_TO_TICKS(10));
+  }
+
+  taskENTER_CRITICAL();
+  const uint8_t stateAtTimeout = _mlState;
+  if (stateAtTimeout == ML_DONE) {  // finished right at the deadline
+    const int result = _mlResult;
+    _mlState = ML_IDLE;
+    taskEXIT_CRITICAL();
+    return (_mlError == ML_OK) ? result : -1;
+  }
+  ++_mlSeq;  // abandon: the task will not report back for this request
+  if (stateAtTimeout != ML_SENDING) _mlState = ML_IDLE;
+  taskEXIT_CRITICAL();
+
+  if (stateAtTimeout == ML_REQUESTED) _mlError = isConnected() ? ML_ERR_TIMEOUT : ML_ERR_NOT_CONNECTED;
+  else _mlError = ML_ERR_TIMEOUT;
   return -1;
+}
+
+int VisionSystemClientR4::MLLastError() const { return _mlError; }
+
+void VisionSystemClientR4::MLSetTimeout(uint32_t timeoutMs) {
+  _mlTimeoutMs = timeoutMs < 1000 ? 1000 : timeoutMs;
+}
+
+// Runs on the network task.
+void VisionSystemClientR4::serviceMlRequest() {
+  if (_mlState == ML_AWAITING_REPLY && (millis() - _mlAwaitStart) > _mlTimeoutMs) {
+    _mlState = ML_IDLE;  // nobody is waiting any more
+  }
+  if (_mlState != ML_REQUESTED) return;
+
+  taskENTER_CRITICAL();
+  const uint32_t seq = _mlSeq;
+  const uint8_t index = _mlModelIndex;
+  _mlState = ML_SENDING;
+  taskEXIT_CRITICAL();
+
+  bool socketDirty = false;
+  const uint8_t err = sendPredictionRequest(index, socketDirty);
+
+  // A half-written WebSocket frame cannot be cancelled; reconnect to resync.
+  if (socketDirty) disconnectWebSocket();
+
+  taskENTER_CRITICAL();
+  if (_mlSeq != seq) {
+    _mlState = ML_IDLE;  // caller gave up while we were sending
+  } else if (err == ML_OK) {
+    _mlAwaitStart = millis();
+    _mlState = ML_AWAITING_REPLY;
+  } else {
+    _mlError = err;
+    _mlState = ML_DONE;
+  }
+  taskEXIT_CRITICAL();
+}
+
+uint8_t VisionSystemClientR4::sendPredictionRequest(uint8_t modelIndex, bool& socketDirty) {
+  socketDirty = false;
+
+  if (!_camReady && !camHandshake()) return ML_ERR_CAMERA_NOT_FOUND;
+
+  uint32_t jpegLen = 0;
+  uint8_t status = 0;
+  if (!camCapture(jpegLen, status)) {
+    // Camera may have been reset or switched modes; handshake once more.
+    _camReady = false;
+    if (!camHandshake() || !camCapture(jpegLen, status)) return ML_ERR_CAMERA_NOT_FOUND;
+  }
+  if (status != CAM_STATUS_OK || jpegLen == 0 || jpegLen > ML_MAX_JPEG_BYTES) {
+    camRelease();
+    return ML_ERR_CAPTURE_FAILED;
+  }
+
+  // Fetch the first chunk before starting the WebSocket frame, so an
+  // unreliable camera link fails without disturbing the connection.
+  const uint16_t firstLen = jpegLen < CAM_CHUNK_SIZE ? static_cast<uint16_t>(jpegLen) : CAM_CHUNK_SIZE;
+  bool firstOk = false;
+  for (uint8_t attempt = 0; attempt < CAM_CHUNK_RETRIES && !firstOk; ++attempt) {
+    firstOk = camReadChunk(0, firstLen);
+  }
+  if (!firstOk) {
+    camRelease();
+    return ML_ERR_TRANSFER_FAILED;
+  }
+
+  // Same JSON the ESP32-CAM's WiFi-module mode sends; built and Base64-encoded
+  // on the fly so the full image never has to fit in R4 RAM.
+  String prefix;
+  prefix.reserve(120);
+  prefix += "{\"op\":\"prediction_request\",\"teamName\":\"";
+  prefix += jsonEscape(_teamName);
+  prefix += "\",\"index\":";
+  prefix += String(static_cast<int>(modelIndex));
+  prefix += ",\"frame\":\"";
+  uint8_t suffix[2] = {'"', '}'};
+
+  const uint32_t b64Len = 4 * ((jpegLen + 2) / 3);
+  const uint64_t total = static_cast<uint64_t>(prefix.length()) + b64Len + sizeof(suffix);
+
+  if (!_wsConnected || !_wsPtr || !_tcpPtr || !_wsPtr->connected()) {
+    camRelease();
+    return ML_ERR_NOT_CONNECTED;
+  }
+
+  uint8_t header[10];
+  size_t headerLen = 0;
+  header[headerLen++] = 0x81;  // FIN + text
+  if (total <= 125) {
+    header[headerLen++] = 0x80 | static_cast<uint8_t>(total);
+  } else if (total <= 0xFFFF) {
+    header[headerLen++] = 0x80 | 126;
+    header[headerLen++] = static_cast<uint8_t>((total >> 8) & 0xFF);
+    header[headerLen++] = static_cast<uint8_t>(total & 0xFF);
+  } else {
+    header[headerLen++] = 0x80 | 127;
+    for (int shift = 56; shift >= 0; shift -= 8) {
+      header[headerLen++] = static_cast<uint8_t>((total >> shift) & 0xFF);
+    }
+  }
+  for (uint8_t i = 0; i < 4; ++i) _wsMask[i] = static_cast<uint8_t>(random(0, 256));
+  _wsMaskPos = 0;
+
+  socketDirty = true;  // from here on, any failure leaves a partial frame
+  if (_tcpPtr->write(header, headerLen) != headerLen ||
+      _tcpPtr->write(_wsMask, sizeof(_wsMask)) != sizeof(_wsMask)) {
+    camRelease();
+    return ML_ERR_TRANSFER_FAILED;
+  }
+
+  const size_t prefixLen = prefix.length();
+  if (!wsWriteMasked(reinterpret_cast<uint8_t*>(const_cast<char*>(prefix.c_str())), prefixLen)) {
+    camRelease();
+    return ML_ERR_TRANSFER_FAILED;
+  }
+
+  static const char B64[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+  uint32_t offset = 0;
+  bool haveChunk = true;  // chunk 0 already in _camChunk
+  while (offset < jpegLen) {
+    const uint32_t remaining = jpegLen - offset;
+    const uint16_t n = remaining < CAM_CHUNK_SIZE ? static_cast<uint16_t>(remaining) : CAM_CHUNK_SIZE;
+
+    if (!haveChunk) {
+      for (uint8_t attempt = 0; attempt < CAM_CHUNK_RETRIES && !haveChunk; ++attempt) {
+        haveChunk = camReadChunk(offset, n);
+      }
+      if (!haveChunk) {
+        camRelease();
+        return ML_ERR_TRANSFER_FAILED;
+      }
+    }
+
+    size_t out = 0;
+    for (uint16_t i = 0; i < n; i += 3) {
+      const uint32_t b0 = _camChunk[i];
+      const uint32_t b1 = (i + 1 < n) ? _camChunk[i + 1] : 0;
+      const uint32_t b2 = (i + 2 < n) ? _camChunk[i + 2] : 0;
+      const uint32_t triple = (b0 << 16) | (b1 << 8) | b2;
+      _camB64[out++] = B64[(triple >> 18) & 0x3F];
+      _camB64[out++] = B64[(triple >> 12) & 0x3F];
+      _camB64[out++] = (i + 1 < n) ? B64[(triple >> 6) & 0x3F] : '=';
+      _camB64[out++] = (i + 2 < n) ? B64[triple & 0x3F] : '=';
+    }
+    if (!wsWriteMasked(_camB64, out)) {
+      camRelease();
+      return ML_ERR_TRANSFER_FAILED;
+    }
+
+    offset += n;
+    haveChunk = false;
+  }
+
+  if (!wsWriteMasked(suffix, sizeof(suffix))) {
+    camRelease();
+    return ML_ERR_TRANSFER_FAILED;
+  }
+
+  socketDirty = false;
+  camRelease();
+  return ML_OK;
+}
+
+bool VisionSystemClientR4::wsWriteMasked(uint8_t* data, size_t n) {
+  for (size_t i = 0; i < n; ++i) {
+    data[i] ^= _wsMask[_wsMaskPos & 3];
+    ++_wsMaskPos;
+  }
+  size_t sent = 0;
+  while (sent < n) {
+    const size_t w = _tcpPtr->write(data + sent, n - sent);
+    if (w == 0) return false;
+    sent += w;
+  }
+  return true;
+}
+
+void VisionSystemClientR4::camDrain() {
+  while (Serial1.available()) Serial1.read();
+}
+
+bool VisionSystemClientR4::camReadExact(uint8_t* out, size_t n, uint32_t timeoutMs) {
+  const uint32_t start = millis();
+  size_t got = 0;
+  while (got < n) {
+    int c = Serial1.read();
+    if (c >= 0) {
+      out[got++] = static_cast<uint8_t>(c);
+    } else if ((millis() - start) > timeoutMs) {
+      return false;
+    } else {
+      vTaskDelay(1);  // UART RX buffer comfortably covers a tick at 115200
+    }
+  }
+  return true;
+}
+
+// Scan for "A5 <op>", skipping any noise before it.
+bool VisionSystemClientR4::camWaitFor(uint8_t op, uint32_t timeoutMs) {
+  const uint32_t start = millis();
+  bool sawSync = false;
+  while ((millis() - start) <= timeoutMs) {
+    int c = Serial1.read();
+    if (c < 0) {
+      vTaskDelay(1);
+      continue;
+    }
+    if (sawSync && c == op) return true;
+    sawSync = (c == CAM_SYNC);
+  }
+  return false;
+}
+
+bool VisionSystemClientR4::camReadHelloReply(uint32_t timeoutMs) {
+  if (!camWaitFor(CAM_OP_HELLO, timeoutMs)) return false;
+  uint8_t rest[2];  // version, status
+  if (!camReadExact(rest, sizeof(rest), 50)) return false;
+  return rest[0] >= 1 && rest[1] == CAM_STATUS_OK;
+}
+
+bool VisionSystemClientR4::camHandshake() {
+  static const uint8_t classicHello[] = {0xFF, 0xFE, 0xFD, 0xFC, CAM_OP_HELLO, 'R', '4', 0xFF, 0xFE, 0xFD, 0xFC};
+  static const uint8_t fastHello[] = {CAM_SYNC, CAM_OP_HELLO};
+
+  for (uint8_t attempt = 0; attempt < 3; ++attempt) {
+    // 1) A camera that has just booted is undecided and listening at 19200.
+    Serial1.end();
+    Serial1.begin(CAM_HANDSHAKE_BAUD);
+    camDrain();
+    Serial1.write(classicHello, sizeof(classicHello));
+    Serial1.flush();
+    camReadHelloReply(250);  // reply (if any) is followed by the camera switching to 115200
+
+    // 2) Confirm at 115200. This also finds a camera already in camera-only
+    //    mode, e.g. after only the R4 was reset.
+    Serial1.end();
+    Serial1.begin(CAM_FAST_BAUD);
+    vTaskDelay(pdMS_TO_TICKS(20));
+    camDrain();
+    Serial1.write(fastHello, sizeof(fastHello));
+    Serial1.flush();
+    if (camReadHelloReply(200)) {
+      _camReady = true;
+      debug("[Enes100] ML camera ready (camera-only mode)");
+      return true;
+    }
+  }
+  debug("[Enes100] ML camera did not answer on Serial1");
+  _camReady = false;
+  return false;
+}
+
+static uint16_t camCrc16(uint16_t crc, const uint8_t* data, size_t n) {
+  for (size_t i = 0; i < n; ++i) {
+    crc ^= static_cast<uint16_t>(data[i]) << 8;
+    for (uint8_t b = 0; b < 8; ++b) {
+      crc = (crc & 0x8000) ? static_cast<uint16_t>((crc << 1) ^ 0x1021) : static_cast<uint16_t>(crc << 1);
+    }
+  }
+  return crc;
+}
+
+bool VisionSystemClientR4::camCapture(uint32_t& length, uint8_t& status) {
+  static const uint8_t cmd[] = {CAM_SYNC, CAM_OP_CAPTURE};
+  camDrain();
+  Serial1.write(cmd, sizeof(cmd));
+  Serial1.flush();
+  if (!camWaitFor(CAM_OP_CAPTURE, CAM_CAPTURE_TIMEOUT_MS)) return false;
+  uint8_t rest[7];  // status, len u32, crc16
+  if (!camReadExact(rest, sizeof(rest), 50)) return false;
+  const uint16_t crc = static_cast<uint16_t>(rest[5] | (rest[6] << 8));
+  if (camCrc16(0xFFFF, rest, 5) != crc) return false;
+  status = rest[0];
+  length = static_cast<uint32_t>(rest[1]) |
+           (static_cast<uint32_t>(rest[2]) << 8) |
+           (static_cast<uint32_t>(rest[3]) << 16) |
+           (static_cast<uint32_t>(rest[4]) << 24);
+  return true;
+}
+
+bool VisionSystemClientR4::camReadChunk(uint32_t offset, uint16_t expected) {
+  const uint8_t cmd[] = {CAM_SYNC, CAM_OP_CHUNK,
+                         static_cast<uint8_t>(offset & 0xFF),
+                         static_cast<uint8_t>((offset >> 8) & 0xFF),
+                         static_cast<uint8_t>((offset >> 16) & 0xFF),
+                         static_cast<uint8_t>((offset >> 24) & 0xFF)};
+  camDrain();
+  Serial1.write(cmd, sizeof(cmd));
+  Serial1.flush();
+
+  if (!camWaitFor(CAM_OP_CHUNK, CAM_CHUNK_TIMEOUT_MS)) return false;
+  uint8_t hdr[6];  // echoed offset u32, n u16
+  if (!camReadExact(hdr, sizeof(hdr), CAM_CHUNK_TIMEOUT_MS)) return false;
+  if (memcmp(hdr, cmd + 2, 4) != 0) return false;  // camera served a different offset
+  const uint16_t n = static_cast<uint16_t>(hdr[4] | (hdr[5] << 8));
+  if (n != expected) return false;
+  if (!camReadExact(_camChunk, n, CAM_CHUNK_TIMEOUT_MS)) return false;
+  uint8_t crcBytes[2];
+  if (!camReadExact(crcBytes, sizeof(crcBytes), CAM_CHUNK_TIMEOUT_MS)) return false;
+  uint16_t crc = camCrc16(0xFFFF, hdr, sizeof(hdr));
+  crc = camCrc16(crc, _camChunk, n);
+  return crc == static_cast<uint16_t>(crcBytes[0] | (crcBytes[1] << 8));
+}
+
+void VisionSystemClientR4::camRelease() {
+  static const uint8_t cmd[] = {CAM_SYNC, CAM_OP_RELEASE};
+  Serial1.write(cmd, sizeof(cmd));
+  Serial1.flush();
+  camWaitFor(CAM_OP_RELEASE, 50);  // best effort; the camera also frees idle frames itself
+  camDrain();
 }
 
 void VisionSystemClientR4::MLCaptureTrainingImage(const char* label) {

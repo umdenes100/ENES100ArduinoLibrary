@@ -7,3 +7,6 @@ updateLocation	KEYWORD2
 mission	KEYWORD2
 print	KEYWORD2
 println	KEYWORD2
+MLGetPrediction	KEYWORD2
+MLLastError	KEYWORD2
+MLSetTimeout	KEYWORD2
