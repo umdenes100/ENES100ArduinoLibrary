@@ -317,6 +317,7 @@ private:
   uint32_t _mlTimeoutMs;
   uint32_t _mlAwaitStart;
   bool _camReady;
+  bool _camSerialOpen;
   uint8_t _wsMask[4];
   size_t _wsMaskPos;
   uint8_t _camChunk[CAM_CHUNK_SIZE];

@@ -544,8 +544,9 @@ constexpr uint8_t CAM_OP_CAPTURE = 0x11;
 constexpr uint8_t CAM_OP_CHUNK = 0x12;
 constexpr uint8_t CAM_OP_RELEASE = 0x13;
 constexpr uint8_t CAM_STATUS_OK = 0;
-constexpr uint32_t CAM_HANDSHAKE_BAUD = 19200;   // camera listens here until it knows which controller it has
-constexpr uint32_t CAM_FAST_BAUD = 115200;       // camera-only mode
+constexpr uint32_t CAM_FAST_BAUD = 115200;       // the only baud the R4 ever uses on Serial1
+constexpr uint32_t CAM_HANDSHAKE_MS = 1500;      // > one full camera listen cycle (400 ms + 100 ms) x 2
+constexpr uint32_t CAM_HELLO_REPLY_MS = 20;
 constexpr uint32_t CAM_CAPTURE_TIMEOUT_MS = 1500;
 constexpr uint32_t CAM_CHUNK_TIMEOUT_MS = 300;
 constexpr uint8_t CAM_CHUNK_RETRIES = 5;
@@ -1825,6 +1826,7 @@ VisionSystemClientR4::VisionSystemClientR4()
     _mlTimeoutMs(ML_DEFAULT_TIMEOUT_MS),
     _mlAwaitStart(0),
     _camReady(false),
+    _camSerialOpen(false),
     _wsMaskPos(0) {
   _teamName[0] = '\0';
   _hostname[0] = '\0';
@@ -2805,27 +2807,23 @@ bool VisionSystemClientR4::camReadHelloReply(uint32_t timeoutMs) {
 }
 
 bool VisionSystemClientR4::camHandshake() {
-  static const uint8_t classicHello[] = {0xFF, 0xFE, 0xFD, 0xFC, CAM_OP_HELLO, 'R', '4', 0xFF, 0xFE, 0xFD, 0xFC};
-  static const uint8_t fastHello[] = {CAM_SYNC, CAM_OP_HELLO};
-
-  for (uint8_t attempt = 0; attempt < 3; ++attempt) {
-    // 1) A camera that has just booted is undecided and listening at 19200.
-    Serial1.end();
-    Serial1.begin(CAM_HANDSHAKE_BAUD);
-    camDrain();
-    Serial1.write(classicHello, sizeof(classicHello));
-    Serial1.flush();
-    camReadHelloReply(250);  // reply (if any) is followed by the camera switching to 115200
-
-    // 2) Confirm at 115200. This also finds a camera already in camera-only
-    //    mode, e.g. after only the R4 was reset.
-    Serial1.end();
+  // Open Serial1 exactly once. On the UNO R4 every Serial1.begin() permanently
+  // claims interrupt slots (end() does not release them), so repeated
+  // begin()/end() calls eventually crash the board. The camera adapts to our
+  // fixed 115200 instead; see cameramode.hpp in the camera firmware.
+  if (!_camSerialOpen) {
     Serial1.begin(CAM_FAST_BAUD);
-    vTaskDelay(pdMS_TO_TICKS(20));
+    _camSerialOpen = true;
+  }
+
+  static const uint8_t hello[] = {CAM_SYNC, CAM_OP_HELLO};
+  const uint32_t start = millis();
+  while ((millis() - start) < CAM_HANDSHAKE_MS) {
     camDrain();
-    Serial1.write(fastHello, sizeof(fastHello));
+    Serial1.write(hello, sizeof(hello));
     Serial1.flush();
-    if (camReadHelloReply(200)) {
+    if (camReadHelloReply(CAM_HELLO_REPLY_MS)) {
+      camDrain();
       _camReady = true;
       debug("[Enes100] ML camera ready (camera-only mode)");
       return true;
