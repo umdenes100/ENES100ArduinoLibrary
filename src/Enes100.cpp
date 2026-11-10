@@ -2124,6 +2124,7 @@ void VisionSystemClientR4::chooseServerForRoom() {
     case 1116: strcpy(_server, "10.112.9.114"); break;
     case 1120: strcpy(_server, "10.112.9.115"); break;
     case 1201: strcpy(_server, "10.112.9.116"); break;
+    case 5001: strcpy(_server, "10.112.9.33"); break;
     default:   strcpy(_server, "10.112.9.116"); break;
   }
 }
