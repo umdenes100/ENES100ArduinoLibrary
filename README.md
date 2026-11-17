@@ -22,6 +22,16 @@ UNO R4 WiFi:
 Enes100.begin("Team Name", MATERIAL, 205, 1116);
 ```
 
+UNO R4 WiFi with the ENES100 ML camera (camera as the WiFi module):
+
+```cpp
+Enes100.begin("Team Name", SEED, 381, 1116, Serial1);
+```
+
+Passing `Serial1` selects camera-module mode. The R4 then talks to the ML camera over pins D0/D1 with the same serial protocol a classic Uno uses, the camera handles WiFi and the vision system connection, and the R4's onboard WiFi is not used. All calls (`getX`, `print`, `mission`, `MLGetPrediction`, ...) work as they do on a classic Uno. Wiring: camera TX -> D0 (RX), camera RX -> D1 (TX), GND -> GND, 5V -> 5V, camera switch in the vision position. See the `Machine_Learning_R4` example and `extras/R4_ML_Camera_Bench_Test.md`.
+
+The four-argument and six-argument forms on the UNO R4 WiFi are unchanged and still use onboard WiFi; `MLGetPrediction()` returns `-1` in that mode because no camera is attached. Use one mode per sketch.
+
 The examples include a commented RX/TX form for classic Uno users. `AdvancedPosition` is explicitly UNO R4 WiFi-only because it uses the onboard 12x8 LED matrix.
 
 ## Debug states (classic Uno + WiFi module)

@@ -4,6 +4,7 @@
 
 class WiFiClient;
 class WebSocketClient;
+class Enes100R4CameraLink;
 
 // -----------------------------------------------------------------------------
 // ENES100 mission / message constants
@@ -122,6 +123,17 @@ public:
              int wifiModuleTX,
              int wifiModuleRX);
 
+  // ML camera as the WiFi module: pass the hardware serial port the camera is
+  // wired to (Serial1 = pins D0/D1). Every Enes100 call then goes through the
+  // camera using the same serial protocol as a classic Uno, and the R4's
+  // onboard WiFi is not used. Example:
+  //   Enes100.begin("Team Name", SEED, 381, 1116, Serial1);
+  void begin(const char* teamName,
+             byte teamType,
+             int markerId,
+             int roomNumber,
+             HardwareSerial& cameraSerial);
+
   bool isConnected() const;
   byte state() const;
 
@@ -136,8 +148,9 @@ public:
   void mission(int type, char message);
   void mission(int type, Coordinate message);
 
-  // There is no camera attached to the UNO R4 WiFi itself. Prediction is
-  // therefore unavailable; capture still sends the server-side capture opcode.
+  // MLGetPrediction() needs the ML camera, so it only works after
+  // begin(..., Serial1); with native WiFi it returns -1. Capture sends the
+  // server-side capture opcode with native WiFi and does nothing in camera mode.
   int MLGetPrediction(int modelIndex);
   void MLCaptureTrainingImage(const char* label);
 
@@ -278,6 +291,9 @@ private:
 
   WiFiClient* _tcpPtr;
   WebSocketClient* _wsPtr;
+
+  // Non-null once begin(..., cameraSerial) has selected camera-module mode.
+  Enes100R4CameraLink* _camera;
 };
 
 extern VisionSystemClientR4 Enes100;

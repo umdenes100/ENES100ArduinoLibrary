@@ -506,6 +506,7 @@ bool VisionSystemClient::updateLocation() {
 #else
 
 #include "Enes100R4.h"
+#include "Enes100R4Camera.h"
 
 #include <WiFiS3.h>
 #include <ArduinoHttpClient.h>
@@ -1801,7 +1802,8 @@ VisionSystemClientR4::VisionSystemClientR4()
     _txTail(0),
     _txCount(0),
     _tcpPtr(nullptr),
-    _wsPtr(nullptr) {
+    _wsPtr(nullptr),
+    _camera(nullptr) {
   _teamName[0] = '\0';
   _hostname[0] = '\0';
   _wifiPassword[0] = '\0';
@@ -1844,6 +1846,20 @@ void VisionSystemClientR4::begin(const char* teamName,
   (void)wifiModuleTX;
   (void)wifiModuleRX;
   begin(teamName, teamType, markerId, roomNumber);
+}
+
+void VisionSystemClientR4::begin(const char* teamName,
+                                 byte teamType,
+                                 int markerId,
+                                 int roomNumber,
+                                 HardwareSerial& cameraSerial) {
+  // Camera-module mode: the ML camera is the WiFi module, as on a classic Uno.
+  // The native WiFi background task is intentionally not started.
+  // A single static link object: Serial1 is shared hardware, and repeated
+  // begin() calls reuse it instead of allocating a new one.
+  static Enes100R4CameraLink link;
+  link.begin(teamName, teamType, markerId, roomNumber, cameraSerial, &location);
+  _camera = &link;
 }
 
 bool VisionSystemClientR4::startBackgroundTask() {
@@ -2334,6 +2350,7 @@ void VisionSystemClientR4::handlePing(const String& message) {
 }
 
 void VisionSystemClientR4::enqueueUserMessage(const String& message, bool newline) {
+  if (_camera) { _camera->print(message.c_str(), newline); return; }
   String copy = message;
   if (newline) copy += '\n';
   enqueueRaw(copy.c_str());
@@ -2388,20 +2405,24 @@ bool VisionSystemClientR4::popRaw(char* out, size_t outLen, uint8_t& kind) {
 }
 
 void VisionSystemClientR4::mission(int type, int message) {
+  if (_camera) { _camera->mission(type, message); return; }
   sendMissionValue(type, String(message));
 }
 
 void VisionSystemClientR4::mission(int type, double message) {
+  if (_camera) { _camera->mission(type, message); return; }
   sendMissionValue(type, String(message, 2));
 }
 
 void VisionSystemClientR4::mission(int type, char message) {
+  if (_camera) { _camera->mission(type, message); return; }
   String s;
   s += message;
   sendMissionValue(type, s);
 }
 
 void VisionSystemClientR4::mission(int type, Coordinate message) {
+  if (_camera) { _camera->mission(type, message.x, message.y, message.theta); return; }
   String s;
   s.reserve(48);
   s += String(message.x, 2);
@@ -2494,30 +2515,38 @@ String VisionSystemClientR4::formatMission(int type, const String& rawValue) con
   return result;
 }
 
+// From here on, each public method starts with "if (_camera) ...": in
+// camera-module mode the call goes to Enes100R4CameraLink (Enes100R4Camera.cpp)
+// and the native WiFi code below it is skipped.
 int VisionSystemClientR4::MLGetPrediction(int modelIndex) {
+  if (_camera) return _camera->MLGetPrediction(modelIndex);
   (void)modelIndex;
   return -1;
 }
 
 void VisionSystemClientR4::MLCaptureTrainingImage(const char* label) {
+  if (_camera) return;  // The camera firmware has no serial capture command.
   enqueueRaw(label ? label : "", TX_CAPTURE);
 }
 
 bool VisionSystemClientR4::isConnected() const {
+  if (_camera) return _camera->isConnected();
   return _wifiConnected && _wsConnected;
 }
 
 byte VisionSystemClientR4::state() const {
+  if (_camera) return _camera->state();
   return isConnected() ? 0x01 : 0x00;
 }
 
-float VisionSystemClientR4::getX() const { return _x; }
-float VisionSystemClientR4::getY() const { return _y; }
-float VisionSystemClientR4::getTheta() const { return _theta; }
-bool VisionSystemClientR4::isVisible() const { return _visible; }
-bool VisionSystemClientR4::updateLocation() const { return true; }
+float VisionSystemClientR4::getX() const { return _camera ? _camera->getX() : _x; }
+float VisionSystemClientR4::getY() const { return _camera ? _camera->getY() : _y; }
+float VisionSystemClientR4::getTheta() const { return _camera ? _camera->getTheta() : _theta; }
+bool VisionSystemClientR4::isVisible() const { return _camera ? _camera->isVisible() : _visible; }
+bool VisionSystemClientR4::updateLocation() const { return _camera ? _camera->updateLocation() : true; }
 
 void VisionSystemClientR4::println() {
+  if (_camera) { _camera->print("", true); return; }
   enqueueRaw("\n");
 }
 
@@ -2543,6 +2572,7 @@ bool VisionSystemClientR4::debugStatus(Enes100R4DebugStatus& out) const {
 }
 
 void VisionSystemClientR4::debugDump(Stream& out) const {
+  if (_camera) { _camera->debugDump(out); return; }
   Enes100R4DebugStatus d;
   debugStatus(d);
   out.println("----- ENES100 R4 DEBUG -----");
